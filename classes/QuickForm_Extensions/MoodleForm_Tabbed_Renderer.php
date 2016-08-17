@@ -82,7 +82,7 @@ class MoodleQuickForm_Tabbed_Renderer extends HTML_QuickForm_Renderer_Tableless{
     /**
      * Constructor
      */
-    function MoodleQuickForm_Renderer(){
+    function __construct() {
         // switch next two lines for ol li containers for form items.
         //        $this->_elementTemplates=array('default'=>"\n\t\t".'<li class="fitem"><label>{label}{help}<!-- BEGIN required -->{req}<!-- END required --></label><div class="qfelement<!-- BEGIN error --> error<!-- END error --> {type}"><!-- BEGIN error --><span class="error">{error}</span><br /><!-- END error -->{element}</div></li>');
         $this->_elementTemplates = array(
@@ -98,7 +98,7 @@ class MoodleQuickForm_Tabbed_Renderer extends HTML_QuickForm_Renderer_Tableless{
 
         'nodisplay'=>'');
 
-        parent::HTML_QuickForm_Renderer_Tableless();
+        parent::__construct();
     }
 
     /**
@@ -106,7 +106,7 @@ class MoodleQuickForm_Tabbed_Renderer extends HTML_QuickForm_Renderer_Tableless{
      *
      * @param array $elements form elements which needs to be grouped as advance elements.
      */
-    function setAdvancedElements($elements){
+    function setAdvancedElements($elements) {
         $this->_advancedElements = $elements;
     }
 
@@ -124,7 +124,7 @@ class MoodleQuickForm_Tabbed_Renderer extends HTML_QuickForm_Renderer_Tableless{
      *
      * @param MoodleQuickForm $form reference of the form
      */
-    function startForm(&$form){
+    function startForm(&$form) {
         global $PAGE;
         $this->_reqHTML = $form->getReqHTML();
         $this->_elementTemplates = str_replace('{req}', $this->_reqHTML, $this->_elementTemplates);
@@ -169,27 +169,27 @@ class MoodleQuickForm_Tabbed_Renderer extends HTML_QuickForm_Renderer_Tableless{
      * @param bool $required if input is required field
      * @param string $error error message to display
      */
-    function startGroup(&$group, $required, $error){
+    function startGroup(&$group, $required, $error) {
         // Make sure the element has an id.
         $group->_generateId();
 
-        if (method_exists($group, 'getElementTemplateType')){
+        if (method_exists($group, 'getElementTemplateType')) {
             $html = $this->_elementTemplates[$group->getElementTemplateType()];
         }else{
             $html = $this->_elementTemplates['default'];
 
         }
 
-        if (isset($this->_advancedElements[$group->getName()])){
+        if (isset($this->_advancedElements[$group->getName()])) {
             $html =str_replace(' {advanced}', ' advanced', $html);
             $html =str_replace('{advancedimg}', $this->_advancedHTML, $html);
         } else {
             $html =str_replace(' {advanced}', '', $html);
             $html =str_replace('{advancedimg}', '', $html);
         }
-        if (method_exists($group, 'getHelpButton')){
+        if (method_exists($group, 'getHelpButton')) {
             $html =str_replace('{help}', $group->getHelpButton(), $html);
-        }else{
+        } else {
             $html =str_replace('{help}', '', $html);
         }
         $html =str_replace('{id}', 'fgroup_' . $group->getAttribute('id'), $html);
@@ -221,7 +221,7 @@ class MoodleQuickForm_Tabbed_Renderer extends HTML_QuickForm_Renderer_Tableless{
      * @param bool $required if input is required field
      * @param string $error error message to display
      */
-    function renderElement(&$element, $required, $error){
+    function renderElement(&$element, $required, $error) {
         // Make sure the element has an id.
         $element->_generateId();
 
