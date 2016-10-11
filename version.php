@@ -15,16 +15,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package   local_userequipment
- * @category  local
- * @copyright 2016 Valery Fremaux (valery.fremaux@gmail.com)
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_userequipment
+ * @category    local
+ * @author      Valery Fremaux <valery.fremaux@gmail.com>
+ * @copyright   2016 Valery Fremaux (valery.fremaux@gmail.com)
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- 
+
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version  = 2015122002;   // The (date) version of this plugin
-$plugin->requires = 2014050800;   // Requires this Moodle version
+$plugin->version  = 2015122002;   // The (date) version of this plugin.
+$plugin->requires = 2014050800;   // Requires this Moodle version.
 $plugin->component = 'local_userequipment';
 $plugin->release = '2.7.0 (Build 2015122002)';
 $plugin->maturity = MATURITY_BETA;
+
+// Non moodle attributes.
+$plugin->codeincrement = '2.7.0000';

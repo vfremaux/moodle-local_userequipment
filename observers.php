@@ -14,14 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * @package   local_userequipment
  * @category  local
  * @copyright 2016 Valery Fremaux (valery.fremaux@gmail.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die;
 
 class local_userequipment_event_observer {
 
@@ -29,14 +28,14 @@ class local_userequipment_event_observer {
      * Triggered when a user is created
      * initialize the standard user equipement list
      */
-    static function on_user_created($e) {
+    public static function on_user_created($e) {
         global $DB;
 
         $config = get_config('local_userequipment');
 
         $DB->delete_records('local_user_equipment', array('user' => $e->userid));
 
-        // Transfer default equipement to user equipement
+        // Transfer default equipement to user equipement.
         if (!empty($config->defaultequipment)) {
             foreach ($config->defaultequipment as $key => $available) {
                 $record = new StdClass();
@@ -50,7 +49,7 @@ class local_userequipment_event_observer {
         }
     }
 
-    on_user_loggedin($e) {
+    public static function on_user_loggedin($e) {
         global $DB;
 
         $userpref = $DB->get_record('user_preferences', array('userid' => $e->userid, 'name' => 'moodleuserlevel'));

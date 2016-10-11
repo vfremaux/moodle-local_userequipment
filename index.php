@@ -72,35 +72,40 @@ $course = $DB->get_record('course', array('id' => SITEID));
 $manager = core_plugin_manager::instance();
 $uemanager = userequipment_manager::instance();
 
-$form = new UserEquipmentForm();
+if ($uemanager->is_enabled_for_user($USER)) {
 
-$cleanedup = optional_param('cleanedup', false, PARAM_BOOL);
-if (!$form->is_cancelled()) {
-    if ($data = $form->get_data()) {
-        if (!empty($data->cleanup)) {
-            $uemanager->delete_equipment($USER);
-            $cleanedup = true;
-        } else {
-            $uemanager->add_update_user($data, $user->id);
+    $form = new UserEquipmentForm();
+    
+    $cleanedup = optional_param('cleanedup', false, PARAM_BOOL);
+    if (!$form->is_cancelled()) {
+        if ($data = $form->get_data()) {
+            if (!empty($data->cleanup)) {
+                $uemanager->delete_equipment($USER);
+                $cleanedup = true;
+            } else {
+                $uemanager->add_update_user($data, $user->id);
+            }
+            redirect(new moodle_url($url, array('cleanedup' => $cleanedup)));
         }
-        redirect(new moodle_url($url, array('cleanedup' => $cleanedup)));
     }
-}
-
-if (empty($data)) {
-    $data = $uemanager->fetch_equipement($USER);
+    
     if (empty($data)) {
-        $data = @$config->defaultequipment;
+        $data = $uemanager->fetch_equipement($USER);
+        if (empty($data)) {
+            $data = @$config->defaultequipment;
+        }
     }
+    
+    echo $OUTPUT->header();
+    
+    if ($cleanedup) {
+        echo $OUTPUT->notification(get_string('equipmentcleaned', 'local_userequipment'));
+    }
+    
+    $form->set_data($data);
+    $form->display();
+} else {
+    echo $OUTPUT->notification(get_string('disabledforuser', 'local_userequipment'));
 }
-
-echo $OUTPUT->header();
-
-if ($cleanedup) {
-    echo $OUTPUT->notification(get_string('equipmentcleaned', 'local_userequipment'));
-}
-
-$form->set_data($data);
-$form->display();
 
 echo $OUTPUT->footer();

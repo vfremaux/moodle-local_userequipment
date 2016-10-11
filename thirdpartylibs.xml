@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<libraries>
+  <library>
+    <location>classes/QuickForm_Extensions</location>
+    <name>Quickform complements</name>
+    <license>GPL v3</license>
+    <version></version>
+    <licenseversion></licenseversion>
+  </library>
+</libraries>
