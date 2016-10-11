@@ -39,7 +39,7 @@ class userequipment_manager {
     private function __construct() {
     }
 
-    static function init_defaults() {
+    public static function init_defaults() {
         return array(
          'block_activity_modules' => 1,
          'block_activity_publisher' => 0,
@@ -287,7 +287,7 @@ class userequipment_manager {
             }
             return $equipement;
         }
-    
+
         return array();
     }
 
@@ -306,9 +306,9 @@ class userequipment_manager {
         global $CFG;
         global $DB;
 
-        $config = get_config('local_userequipment');
-
-        if (!$config->enabled) return true; // everything allowed
+        if (!$this->is_enabled_for_user($USER)) {
+            return true;
+        }
 
         if (empty($userid)) {
             $userid = $USER->id;
@@ -333,4 +333,37 @@ class userequipment_manager {
         return $CHECKCACHE[$plugintype.'_'.$plugin];
     }
 
+    public function is_enabled_for_user($user) {
+        global $COURSE;
+        global $DB;
+
+        $config = get_config('local_userequipment');
+
+        if (!$config->enabled) {
+            return true; // Everything allowed.
+        }
+
+        switch (@$config->disable_control) {
+            case 0 :
+                return true;
+                break;
+            case 'capability':
+                if (empty($config->disable_control_value)) {
+                    return true;
+                }
+                $context = context_course::instance($COURSE->id);
+                if (has_capability($config->disable_control_value, $context, $user->id)) {
+                    return true;
+                }
+                break;
+            case 'profilefield':
+                $field = $DB->get_record('user_profile_field', array('shortname' => $config->disable_control_value));
+                $value = $DB->get_field('user_profile_data', 'data', array('fieldid' => $field->id, 'userid' => $user->id));
+                if ($value) {
+                    return true;
+                }
+                break;
+        }
+        return false;
+    }
 }
