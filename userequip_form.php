@@ -144,7 +144,7 @@ class UserEquipmentForm extends moodleform {
                         $group[] = $mform->createElement('checkbox', 'block_'.$block->name, '', $blockname);
                         $allplugins[] = 'block_'.$block->name;
                     }
-                    $mform->addGroup($group, 'groupcat'.$catshort, $catname, '', array(' '));
+                    $mform->addGroup($group, 'groupcat'.$catshort, $catname, '', false);
                 }
             }
         }
@@ -195,7 +195,7 @@ class UserEquipmentForm extends moodleform {
                         $group[] = $mform->createElement('checkbox', 'mod_'.$mod->name, '', $modname.' ');
                         $allplugins[] = 'mod_'.$mod->name;
                     }
-                    $mform->addGroup($group, 'groupmods'.$catshort, $catname, ' ', array(' '));
+                    $mform->addGroup($group, 'groupmods'.$catshort, $catname, ' ', false);
                 }
             }
         }

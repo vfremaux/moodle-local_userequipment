@@ -34,6 +34,14 @@ $string['equipme'] = 'Manage my equipment';
 $string['cleanup'] = 'Delete all my equipment marks';
 $string['equipmentcleaned'] = 'Equipment marks have been successfully deleted';
 
+$string['allusers'] = 'All users enabled';
+$string['capabilitycontrol'] = 'Disable by capability';
+$string['profilefieldcontrol'] = 'disable by profile field';
+$string['configdisablecontrol'] = 'Disable control source';
+$string['configdisablecontrol_desc'] = 'Allows selecting the way some users may be equipement disabled';
+$string['configdisablecontrolvalue'] = 'Disable control value';
+$string['configdisablecontrolvalue_desc'] = 'Set value for control. Value may be a capability name or a custom user control field name.';
+$string['disabledforuser'] = 'Self equipment has been disabled for you.';
 $string['cancel'] = 'Cancel';
 $string['target'] = 'Target Users';
 $string['other'] = 'Other';

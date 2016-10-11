@@ -29,14 +29,14 @@ class local_userequipment_event_observer {
      * Triggered when a user is created
      * initialize the standard user equipement list
      */
-    static function on_user_created($e) {
+    public static function on_user_created($e) {
         global $DB;
 
         $config = get_config('local_userequipment');
 
         $DB->delete_records('local_user_equipment', array('user' => $e->userid));
 
-        // Transfer default equipement to user equipement
+        // Transfer default equipement to user equipement.
         if (!empty($config->defaultequipment)) {
             foreach ($config->defaultequipment as $key => $available) {
                 $record = new StdClass();
@@ -50,7 +50,7 @@ class local_userequipment_event_observer {
         }
     }
 
-    on_user_loggedin($e) {
+    public static function on_user_loggedin($e) {
         global $DB;
 
         $userpref = $DB->get_record('user_preferences', array('userid' => $e->userid, 'name' => 'moodleuserlevel'));
