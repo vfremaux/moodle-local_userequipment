@@ -31,6 +31,7 @@ $context = context_system::instance();
 $PAGE->set_context($context);
 
 // Security.
+
 require_login();
 require_capability('moodle/site:config', $context);
 
@@ -38,7 +39,7 @@ $url = new moodle_url('/local/userequipment/template.php');
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('admin');
 
-// Default configuration
+// Default configuration.
 
 $config = get_config('local_userequipment');
 $manager = get_ue_manager();
@@ -55,11 +56,13 @@ $course = $DB->get_record('course', array('id' => SITEID));
 
 $mform = new UserEquipmentForm($url, array('istemplate' => true, 'template' => $templateid));
 
-if (!$mform->is_cancelled()) {
-    if ($data = $mform->get_data()) {
-        $manager->add_update_template($data);
-        redirect(new moodle_url('/local/userequipment/templates.php'));
-    }
+if ($mform->is_cancelled()) {
+    redirect(new moodle_url('/local/userequipment/templates.php'));
+}
+
+if ($data = $mform->get_data()) {
+    $manager->add_update_template($data);
+    redirect(new moodle_url('/local/userequipment/templates.php'));
 }
 
 if (empty($data)) {

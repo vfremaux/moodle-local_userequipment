@@ -1,6 +1,9 @@
 #page-local-userequipment-index #id_bheader .fitem,
 #page-local-userequipment-index #id_qheader .fitem,
-#page-local-userequipment-index #id_mheader .fitem {
+#page-local-userequipment-index #id_mheader .fitem,
+#page-local-userequipment-template #id_bheader .fitem,
+#page-local-userequipment-template #id_qheader .fitem,
+#page-local-userequipment-template #id_mheader .fitem {
     float: left;
     width: 23%;
     clear: none;
@@ -10,14 +13,20 @@
 
 #page-local-userequipment-index #id_bheader .fitem .felement,
 #page-local-userequipment-index #id_qheader .fitem .felement,
-#page-local-userequipment-index #id_mheader .fitem .felement {
+#page-local-userequipment-index #id_mheader .fitem .felement,
+#page-local-userequipment-template #id_bheader .fitem .felement,
+#page-local-userequipment-template #id_qheader .fitem .felement,
+#page-local-userequipment-template #id_mheader .fitem .felement {
     display:block;
 }
 
 
 #page-local-userequipment-index #id_bheader fieldset.fgroup,
 #page-local-userequipment-index #id_qheader fieldset.fgroup,
-#page-local-userequipment-index #id_mheader fieldset.fgroup {
+#page-local-userequipment-index #id_mheader fieldset.fgroup,
+#page-local-userequipment-template #id_bheader fieldset.fgroup,
+#page-local-userequipment-template #id_qheader fieldset.fgroup,
+#page-local-userequipment-template #id_mheader fieldset.fgroup {
     clear: left;
     margin: 0 0 1em;
     width: 100%;
@@ -27,7 +36,10 @@
 
 #page-local-userequipment-index #id_bheader fieldset.fgroup > span,
 #page-local-userequipment-index #id_qheader fieldset.fgroup > span,
-#page-local-userequipment-index #id_mheader fieldset.fgroup > span {
+#page-local-userequipment-index #id_mheader fieldset.fgroup > span,
+#page-local-userequipment-template #id_bheader fieldset.fgroup > span,
+#page-local-userequipment-template #id_qheader fieldset.fgroup > span,
+#page-local-userequipment-template #id_mheader fieldset.fgroup > span {
     float: left;
     clear: left;
     line-height: 1.7;
