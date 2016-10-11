@@ -32,7 +32,15 @@ $string['enableuserequipment'] = 'Activer le plan d\'équipement individuel des 
 $string['enableuserequipment_desc'] = 'Si activé, les utilisateurs (editeurs) peuvent choisir les fonctions qu\'ils mobilisent, et nettoyer les interfaces de tout ce qui ne leur sert pas dans leur processus d\'édition.';
 $string['equipme'] = 'Gérer mes équipements';
 
+$string['allusers'] = 'Tous les utilisateurs activés';
+$string['capabilitycontrol'] = 'Désactiver par capacité';
+$string['profilefieldcontrol'] = 'Désactiver par champ de profil';
+$string['configdisablecontrol'] = 'Source de désactivation';
+$string['configdisablecontrol_desc'] = 'Permet de choisir comment l\'auto-équipement de certains utilisateurs est désactivé';
+$string['configdisablecontrolvalue'] = 'Valeur de contrôle';
+$string['configdisablecontrolvalue_desc'] = 'Définit la valeur de contrôle. Celapeut être le nom d\'une capacité ou le code d\'un champ de profil.';
 $string['cancel'] = 'Annuler';
+$string['disabledforuser'] = 'L\'équipement utilisateur a été désactivé pour votre catégorie d\'utilisateur.';
 $string['plugins'] = 'Plugins';
 $string['other'] = 'Autres';
 $string['template'] = 'Profil';

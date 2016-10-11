@@ -14,23 +14,24 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * @package   local_userequipment
  * @category  local
  * @copyright 2016 Valery Fremaux (valery.fremaux@gmail.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die;
+
 require_once($CFG->libdir.'/formslib.php');
-// hack formlibs factory default.
+
+// Hack formlibs factory default.
 
 require_once($CFG->dirroot.'/mod/resource/lib.php');
 require_once($CFG->dirroot.'/lib/questionlib.php');
 
 class UserEquipmentForm extends moodleform {
 
-    function definition() {
+    public function definition() {
         global $CFG, $DB;
 
         $mform = $this->_form;
@@ -48,7 +49,7 @@ class UserEquipmentForm extends moodleform {
             $mform->setType('name', PARAM_TEXT);
             $mform->addRule('name', null, 'required', null, 'client');
         } else {
-            // End user informative about user profile
+            // End user informative about user profile.
             $mform->addElement('header', 'theader', get_string('userequipment', 'local_userequipment'));
 
             $mform->addElement('html', get_string('ueinfo_tpl', 'local_userequipment'));
@@ -77,11 +78,9 @@ class UserEquipmentForm extends moodleform {
                 if ($formatname == "[[format$fname]]") {
                     $formatname = get_string("format$fname");
                 }
-                // $mform->addElement('advcheckbox', 'format_'.$fname, $formatname, '', array('group' => 1));
                 $mform->addElement('checkbox', 'format_'.$fname, $formatname);
                 $allplugins[] = 'format_'.$fname;
             }
-            // moodleform::add_checkbox_controller(1);
         }
 
         $mform->addElement('header', 'bheader', get_string('blocks'));
@@ -98,7 +97,6 @@ class UserEquipmentForm extends moodleform {
                         if (empty($blockname)) {
                             $blockname = get_string('blockname', 'block_'.$block->name);
                         }
-                        // $mform->addElement('advcheckbox', 'block_'.$block->name, $blockname, '', array('group' => 2));
                         $blockdesc = get_string('blockdesc_block_'.$block->name, 'local_userequipment');
 
                         $mform->addElement('checkbox', 'block_'.$block->name, $blockname, $blockdesc);
@@ -106,7 +104,7 @@ class UserEquipmentForm extends moodleform {
                     }
                 }
             } else {
-                // Page enhanced implementation, get categorization
+                // Page enhanced implementation, get categorization.
 
                 $BLOCKCATS = $DB->get_records('format_page_pfamily', array('type' => 'block'), 'shortname', 'shortname,id,name');
                 $blockcategories = array();
@@ -136,7 +134,6 @@ class UserEquipmentForm extends moodleform {
                         if (empty($blockname)) {
                             $blockname = get_string('blockname', 'block_'.$block->name);
                         }
-                        // echo 'plugdesc_block_'.$block->name.'<br/>';
                         if ($sm->string_exists('plugdesc_block_'.$block->name, 'local_userequipment')) {
                             $blockdesc = get_string('plugdesc_block_'.$block->name, 'local_userequipment');
                             $blockname = '<span data-tooltip="'.$blockdesc.'" data-tooltip-position="bottom">'.$blockname.' </span>';
@@ -144,7 +141,7 @@ class UserEquipmentForm extends moodleform {
                         $group[] = $mform->createElement('checkbox', 'block_'.$block->name, '', $blockname);
                         $allplugins[] = 'block_'.$block->name;
                     }
-                    $mform->addGroup($group, 'groupcat'.$catshort, $catname, '', array(' '));
+                    $mform->addGroup($group, 'groupcat'.$catshort, $catname, '', false);
                 }
             }
         }
@@ -195,7 +192,7 @@ class UserEquipmentForm extends moodleform {
                         $group[] = $mform->createElement('checkbox', 'mod_'.$mod->name, '', $modname.' ');
                         $allplugins[] = 'mod_'.$mod->name;
                     }
-                    $mform->addGroup($group, 'groupmods'.$catshort, $catname, ' ', array(' '));
+                    $mform->addGroup($group, 'groupmods'.$catshort, $catname, ' ', false);
                 }
             }
         }
@@ -214,6 +211,4 @@ class UserEquipmentForm extends moodleform {
         $this->add_action_buttons(true);
     }
 
-    function validation($data, $files) {
-    }
 }
