@@ -54,9 +54,9 @@ function get_all_plugin_classes() {
         }
     }
 
-    global $QTYPES;
-    if (!empty($QTYPES)) {
-        foreach (array_keys($QTYPES) as $qtypename) {
+    $qtypes = question_bank::get_all_qtypes();
+    if (!empty($qtypes)) {
+        foreach (array_keys($qtypes) as $qtypename) {
             $allplugins[] = 'qtype_'.$qtypename;
         }
     }
