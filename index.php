@@ -26,7 +26,7 @@ require_once($CFG->dirroot.'/local/userequipment/lib.php');
 require_once($CFG->dirroot.'/local/userequipment/classes/manager.php');
 require_once($CFG->dirroot.'/lib/blocklib.php');
 
-Use local_userequipment\userequipment_manager;
+use local_userequipment\userequipment_manager;
 
 $id = optional_param('id', 0, PARAM_INT);
 
@@ -55,7 +55,7 @@ if ($user->id == $USER->id) {
     require_capability('local/userequipment:selfequip', $context);
 }
 
-// Default configuration
+// Default configuration.
 
 $config = get_config('local_userequipment');
 
@@ -75,7 +75,7 @@ $uemanager = userequipment_manager::instance();
 if ($uemanager->is_enabled_for_user($USER)) {
 
     $form = new UserEquipmentForm();
-    
+
     $cleanedup = optional_param('cleanedup', false, PARAM_BOOL);
     if (!$form->is_cancelled()) {
         if ($data = $form->get_data()) {
@@ -88,20 +88,20 @@ if ($uemanager->is_enabled_for_user($USER)) {
             redirect(new moodle_url($url, array('cleanedup' => $cleanedup)));
         }
     }
-    
+
     if (empty($data)) {
         $data = $uemanager->fetch_equipement($USER);
         if (empty($data)) {
             $data = @$config->defaultequipment;
         }
     }
-    
+
     echo $OUTPUT->header();
-    
+
     if ($cleanedup) {
         echo $OUTPUT->notification(get_string('equipmentcleaned', 'local_userequipment'));
     }
-    
+
     $form->set_data($data);
     $form->display();
 } else {

@@ -27,9 +27,9 @@ require_once($CFG->dirroot.'/local/userequipment/classes/manager.php');
 require_once($CFG->dirroot.'/local/userequipment/classes/applyselectors.php');
 require_once($CFG->dirroot.'/lib/blocklib.php');
 
-Use local_userequipment\userequipment_manager;
-Use local_userequipment\selectors\ue_application_users_selector;
-Use local_userequipment\selectors\ue_all_users_selector;
+use local_userequipment\userequipment_manager;
+use local_userequipment\selectors\ue_application_users_selector;
+use local_userequipment\selectors\ue_all_users_selector;
 
 $templateid = optional_param('template', 0, PARAM_INT);
 
@@ -42,6 +42,8 @@ $PAGE->set_context($context);
 $url = new moodle_url('/local/userequipment/apply.php');
 $PAGE->set_url($url);
 
+$renderer = $PAGE->get_renderer('local_user_equipment');
+
 // Security.
 require_login();
 require_capability('moodle/site:config', $context);
@@ -52,7 +54,7 @@ $potentialmembersselector = new ue_all_users_selector('addselect', array('templa
 if (optional_param('add', false, PARAM_BOOL) && confirm_sesskey()) {
     $userstoadd = $potentialmembersselector->get_selected_users();
     if (!empty($userstoadd)) {
-         foreach ($userstoadd as $user) {
+        foreach ($userstoadd as $user) {
             $SESSION->ue_selection[$user->id] = $user;
             $toapplyselector->invalidate_selected_users();
             $potentialmembersselector->invalidate_selected_users();
@@ -94,48 +96,6 @@ if (!empty($message)) {
 
 echo $OUTPUT->heading(get_string('applytemplate', 'local_userequipment', $template->name));
 
-?>
-
-<div id="addmembersform">
-<form id="assignform" method="post" action="<?php echo $CFG->wwwroot; ?>/local/userequipment/apply.php">
-<div>
-<input type="hidden" name="template" value="<?php echo $templateid ?>" />
-<input type="hidden" name="sesskey" value="<?php p(sesskey()); ?>" />
-
-<table class="generaltable generalbox pagemanagementtable boxaligncenter" summary="">
-<tr>
-  <td id='existingcell'>
-      <p>
-        <label for="removeselect"><?php print_string('target', 'local_userequipment'); ?></label>
-      </p>
-      <?php $toapplyselector->display(); ?>
-      </td>
-  <td id='buttonscell'>
-    <p class="arrow_button">
-        <input name="add" id="add" type="submit" value="<?php echo $OUTPUT->larrow().'&nbsp;'.get_string('add'); ?>" title="<?php print_string('add'); ?>" /><br />
-        <input name="remove" id="remove" type="submit" value="<?php echo get_string('remove').'&nbsp;'.$OUTPUT->rarrow(); ?>" title="<?php print_string('remove'); ?>" />
-    </p>
-  </td>
-  <td id='potentialcell'>
-      <p>
-        <label for="addselect"><?php print_string('potentialmembers', 'local_userequipment'); ?></label>
-      </p>
-      <?php $potentialmembersselector->display(); ?>
-  </td>
-</tr>
-</table>
-</div>
-<center>
-<?php
-    echo '<input type="checkbox" name="strict" value="1" /> '.get_string('applystrict', 'local_userequipment').'<br/>';
-    echo '<input type="submit" name="apply" value="'.get_string('applytoselection', 'local_userequipment').'" />';
-    $returl = new moodle_url('/local/userequipment/templates.php');
-    echo '<a href="'.$returl.'"><input type="button" name="cancel" value="'.get_string('cancel', 'local_userequipment').'"  /></a>';
-?>
-</center>
-
-</form>
-</div>
-<?php
+echo $renderer->addmembersform($templateid, $toapplyselector, $potentialmembersselector);
 
 echo $OUTPUT->footer();

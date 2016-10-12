@@ -16,6 +16,8 @@
 
 namespace local_userequipment\selectors;
 
+defined('MOODLE_INTERNAL') || die;
+
 require_once($CFG->dirroot.'/user/selector/lib.php');
 require_once($CFG->dirroot.'/group/lib.php');
 
@@ -29,8 +31,6 @@ abstract class ue_application_users_selector_base extends \user_selector_base {
      * @param array $options should have two elements with keys pageid and courseid.
      */
     public function __construct($name, $options = array()) {
-        global $CFG;
-
         $options['accesscontext'] = \context_system::instance();
         parent::__construct($name, $options);
     }
@@ -51,8 +51,6 @@ class ue_application_users_selector extends ue_application_users_selector_base {
      * @param array $options should have two elements with keys pageid and courseid.
      */
     public function __construct($name, $options = array()) {
-        global $CFG;
-
         $options['accesscontext'] = \context_system::instance();
         parent::__construct($name, $options);
     }
@@ -65,7 +63,7 @@ class ue_application_users_selector extends ue_application_users_selector_base {
     public function find_users($search) {
         global $SESSION;
 
-        $selected = (empty($SESSION->ue_selection)) ? array() : $SESSION->ue_selection ;
+        $selected = (empty($SESSION->ue_selection)) ? array() : $SESSION->ue_selection;
 
         return array($selected);
     }
@@ -77,10 +75,6 @@ class ue_application_users_selector extends ue_application_users_selector_base {
  */
 class ue_all_users_selector extends ue_application_users_selector_base {
     const MAX_USERS_PER_PAGE = 100;
-
-    public function output_user($user) {
-        return parent::output_user($user);
-    }
 
     /**
      * Returns the user selector JavaScript module

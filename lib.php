@@ -14,17 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * @package     local_userequipment
+ * @category    local
+ * @copyright   2016 Valery Fremaux (valery.fremaux@gmail.com)
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 defined('MOODLE_INTERNAL') || die();
 
-/**
- * @package   local_userequipment
- * @category  local
- * @copyright 2016 Valery Fremaux (valery.fremaux@gmail.com)
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
 require_once($CFG->dirroot.'/local/userequipment/classes/manager.php');
 
-Use local_userequipment\userequipment_manager;
+use local_userequipment\userequipment_manager;
 
 /**
  *
@@ -34,14 +34,14 @@ function get_all_plugin_classes() {
 
     $allplugins = array();
     $plugins = core_plugin_manager::get_plugins_of_type('blocks');
-    if (!empty($plugins)){
+    if (!empty($plugins)) {
         foreach ($plugins as $p) {
             $allplugins[] = 'block_'.$p;
         }
     }
 
     $plugins = core_plugin_manager::get_plugins_of_type('mod');
-    if (!empty($plugins)){
+    if (!empty($plugins)) {
         foreach ($plugins as $p) {
             $allplugins[] = 'mod_'.$p;
         }
@@ -86,7 +86,7 @@ function initiate_new_user_equipment_event($user) {
     global $CFG, $DB;
 
     if (empty($CFG->enable_user_equipement)) {
-        return; // do not mark anything
+        return; // Do not mark anything.
     }
 
     if (isset($CFG->defaultequipment)) {
@@ -103,6 +103,9 @@ function initiate_new_user_equipment_event($user) {
     }
 }
 
+/**
+ * We add to user settings, not in global navigation.
+ */
 function local_userequipment_extends_navigation($globalnav) {
     global $PAGE;
 
@@ -117,7 +120,6 @@ function local_userequipment_extends_navigation($globalnav) {
         }
     }
 }
-
 
 function get_ue_manager() {
     return userequipment_manager::instance();

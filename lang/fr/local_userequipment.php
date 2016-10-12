@@ -66,15 +66,15 @@ dont vous ne vous servez pas du tout (ou aps encore). Le principe de l\'équipem
 
 <h4>Comment cela fonctionne ?</h4>
 
-<p>Lorsque l\'équipement utilisateur est actif dans votre Moodle, chaque utiisateur peut contrôle par lui-même s\'il actve ou non les plugins installés dans la plate-forme. 
+<p>Lorsque l\'équipement utilisateur est actif dans votre Moodle, chaque utiisateur peut contrôle par lui-même s\'il actve ou non les plugins installés dans la plate-forme.
 Comme nous gérons ces activations au niveau "Utilisateur", il n\'est pas raisonnable d\'explorer globalement tous les roles et tous les droits dont vous disposez dans
 tous les contextes de travail. De ce fait, les listes d\'équipement pourraient vous mentionner des fonctionnalités ou plugins dont
-vous n\'avez jamais entendu parler et qui de toutes façons vous seraient innaccessibles au regard de vos rôles. 
+vous n\'avez jamais entendu parler et qui de toutes façons vous seraient innaccessibles au regard de vos rôles.
 Nous avons essayé d\'être suffisament explicites pour que vous puissiez rapidement vous repérer dans les propositions et voir si elles correspondent
 à votre usage.</p>
 
 <p>Naviguez dans les autres sections du formulaire pour examiner les listes de blocs, modules, et autres types de plugins qui pourraient constituer votre équipement personnel,
-tout en gardant en tête que certaines ne seront réellement disponibles que sous un ensemble de conditions autres telles que les décisions des administrateurs, 
+tout en gardant en tête que certaines ne seront réellement disponibles que sous un ensemble de conditions autres telles que les décisions des administrateurs,
 vos rôles et le réglage des profils de rôle.</p>
 
 <p>Si vous supprimez tous les choix d\'équipement de votre profil, vous serez à nouveau en présence d\'un Moodle complet.</p>
@@ -83,7 +83,6 @@ vos rôles et le réglage des profils de rôle.</p>
 <p>Il est possible que les administrateurs vous aient appliqué un profil d\'équipement prédéfini. Vous pouvez à tout moment réactiver ou au contraire
 réduire encore votre équipement en deà ou au dessus de ce profil. Si vous vous considérez sous-équipé, et n\'arrivez pas à récpérer l\'usage de telle
 ou telle fonction, contactez vos administrateurs de plate-forme pour faire le point avec eux.</p>
-
 ';
 
-include_once('plugin_descriptions.php');
+require_once('plugin_descriptions.php');

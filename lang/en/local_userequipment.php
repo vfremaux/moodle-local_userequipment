@@ -69,7 +69,7 @@ in blocks, activities, or other choice menus. </p>
 <h4>How it works ?</h4>
 
 <p>When User Feature Self-Equipment is enabled in your Moodle, each user can choose to activate or not some plugins. As we are working at user level, this
-feature cannot decently check all your roles in all the contexts you are involved in. Thus the equipement forms may show you features you have never seen 
+feature cannot decently check all your roles in all the contexts you are involved in. Thus the equipement forms may show you features you have never seen
 or would never see in any Moodle your are teaching in. We tried to explicit the descriptions so you can figure out if this feature suits to your role or not.</p>
 
 <p>Browse in the other form sections to discover the list of features, blocks, modules, quetion types, or other module options that you might be using, reminding that
@@ -83,4 +83,4 @@ contact your administrators to be applied a richer profile, or to get some infor
 
 ';
 
-include_once('plugin_descriptions.php');
+require_once('plugin_descriptions.php');
