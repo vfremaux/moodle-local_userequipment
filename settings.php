@@ -62,7 +62,7 @@ if ($hassiteconfig) {
     $settings->add(new admin_setting_configtext($key, $label, $desc, 'local/userequipment:isdisabled', PARAM_TEXT));
 
     $label = get_string('templates', 'local_userequipment');
-    $settings->add(new admin_setting_heading('templates', , '<a href="'.$templatesurl.'">'.$managetemplatesstr.'</a>'));
+    $settings->add(new admin_setting_heading('templates', $label, '<a href="'.$templatesurl.'">'.$managetemplatesstr.'</a>'));
 
 }
 
