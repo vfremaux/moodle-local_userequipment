@@ -153,7 +153,9 @@ class UserEquipmentForm extends moodleform {
                 foreach ($modules as $mod) {
                     $mname = $mod->name;
                     $module = $DB->get_record('modules', array('name' => $mname));
-                    if (empty($module) || !$module->visible) continue;
+                    if (empty($module) || !$module->visible) {
+                        continue;
+                    }
                     $mform->addElement('checkbox', 'mod_'.$mname, get_string('pluginname', $mname));
                     $allplugins[] = 'mod_'.$mname;
                 }
