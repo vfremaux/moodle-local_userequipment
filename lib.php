@@ -105,6 +105,7 @@ function initiate_new_user_equipment_event($user) {
 
 /**
  * We add to user settings, not in global navigation.
+ * @param object $globalnav the global navigation tree
  */
 function local_userequipment_extends_navigation($globalnav) {
     global $PAGE;

@@ -125,8 +125,11 @@ class UserEquipmentForm extends moodleform {
                 foreach ($blockcategories as $catshort => $catblocks) {
 
                     $group = array();
-                    $cname = format_string($blockcats[$catshort]->name);
-                    $catname = (!empty($blockcats[$catshort]->name)) ? $cname : get_string('other', 'local_userequipment');
+                    if (!array_key_exists($catshort, $blockcats)) {
+                        $catname = get_string('other', 'local_userequipment');
+                    } else {
+                        $catname = format_string($blockcats[$catshort]->name);
+                    }
 
                     foreach ($catblocks as $block) {
                         $blockobject = block_instance($block->name);
@@ -136,9 +139,11 @@ class UserEquipmentForm extends moodleform {
                         }
                         if ($sm->string_exists('plugdesc_block_'.$block->name, 'local_userequipment')) {
                             $blockdesc = get_string('plugdesc_block_'.$block->name, 'local_userequipment');
-                            $blocknamespan = '<span data-tooltip="'.$blockdesc.'" data-tooltip-position="bottom">';
-                            $blocknamespan .= $blockname.' </span>';
+                        } else {
+                            $blockdesc = '';
                         }
+                        $blocknamespan = '<span data-tooltip="'.$blockdesc.'" data-tooltip-position="bottom">';
+                        $blocknamespan .= $blockname.' </span>';
                         $group[] = $mform->createElement('checkbox', 'block_'.$block->name, '', $blocknamespan);
                         $allplugins[] = 'block_'.$block->name;
                     }
@@ -183,8 +188,11 @@ class UserEquipmentForm extends moodleform {
                 foreach ($modcategories as $catshort => $catmods) {
 
                     $group = array();
-                    $mname = format_string($modcats[$catshort]->name);
-                    $catname = (!empty($modcats[$catshort]->name)) ? $mname : get_string('other', 'local_userequipment');
+                    if (!array_key_exists($catshort, $modcats)) {
+                        $catname = get_string('other', 'local_userequipment');
+                    } else {
+                        $catname = format_string($modcats[$catshort]->name);
+                    }
 
                     foreach ($catmods as $mod) {
                         if ($sm->string_exists('modulename_help', $mod->name)) {

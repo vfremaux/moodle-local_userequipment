@@ -45,6 +45,7 @@ $PAGE->set_url($url);
 $renderer = $PAGE->get_renderer('local_user_equipment');
 
 // Security.
+
 require_login();
 require_capability('moodle/site:config', $context);
 
