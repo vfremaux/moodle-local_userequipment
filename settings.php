@@ -15,14 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package   local_userequipment
- * @category  local
- * @copyright 2016 Valery Fremaux (valery.fremaux@gmail.com)
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_userequipment
+ * @category    local
+ * @copyright   2016 Valery Fremaux (valery.fremaux@gmail.com)
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die;
 
-// settings default init.
+// Settings default init.
 
 if (is_dir($CFG->dirroot.'/local/adminsettings')) {
     // Integration driven code.
@@ -39,7 +39,10 @@ if ($hassiteconfig) {
 
     $ADMIN->add('users', $settings);
 
-    $settings->add(new admin_setting_configcheckbox('local_userequipment/enabled', get_string('enableuserequipment', 'local_userequipment'), get_string('enableuserequipment_desc', 'local_userequipment'), ''));
+    $key = 'local_userequipment/enabled';
+    $label = get_string('enableuserequipment', 'local_userequipment');
+    $desc = get_string('enableuserequipment_desc', 'local_userequipment');
+    $settings->add(new admin_setting_configcheckbox($key, $label, $desc, ''));
 
     $templatesurl = new moodle_url('/local/userequipment/templates.php');
     $managetemplatesstr = get_string('managetemplates', 'local_userequipment');
@@ -48,13 +51,18 @@ if ($hassiteconfig) {
     $options['0'] = get_string('allusers', 'local_userequipment');
     $options['capability'] = get_string('capabilitycontrol', 'local_userequipment');
     $options['profilefield'] = get_string('profilefieldcontrol', 'local_userequipment');
-    $settings->add(new admin_setting_configselect('local_userequipment/disable_control', get_string('configdisablecontrol', 'local_userequipment'),
-                   get_string('configdisablecontrol_desc', 'local_userequipment'), 'capability', $options));
+    $key = 'local_userequipment/disable_control';
+    $label = get_string('configdisablecontrol', 'local_userequipment');
+    $desc = get_string('configdisablecontrol_desc', 'local_userequipment');
+    $settings->add(new admin_setting_configselect($key, $label, $desc, 'capability', $options));
 
-    $settings->add(new admin_setting_configtext('local_userequipment/disable_control_value', get_string('configdisablecontrolvalue', 'local_userequipment'),
-                   get_string('configdisablecontrolvalue_desc', 'local_userequipment'), 'local/userequipment:isdisabled', PARAM_TEXT));
+    $key = 'local_userequipment/disable_control_value';
+    $label = get_string('configdisablecontrolvalue', 'local_userequipment');
+    $desc = get_string('configdisablecontrolvalue_desc', 'local_userequipment');
+    $settings->add(new admin_setting_configtext($key, $label, $desc, 'local/userequipment:isdisabled', PARAM_TEXT));
 
-    $settings->add(new admin_setting_heading('templates', get_string('templates', 'local_userequipment'), '<a href="'.$templatesurl.'">'.$managetemplatesstr.'</a>'));
+    $label = get_string('templates', 'local_userequipment');
+    $settings->add(new admin_setting_heading('templates', $label, '<a href="'.$templatesurl.'">'.$managetemplatesstr.'</a>'));
 
 }
 
