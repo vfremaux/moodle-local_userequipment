@@ -14,18 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * @package   local_userequipment
  * @category  local
  * @copyright 2016 Valery Fremaux (valery.fremaux@gmail.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die;
 
 $capabilities = array(
 
-    // whoever has this capability will get full list of things
+    // Whoever has this capability will get full list of things.
     'local/userequipment:override' => array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_SYSTEM,
@@ -35,7 +34,7 @@ $capabilities = array(
         )
     ),
 
-    // whoever has this capability can control his equipement by himself
+    // Whoever has this capability can control his equipement by himself.
     'local/userequipment:selfequip' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
@@ -45,7 +44,7 @@ $capabilities = array(
         )
     ),
 
-    // whoever has this capability can control equipment of other users
+    // Whoever has this capability can control equipment of other users.
     'local/userequipment:equip' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,

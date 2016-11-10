@@ -14,14 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * @package   local_userequipment
  * @category  local
  * @copyright 2016 Valery Fremaux (valery.fremaux@gmail.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die();
+
 require_once($CFG->dirroot.'/local/userequipment/lib.php');
 
 /**
@@ -29,14 +29,16 @@ require_once($CFG->dirroot.'/local/userequipment/lib.php');
  */
 function check_user_equipment($plugintype, $plugin, $userid = 0) {
     global $USER;
-    global $CFG;
-    global $DB;
 
-    if (!$userid) $userid = $USER->id;
+    if (!$userid) {
+        $userid = $USER->id;
+    }
 
     $config = get_config('local_userequipment');
 
-    if (!$config->enabled) return true; // everything allowed
+    if (!$config->enabled) {
+        return true; // Everything allowed.
+    }
 
     $manager = get_ue_manager();
     return $manager->check_user_equipment($plugintype, $plugin, $userid);

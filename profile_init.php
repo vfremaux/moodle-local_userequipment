@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -27,7 +26,7 @@ require_once($CFG->dirroot.'/local/userequipment/lib.php');
 require_once($CFG->dirroot.'/local/userequipment/classes/manager.php');
 require_once($CFG->dirroot.'/lib/blocklib.php');
 
-Use local_userequipment\userequipment_manager;
+use local_userequipment\userequipment_manager;
 
 $id = optional_param('id', 0, PARAM_INT);
 
