@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 class template_controller {
 
-    function process($action) {
+    public function process($action) {
         global $DB;
 
         if ($action == 'delete') {

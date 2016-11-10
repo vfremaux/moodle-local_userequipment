@@ -14,26 +14,26 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace local_userequipment;
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * @package   local_userequipment
  * @category  local
  * @copyright 2016 Valery Fremaux (valery.fremaux@gmail.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+namespace local_userequipment;
+
+defined('MOODLE_INTERNAL') || die();
 
 class userequipment_manager {
 
-    static $instance;
+    protected static $instance;
 
     public static function instance() {
         if (empty($instance)) {
-            userequipment_manager::$instance = new userequipment_manager();
+            self::$instance = new userequipment_manager();
         }
 
-        return userequipment_manager::$instance;
+        return self::$instance;
     }
 
     private function __construct() {
@@ -78,7 +78,7 @@ class userequipment_manager {
          'block_section_links' => 0,
          'block_sharedresources' => 0,
          'block_site_main_menu' => 1,
-         'block_social_activities' => 1, 
+         'block_social_activities' => 1,
          'block_tag_flickr' => 1,
          'block_tag_youtube' => 1,
          'block_tags' => 1,
@@ -161,7 +161,7 @@ class userequipment_manager {
          'format_social' => 0);
     }
 
-    /** 
+    /**
      * Applies an equipment template to a user. If strict, will replace existing equipment
      * with the template deleting eventual previous allowance.
      * @param int $userid
@@ -169,7 +169,7 @@ class userequipment_manager {
      * @param bool $strict
      * @return void
      */
-    function apply_template($templateid, $userid, $strict = false) {
+    public function apply_template($templateid, $userid, $strict = false) {
         global $DB;
 
         if (!$DB->record_exists('user', array('id' => $userid))) {
@@ -200,7 +200,7 @@ class userequipment_manager {
      * Adds or updates a template in DB
      * @param object $data data from form.
      */
-    function add_update_template($data) {
+    public function add_update_template($data) {
         global $DB;
 
         if ($template = $DB->get_record('local_userequipment_tpl', array('id' => $data->template))) {
@@ -237,7 +237,7 @@ class userequipment_manager {
      * Adds or updates a template in DB
      * @param object $data data from form.
      */
-    function add_update_user($data, $userid) {
+    public function add_update_user($data, $userid) {
         global $DB;
 
         $DB->delete_records('local_userequipment', array('userid' => $userid));
@@ -267,7 +267,7 @@ class userequipment_manager {
     /**
      *
      */
-    function fetch_equipement($user = null, $template = null) {
+    public function fetch_equipement($user = null, $template = null) {
         global $USER, $DB;
 
         if ($template) {
@@ -291,8 +291,8 @@ class userequipment_manager {
         return array();
     }
 
-    function delete_equipment(&$user) {
-        global $USER, $DB;
+    public function delete_equipment(&$user) {
+        global $DB;
 
         $DB->delete_records('local_userequipment', array('userid' => $user->id));
     }
@@ -300,10 +300,9 @@ class userequipment_manager {
     /**
      * checks if a plugin of some plugintype is in user's equipment
      */
-    function check_user_equipment($plugintype, $plugin, $userid = 0) {
+    public function check_user_equipment($plugintype, $plugin, $userid = 0) {
         global $USER;
-        static $CHECKCACHE;
-        global $CFG;
+        static $checkcache;
         global $DB;
 
         if (!$this->is_enabled_for_user($USER)) {
@@ -314,23 +313,24 @@ class userequipment_manager {
             $userid = $USER->id;
         }
 
-        if (!isset($CHECKCACHE)) {
-            $CHECKCACHE = array();
+        if (!isset($checkcache)) {
+            $checkcache = array();
         }
 
         if (!$DB->record_exists('local_userequipment', array('userid' => $userid))) {
             return true;
         }
 
-        if (!in_array($plugintype.'_'.$plugin, array_keys($CHECKCACHE))) {
-            if ($check = $DB->get_record('local_userequipment', array('plugintype' => $plugintype, 'plugin' => $plugin, 'userid' => $userid))) {
-                $CHECKCACHE[$plugintype.'_'.$plugin] = $check->available;
+        if (!in_array($plugintype.'_'.$plugin, array_keys($checkcache))) {
+            $params = array('plugintype' => $plugintype, 'plugin' => $plugin, 'userid' => $userid);
+            if ($check = $DB->get_record('local_userequipment', $params)) {
+                $checkcache[$plugintype.'_'.$plugin] = $check->available;
             } else {
-                $CHECKCACHE[$plugintype.'_'.$plugin] = 0;
+                $checkcache[$plugintype.'_'.$plugin] = 0;
             }
         }
 
-        return $CHECKCACHE[$plugintype.'_'.$plugin];
+        return $checkcache[$plugintype.'_'.$plugin];
     }
 
     public function is_enabled_for_user($user) {
