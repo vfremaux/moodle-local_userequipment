@@ -1,7 +1,28 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-// these strings will provide a short description about plugins to help
-// users to understand if they might need them.
+/**
+ * these strings will provide a short description about plugins to help
+ * users to understand if they might need them.
+ *
+ * @copyright 2015 Valery Fremaux (valery.fremaux@gmail.com)
+ * @package local_userequipment
+ * @category local
+ */
+defined('MOODLE_INTERNAL') || die;
 
 $string['plugdesc_block_activity_modules'] = 'Liste les types de modules utilisés dans le cours et donne un accès à l\'index des activités de chaque type.';
 $string['plugdesc_block_activity_publisher'] = 'Ce bloc est un outil de l\'enseignant qui aide à créer des sauvegardes d\'activités et les publier dans la libriaire mutualisée.';
