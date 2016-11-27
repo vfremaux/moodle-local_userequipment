@@ -93,6 +93,7 @@ $string['plugdesc_block_selfcompletion'] = 'Access the personal completion dahsb
 $string['plugdesc_block_settings'] = 'The general settings block.';
 $string['plugdesc_block_sharedresources'] = 'This is a teacher tool providing sharedresource operation utilities.';
 $string['plugdesc_block_shop_access'] = 'Give access to an instance of Moodle Integrated Shop';
+$string['plugdesc_block_shop_course_seats'] = 'Allows course owners having purchased unassigned seats to engage seats in the course';
 $string['plugdesc_block_shop_bills'] = 'Summarizes the user\'s purchases';
 $string['plugdesc_block_shop_products'] = 'Summarizes the user\'s acquired and running products';
 $string['plugdesc_block_shop_total'] = 'Summarizes the shopping cart state';

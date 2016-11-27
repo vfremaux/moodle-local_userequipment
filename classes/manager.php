@@ -39,6 +39,10 @@ class userequipment_manager {
     private function __construct() {
     }
 
+    public function supports_plugin_type($ptype) {
+        return in_array($ptype, array('mod', 'block', 'qtype', 'format'));
+    }
+
     public static function init_defaults() {
         return array(
          'block_activity_modules' => 1,
@@ -177,10 +181,13 @@ class userequipment_manager {
         }
 
         if ($strict) {
+            echo "Deleting records for $userid ";
             $DB->delete_records('local_userequipment', array('userid' => $userid));
         }
 
+        echo " applying keys from $templateid ";
         if ($templatedefs = $DB->get_records('local_userequipment', array('template' => $templateid))) {
+            echo " applying keys from $templateid ";
             foreach ($templatedefs as $td) {
                 if (!$DB->record_exists('local_userequipment', array('userid' => $userid, 'plugintype' => $td->plugintype, 'plugin' => $td->plugin))) {
                     $def = new \StdClass;
@@ -201,15 +208,32 @@ class userequipment_manager {
      * @param object $data data from form.
      */
     public function add_update_template($data) {
-        global $DB;
+        global $DB, $CFG;
+
+        $context = \context_system::instance();
+
+        $options = array('trusttext' => true,
+                         'subdirs' => false,
+                         'maxfiles' => 100,
+                         'maxbytes' => $CFG->maxbytes,
+                         'context' => $context);
+
+        $data = file_postupdate_standard_editor($data, 'description', $options, $context,
+                                                'local_userequipment', 'templatedesc', $data->template);
 
         if ($template = $DB->get_record('local_userequipment_tpl', array('id' => $data->template))) {
             $template->name = $data->name;
+            $template->description = $data->description;
+            $template->descriptionformat = $data->descriptionformat;
+            $template->usercanchoose = $data->usercanchoose;
             $DB->update_record('local_userequipment_tpl', $template);
         } else {
             $template = new \StdClass;
             $template->name = $data->name;
-            $data->template = $DB->insert_record('local_userequipment_tpl', $template);
+            $template->description = $data->description;
+            $template->descriptionformat = $data->descriptionformat;
+            $template->usercanchoose = $data->usercanchoose;
+            $template->id = $data->template = $DB->insert_record('local_userequipment_tpl', $template);
         }
 
         $DB->delete_records('local_userequipment', array('template' => $data->template));
@@ -222,7 +246,7 @@ class userequipment_manager {
                 $eqrec = new \StdClass;
                 $eqrec->plugintype = array_shift($parts);
                 $eqrec->plugin = implode('_', $parts);
-                $eqrec->user = 0;
+                $eqrec->userid = 0;
                 $eqrec->template = $data->template;
                 if (!empty($data->$eqkey)) {
                     $eqrec->available = 1;
