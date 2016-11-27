@@ -62,10 +62,11 @@ if (empty($templates)) {
 } else {
     $namestr = get_string('name');
     $countstr = get_string('plugins', 'local_userequipment');
+    $canchoosestr = get_string('usercanchoose', 'local_userequipment');
     $table = new html_table();
-    $table->head = array($namestr, $countstr, '', '');
-    $table->align = array('left', 'left', 'left', 'right');
-    $table->size = array('60%', '10%', '20%', '10%');
+    $table->head = array($namestr, $countstr, $canchoosestr, '', '');
+    $table->align = array('left', 'left', 'center', 'left', 'right');
+    $table->size = array('60%', '10%', '10%', '10%', '10%');
     $table->width = '90%';
 
     foreach ($templates as $t) {
@@ -79,7 +80,9 @@ if (empty($templates)) {
         $applyurl = new moodle_url('/local/userequipment/apply.php', array('template' => $t->id));
         $applybutton = $OUTPUT->single_button($applyurl, get_string('applytemplatebtn', 'local_userequipment'));
 
-        $table->data[] = array(format_string($t->name), (0 + @$count), $applybutton, $cmds);
+        $canchoose = ($t->usercanchoose) ? get_string('yes') : get_string('no');
+
+        $table->data[] = array(format_string($t->name), (0 + @$count), $canchoose, $applybutton, $cmds);
     }
 
     echo html_writer::table($table);

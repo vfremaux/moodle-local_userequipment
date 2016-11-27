@@ -125,3 +125,61 @@ function local_userequipment_extends_navigation($globalnav) {
 function get_ue_manager() {
     return userequipment_manager::instance();
 }
+
+/**
+ * checks if a user has a some named capability effective somewhere in a course.
+ * @param string $capability;
+ * @param bool $excludesystem
+ * @param bool $excludesite
+ * @param bool $doanything
+ * @param string $contextlevels restrict to some contextlevel may speedup the query.
+ */
+function local_ue_has_capability_somewhere($capability, $excludesystem = true, $excludesite = true, $doanything = false, $contextlevels = '') {
+    global $USER, $DB;
+
+    $contextclause = '';
+
+    if ($contextlevels) {
+        list($sql, $params) = $DB->get_in_or_equal(explode(',', $contextlevels), SQL_PARAMS_QM);
+        $contextclause = "
+           AND ctx.contextlevel $sql
+        ";
+    }
+    $params[] = $capability;
+    $params[] = $USER->id;
+
+    // this is a a quick rough query that may not handle all role override possibility
+
+    $sql = "
+        SELECT
+            COUNT(DISTINCT ra.id)
+        FROM
+            {role_capabilities} rc,
+            {role_assignments} ra,
+            {context} ctx
+        WHERE
+            rc.roleid = ra.roleid AND
+            ra.contextid = ctx.id AND
+            rc.capability = ?
+            $contextclause
+            AND ra.userid = ? AND
+            rc.permission = 1
+    ";
+    $hassome = $DB->count_records_sql($sql, $params);
+
+    // $hassome = get_user_capability_course($capability, $USER->id, false);
+    if ($excludesite && !empty($hassome) && array_key_exists(SITEID, $hassome)) {
+        unset($hassome[SITEID]);
+    }
+
+    if (!empty($hassome)) {
+        return true;
+    }
+
+    $systemcontext = context_system::instance();
+    if (!$excludesystem && has_capability($capability, $systemcontext, $USER->id, $doanything)) {
+        return true;
+    }
+
+    return false;
+}

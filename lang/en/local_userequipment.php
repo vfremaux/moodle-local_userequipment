@@ -35,6 +35,7 @@ $string['cleanup'] = 'Delete all my equipment marks';
 $string['equipmentcleaned'] = 'Equipment marks have been successfully deleted';
 
 $string['allusers'] = 'All users enabled';
+$string['applytemplate'] = 'Apply profile : "{$a}"';
 $string['capabilitycontrol'] = 'Disable by capability';
 $string['profilefieldcontrol'] = 'disable by profile field';
 $string['configdisablecontrol'] = 'Disable control source';
@@ -49,6 +50,7 @@ $string['potentialmembers'] = 'Potential users';
 $string['plugins'] = 'Plugins';
 $string['template'] = 'Template';
 $string['templatename'] = 'Template name';
+$string['templateapplied'] = 'The template has been applied to your profile';
 $string['templates'] = 'Templates';
 $string['notemplates'] = 'No templates';
 $string['addtemplate'] = 'Add new template';
@@ -59,6 +61,10 @@ $string['applystrict']  = 'Apply strict template';
 $string['applystrict_desc'] = 'Using strict application will erase all previous activation in the targetted user\'s profiles.';
 $string['applytoselection'] = 'Apply to selected users';
 $string['usersupdated'] = 'Users had equipment profile updated';
+$string['usercanchoose'] = 'User choice';
+$string['profilesimple'] = 'Elementary';
+$string['profilestandard'] = 'Standard only';
+$string['profileextended'] = 'Extended';
 
 $string['userequipment'] = 'User feature self-equipment';
 $string['ueinfo_tpl'] = '
@@ -78,9 +84,25 @@ the feature accessibility might depend on other factors, such as global settings
 <p>Removing all profile equipment choices will let you using a full featured moodle again.</p>
 
 <h4>User Equipement Profiles</h4>
-<p>the administrators may have applied a preset profile to you. In all case you can add or remove features from this starting point. If you feel really underequiped,
+<p>The administrators may have applied a preset profile to you. In all case you can add or remove features from this starting point. If you feel really underequiped,
 contact your administrators to be applied a richer profile, or to get some information about real availability of this or that feature.</p>
 
 ';
+
+$string['ueselfinfo_tpl'] = '
+<h4>My Equipment Profiles</h4>
+
+<p>In some Moodle you may apply some profiles for yourself directly without asking an administrator do do it for you. Click on one of the following buttons to change
+your profile. This will reset all your equipement and apply the profile equipement. You may toggle on additional features individually later if the profile do not
+provide them.</p>
+';
+
+$string['profilesimple_desc'] = 'Elementary profile that accesses to the very basic features such as forum assign, publishing files,
+url and video and making quiz.';
+
+$string['profilestandard_desc'] = 'A profile that only activates standard plugins, making course more compatbile with any Moodle
+installation of same version level.';
+
+$string['profileextended_desc'] = 'An extended profile activating valuable pedagogic additions.';
 
 require_once('plugin_descriptions.php');
