@@ -23,6 +23,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+require_once($CFG->dirroot.'/local/userequipment/classes/manager.php');
+
 function xmldb_local_userequipment_install() {
     global $DB;
 
@@ -41,9 +43,9 @@ function xmldb_local_userequipment_install() {
     );
 
     $profiles[] = array(
-        'name' => 'enhanced',
+        'name' => 'extended',
         'usercanchoose' => true,
-        'features' => ue_enhanced_features(),
+        'features' => ue_extended_features(),
     );
 
     // Purge any existing template.
@@ -53,7 +55,8 @@ function xmldb_local_userequipment_install() {
     foreach ($profiles as $profile) {
         $tplrec = new StdClass();
         $tplrec->name = get_string('profile'.$profile['name'], 'local_userequipment');
-        $tplrec->desc = get_string('profile'.$profile['name'].'_desc', 'local_userequipment');
+        $tplrec->description = get_string('profile'.$profile['name'].'_desc', 'local_userequipment');
+        $tplrec->descriptionformat = FORMAT_HTML;
         $tplrec->usercanchoose = $profile['usercanchoose'];
 
         $tplrec->id = $DB->insert_record('local_userequipment_tpl', $tplrec);
@@ -99,7 +102,7 @@ function ue_standard_features($excludes = null) {
     $features = array();
 
     $pluginman = core_plugin_manager::instance();
-    $uemanager = local_userequipment\userequipment_manager::instance();
+    $uemanager = \local_userequipment\userequipment_manager::instance();
 
     $allplugins = $pluginman->get_plugins();
 
@@ -186,4 +189,6 @@ function ue_extended_features() {
             $features[] = $f;
         }
     }
+
+    return $features;
 }

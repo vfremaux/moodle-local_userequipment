@@ -29,19 +29,15 @@ $string['userequipment:equip'] = 'Can configure equipment of other users';
 
 $string['pluginname'] = 'User equipment';
 $string['enableuserequipment'] = 'Enable per user feature equipment';
-$string['enableuserequipment_desc'] = 'If enabled, each user (editing users) can self-equipe their profile with available features, or cleanup their GUIs from unused or unnecessary items.';
 $string['equipme'] = 'Manage my equipment';
 $string['cleanup'] = 'Delete all my equipment marks';
 $string['equipmentcleaned'] = 'Equipment marks have been successfully deleted';
-
 $string['allusers'] = 'All users enabled';
 $string['applytemplate'] = 'Apply profile : "{$a}"';
 $string['capabilitycontrol'] = 'Disable by capability';
 $string['profilefieldcontrol'] = 'disable by profile field';
 $string['configdisablecontrol'] = 'Disable control source';
-$string['configdisablecontrol_desc'] = 'Allows selecting the way some users may be equipement disabled';
 $string['configdisablecontrolvalue'] = 'Disable control value';
-$string['configdisablecontrolvalue_desc'] = 'Set value for control. Value may be a capability name or a custom user control field name.';
 $string['disabledforuser'] = 'Self equipment has been disabled for you.';
 $string['cancel'] = 'Cancel';
 $string['target'] = 'Target Users';
@@ -58,15 +54,26 @@ $string['managetemplates'] = 'manage templates facility';
 $string['applytemplate'] = 'Apply template: {$a}';
 $string['applytemplatebtn'] = 'Apply template';
 $string['applystrict']  = 'Apply strict template';
-$string['applystrict_desc'] = 'Using strict application will erase all previous activation in the targetted user\'s profiles.';
 $string['applytoselection'] = 'Apply to selected users';
 $string['usersupdated'] = 'Users had equipment profile updated';
 $string['usercanchoose'] = 'User choice';
 $string['profilesimple'] = 'Elementary';
 $string['profilestandard'] = 'Standard only';
 $string['profileextended'] = 'Extended';
-
 $string['userequipment'] = 'User feature self-equipment';
+
+$string['enableuserequipment_desc'] = 'If enabled, each user (editing users) can self-equipe their profile with available features,
+or cleanup their GUIs from unused or unnecessary items.';
+
+$string['applystrict_desc'] = 'Using strict application will erase all previous activation in the targetted user\'s profiles.';
+
+$string['configdisablecontrol_desc'] = 'Allows selecting the way some users may be equipement disabled. you can choose using a specific capability
+and manage equipment availability by roles, or drive it using profile fields.';
+
+$string['configdisablecontrolvalue_desc'] = 'Set value for control. Value may be a capability name or a custom user control field name that has to contain
+a non empty value. you may also defined the value as a fieldname=value expression, in which case the field will have to contain the exact value to
+disable equipment.';
+
 $string['ueinfo_tpl'] = '
 <p>Moodle is becoming a very complete and rich application. Probably administrators and other users do use different features you really need. User Feature
 Self Equipement principle will help you to tune the Moodle menus and features choice to better fit your needs and avoid loosing time in finding things
