@@ -69,7 +69,6 @@ if (empty($data)) {
     if (!empty($templateid)) {
         $data = $manager->fetch_equipement(null, $templateid);
         $templaterec = $DB->get_record('local_userequipment_tpl', array('id' => $templateid));
-        print_object($templaterec);
         $data = array_merge($data, (array) $templaterec);
         $data['template'] = $templateid;
     } else {

@@ -33,7 +33,7 @@ function xmldb_local_userequipment_upgrade($oldversion = 0) {
 
     $dbman = $DB->get_manager();
 
-    if ($oldversion < 2016092100) { //New version in version.php
+    if ($oldversion < 2016092100) {
 
         // Define table local_shop to be created.
         $table = new xmldb_table('local_userequipment');
@@ -49,7 +49,7 @@ function xmldb_local_userequipment_upgrade($oldversion = 0) {
 
         // Adding keys to table local_userequipment.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
-        $table->add_index('ix_unique_plugin', XMLDB_INDEX_UNIQUE, array('plugintype','plugin'));
+        $table->add_index('ix_unique_plugin', XMLDB_INDEX_UNIQUE, array('plugintype', 'plugin'));
         $table->add_index('ix_userid', XMLDB_INDEX_NOTUNIQUE, array('userid'));
         $table->add_index('ix_template', XMLDB_INDEX_NOTUNIQUE, array('template'));
 
