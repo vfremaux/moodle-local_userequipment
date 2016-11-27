@@ -134,7 +134,8 @@ function get_ue_manager() {
  * @param bool $doanything
  * @param string $contextlevels restrict to some contextlevel may speedup the query.
  */
-function local_ue_has_capability_somewhere($capability, $excludesystem = true, $excludesite = true, $doanything = false, $contextlevels = '') {
+function local_ue_has_capability_somewhere($capability, $excludesystem = true, $excludesite = true,
+                                           $doanything = false, $contextlevels = '') {
     global $USER, $DB;
 
     $contextclause = '';
@@ -148,7 +149,7 @@ function local_ue_has_capability_somewhere($capability, $excludesystem = true, $
     $params[] = $capability;
     $params[] = $USER->id;
 
-    // this is a a quick rough query that may not handle all role override possibility
+    // This is a a quick rough query that may not handle all role override possibility.
 
     $sql = "
         SELECT
@@ -167,7 +168,6 @@ function local_ue_has_capability_somewhere($capability, $excludesystem = true, $
     ";
     $hassome = $DB->count_records_sql($sql, $params);
 
-    // $hassome = get_user_capability_course($capability, $USER->id, false);
     if ($excludesite && !empty($hassome) && array_key_exists(SITEID, $hassome)) {
         unset($hassome[SITEID]);
     }

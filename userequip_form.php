@@ -69,10 +69,12 @@ class UserEquipmentForm extends moodleform {
 
             if ($selfusabletemplates = $DB->get_records('local_userequipment_tpl', array('usercanchoose' => true))) {
                 $mform->addElement('html', get_string('ueselfinfo_tpl', 'local_userequipment'));
-                foreach($selfusabletemplates as $tpl) {
+                foreach ($selfusabletemplates as $tpl) {
                     $group = array();
-                    $group[] = $mform->createElement('submit', 'applytpl'.$tpl->id, get_string('applytemplate', 'local_userequipment', $tpl->name));
-                    $desc = '<div class="pull-right userequipment-half-column">'.format_text($tpl->description, $tpl->descriptionformat).'</div>';
+                    $label = get_string('applytemplate', 'local_userequipment', $tpl->name);
+                    $group[] = $mform->createElement('submit', 'applytpl'.$tpl->id, $label);
+                    $descstr = format_text($tpl->description, $tpl->descriptionformat);
+                    $desc = '<div class="pull-right userequipment-half-column">'.$descstr.'</div>';
                     $group[] = $mform->createElement('static', 'chk'.$tpl->id);
                     $mform->addGroup($group, 'group'.$tpl->id, '', array($desc), false, false);
                 }
@@ -264,9 +266,14 @@ class UserEquipmentForm extends moodleform {
         $context = $this->editoroptions['context'];
 
         $descdraftideditor = file_get_submitted_draft_itemid('description_editor');
-        $currenttext = file_prepare_draft_area($descdraftideditor, $context->id, 'local_userequipment', 'description_editor', @$defaults->id, array('subdirs' => true), @$defaults->description);
-        $defaults = file_prepare_standard_editor($defaults, 'description', $this->editoroptions, $context, 'local_userequipment', 'templatedesc', @$defaults->id);
-        $defaults->description = array('text' => $currenttext, 'format' => $defaults->descriptionformat, 'itemid' => $descdraftideditor);
+        $currenttext = file_prepare_draft_area($descdraftideditor, $context->id, 'local_userequipment',
+                                               'description_editor', @$defaults->id, array('subdirs' => true),
+                                               @$defaults->description);
+        $defaults = file_prepare_standard_editor($defaults, 'description', $this->editoroptions, $context,
+                                                 'local_userequipment', 'templatedesc', @$defaults->id);
+        $defaults->description = array('text' => $currenttext,
+                                       'format' => $defaults->descriptionformat,
+                                       'itemid' => $descdraftideditor);
 
         parent::set_data($defaults);
     }

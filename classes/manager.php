@@ -189,7 +189,8 @@ class userequipment_manager {
         if ($templatedefs = $DB->get_records('local_userequipment', array('template' => $templateid))) {
             echo " applying keys from $templateid ";
             foreach ($templatedefs as $td) {
-                if (!$DB->record_exists('local_userequipment', array('userid' => $userid, 'plugintype' => $td->plugintype, 'plugin' => $td->plugin))) {
+                $params = array('userid' => $userid, 'plugintype' => $td->plugintype, 'plugin' => $td->plugin);
+                if (!$DB->record_exists('local_userequipment', $params)) {
                     $def = new \StdClass;
                     $def->userid = $userid;
                     $def->plugintype = $td->plugintype;

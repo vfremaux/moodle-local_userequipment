@@ -36,7 +36,7 @@ $url = new moodle_url('/local/userequipment/templates.php');
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('admin');
 
-// Default configuration
+// Default configuration.
 
 $config = get_config('local_userequipment');
 
@@ -74,7 +74,8 @@ if (empty($templates)) {
 
         $editurl = new moodle_url('/local/userequipment/template.php', array('template' => $t->id, 'id' => 0));
         $cmds = '<a href="'.$editurl.'" alt="'.get_string('update').'"><img src="'.$OUTPUT->pix_url('t/edit').'"></a>';
-        $deleteurl = new moodle_url('/local/userequipment/templates.php', array('what' => 'delete', 'template' => $t->id, 'sesskey' => sesskey()));
+        $params = array('what' => 'delete', 'template' => $t->id, 'sesskey' => sesskey());
+        $deleteurl = new moodle_url('/local/userequipment/templates.php', $params);
         $cmds .= '&nbsp;<a href="'.$deleteurl.'" alt="'.get_string('delete').'"><img src="'.$OUTPUT->pix_url('t/delete').'"></a>';
 
         $applyurl = new moodle_url('/local/userequipment/apply.php', array('template' => $t->id));
