@@ -116,6 +116,10 @@ function xmldb_local_userequipment_upgrade($oldversion = 0) {
             $dbman->add_field($table, $field);
         }
 
+        // Play installer to load default templates.
+        require_once($CFG->dirroot.'/local/userequipment/db/install.php');
+        xmldb_local_userequipment_install();
+
         upgrade_plugin_savepoint(true, 2016112600, 'local', 'userequipment');
     }
 

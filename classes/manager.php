@@ -181,13 +181,10 @@ class userequipment_manager {
         }
 
         if ($strict) {
-            echo "Deleting records for $userid ";
             $DB->delete_records('local_userequipment', array('userid' => $userid));
         }
 
-        echo " applying keys from $templateid ";
         if ($templatedefs = $DB->get_records('local_userequipment', array('template' => $templateid))) {
-            echo " applying keys from $templateid ";
             foreach ($templatedefs as $td) {
                 $params = array('userid' => $userid, 'plugintype' => $td->plugintype, 'plugin' => $td->plugin);
                 if (!$DB->record_exists('local_userequipment', $params)) {
