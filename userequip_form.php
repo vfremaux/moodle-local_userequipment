@@ -184,7 +184,7 @@ class UserEquipmentForm extends moodleform {
                         $group[] = $mform->createElement('checkbox', 'block_'.$block->name, '', $blocknamespan);
                         $allplugins[] = 'block_'.$block->name;
                     }
-                    $mform->addGroup($group, 'groupcat'.$catshort, $catname, '', false);
+                    $mform->addGroup($group, 'groupcat'.$catshort, $catname, array(''), false);
                 }
             }
         }
@@ -242,7 +242,7 @@ class UserEquipmentForm extends moodleform {
                         $group[] = $mform->createElement('checkbox', 'mod_'.$mod->name, '', $modnamespan.' ');
                         $allplugins[] = 'mod_'.$mod->name;
                     }
-                    $mform->addGroup($group, 'groupmods'.$catshort, $catname, ' ', false);
+                    $mform->addGroup($group, 'groupmods'.$catshort, $catname, array(''), false);
                 }
             }
         }
@@ -255,7 +255,7 @@ class UserEquipmentForm extends moodleform {
                 $group[] = $mform->createElement('checkbox', 'qtype_'.$qtype->name, '', $qtypevisiblename);
                 $allplugins[] = 'qtype_'.$qtype->name;
             }
-            $mform->addGroup($group, 'groupquiztype', get_string('questiontype', 'question'), '', array(' '));
+            $mform->addGroup($group, 'groupquiztype', get_string('questiontype', 'question'), array(''), false);
         }
 
         $this->add_action_buttons(true);
