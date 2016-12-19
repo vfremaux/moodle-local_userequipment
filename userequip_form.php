@@ -26,13 +26,10 @@ require_once($CFG->libdir.'/formslib.php');
 
 // Hack formlibs factory default.
 
-require_once($CFG->dirroot.'/mod/resource/lib.php');
-require_once($CFG->dirroot.'/lib/questionlib.php');
-
 class UserEquipmentForm extends moodleform {
 
     public function definition() {
-        global $CFG, $DB;
+        global $CFG, $DB, $USER;
 
         $mform = $this->_form;
 
@@ -66,8 +63,10 @@ class UserEquipmentForm extends moodleform {
 
             $assignableroles = get_assignable_roles(context_system::instance());
             $roleoptions = array('' => get_string('none', 'local_userequipment'));
-            $roleoptions = array_merge($roleoptions, $assignableroles);
-            $mform->addElement('select', 'associatedsystemrole', get_string('associatedsystemrole', 'local_userequipment'), $roleoptions, 0);
+            foreach ($assignableroles as $rid => $name) {
+                $roleoptions[$rid] = $name;
+            }
+            $mform->addElement('select', 'associatedsystemrole', get_string('associatedsystemrole', 'local_userequipment'), $roleoptions, '');
 
             $options = array(0 => get_string('releasenever', 'local_userequipment'),
                              1 => get_string('releaseonnewprofile', 'local_userequipment'),
@@ -92,7 +91,15 @@ class UserEquipmentForm extends moodleform {
                 }
             }
 
-            $mform->addElement('submit', 'cleanup', get_string('cleanup', 'local_userequipment'));
+            $group = array();
+            $marks = $DB->count_records('local_userequipment', array('userid' => $USER->id));
+            if ($marks) {
+                $descstr = get_string('marksinfo', 'local_userequipment', $marks);
+                $desc = '<div class="pull-left userequipment-half-column">'.$descstr.'</div>';
+                $group[] = $mform->createElement('static', 'chkcleanup');
+                $group[] = $mform->createElement('submit', 'cleanup', get_string('cleanup', 'local_userequipment'));
+                $mform->addGroup($group, 'groupcleanup', '', array($desc), false, false);
+            }
 
         }
 
