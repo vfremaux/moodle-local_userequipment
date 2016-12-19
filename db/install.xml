@@ -18,13 +18,16 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key for userfiles_link"/>
         <INDEX NAME="ix_template" UNIQUE="false" FIELDS="template"/>
         <INDEX NAME="ix_userid" UNIQUE="false" FIELDS="userid"/>
-        <INDEX NAME="ix_plugin" UNIQUE="true" FIELDS="plugintype,plugin"/>
+        <INDEX NAME="ix_plugin" UNIQUE="true" FIELDS="userid,plugintype,plugin,template"/>
       </KEYS>
     </TABLE>
     <TABLE NAME="local_userequipment_tpl" COMMENT="stores user attached information about available modules for the user">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" />
         <FIELD NAME="name" TYPE="char" LENGTH="64" NOTNULL="true" DEFAULT="0" SEQUENCE="false" ENUM="false" />
+        <FIELD NAME="description" TYPE="text" LENGTH="medium" NOTNULL="false" SEQUENCE="false" ENUM="false" />
+        <FIELD NAME="descriptionformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" ENUM="false" />
+        <FIELD NAME="usercanchoose" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" ENUM="false" />
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Templates ID"/>
