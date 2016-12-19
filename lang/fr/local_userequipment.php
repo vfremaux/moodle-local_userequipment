@@ -27,62 +27,98 @@ $string['userequipment:override'] = 'Surchage les limites d\'équipement';
 $string['userequipment:selfequip'] = 'Peut configurer son propre équipement';
 $string['userequipment:equip'] = 'Peut configurer l\'équipement d\'autres utilisateurs';
 
-$string['pluginname'] = 'Equipement de l\'utilisateur';
-$string['enableuserequipment'] = 'Activer le plan d\'équipement individuel des utilisateurs';
-$string['enableuserequipment_desc'] = 'Si activé, les utilisateurs (editeurs) peuvent choisir les fonctions qu\'ils mobilisent, et nettoyer les interfaces de tout ce qui ne leur sert pas dans leur processus d\'édition.';
-$string['equipme'] = 'Gérer mes équipements';
-
+$string['addtemplate'] = 'Ajouter un nouveau profil';
 $string['allusers'] = 'Tous les utilisateurs activés';
-$string['capabilitycontrol'] = 'Désactiver par capacité';
-$string['profilefieldcontrol'] = 'Désactiver par champ de profil';
-$string['configdisablecontrol'] = 'Source de désactivation';
-$string['configdisablecontrol_desc'] = 'Permet de choisir comment l\'auto-équipement de certains utilisateurs est désactivé';
-$string['configdisablecontrolvalue'] = 'Valeur de contrôle';
-$string['configdisablecontrolvalue_desc'] = 'Définit la valeur de contrôle. Celapeut être le nom d\'une capacité ou le code d\'un champ de profil.';
+$string['applystrict'] = 'Profil strict';
+$string['applytemplate'] = 'Appliquer le profil : {$a}';
+$string['applytemplate'] = 'M\'appliquer le profil : "{$a}"';
+$string['applytemplatebtn'] = 'Appliquer le profil';
+$string['applytoselection'] = 'Appliquer à la sélection';
 $string['cancel'] = 'Annuler';
+$string['capabilitycontrol'] = 'Désactiver par capacité';
+$string['cleanup'] = 'Supprimer mes marques d\'équipement';
+$string['configdisablecontrol'] = 'Source de désactivation';
+$string['configdisablecontrolvalue'] = 'Valeur de contrôle';
 $string['disabledforuser'] = 'L\'équipement utilisateur a été désactivé pour votre catégorie d\'utilisateur.';
-$string['plugins'] = 'Plugins';
+$string['enableuserequipment'] = 'Activer le plan d\'équipement individuel des utilisateurs';
+$string['equipme'] = 'Gérer mes équipements';
+$string['equipmentcleaned'] = 'Les marques d\'équipement ont été supprimées.';
+$string['managetemplates'] = 'gestionnaire de profils d\'équipement';
+$string['notemplates'] = 'Aucun profil';
 $string['other'] = 'Autres';
+$string['pluginname'] = 'Equipement de l\'utilisateur';
+$string['plugins'] = 'Plugins';
+$string['potentialmembers'] = 'Utilisateurs potentiels';
+$string['profileextended'] = 'Etendu';
+$string['profilefieldcontrol'] = 'Désactiver par champ de profil';
+$string['profilesimple'] = 'Elémentaire';
+$string['profilestandard'] = 'Standard';
+$string['target'] = 'Utilisateurs à traiter';
 $string['template'] = 'Profil';
+$string['templateapplied'] = 'Un nouveau profil d\'équipement a été chargé.';
 $string['templatename'] = 'Nom du profil d\'équipement';
 $string['templates'] = 'Profils d\'équipement';
-$string['notemplates'] = 'Aucun profil';
-$string['addtemplate'] = 'Ajouter un nouveau profil';
-$string['managetemplates'] = 'gestionnaire de profils d\'équipement';
-$string['applytemplate'] = 'Appliquer le profil : {$a}';
-$string['applytemplatebtn'] = 'Appliquer le profil';
-$string['applystrict'] = 'Profil strict';
-$string['applystrict_desc'] = 'Avec cette option activée, vous supprimez toutes les autorisations non prévues dans ce profil.';
-$string['applytoselection'] = 'Appliquer à la sélection';
-$string['usersupdated'] = 'Les profils des utilisateurs sélectionnés ont été mis à jour';
-$string['cleanup'] = 'Supprimer mes marques d\'équipement';
-$string['equipmentcleaned'] = 'Les marques d\'équipement ont été supprimées.';
-
+$string['usercanchoose'] = 'Peut être auto-appliqué';
 $string['userequipment'] = 'Equipement de l\'utilisateur';
+$string['usersupdated'] = 'Les profils des utilisateurs sélectionnés ont été mis à jour';
+
+$string['applystrict_desc'] = 'Avec cette option activée, vous supprimez toutes les autorisations non prévues dans ce profil.';
+
+$string['enableuserequipment_desc'] = 'Si activé, les utilisateurs (editeurs) peuvent choisir les fonctions qu\'ils mobilisent,
+et nettoyer les interfaces de tout ce qui ne leur sert pas dans leur processus d\'édition.';
+
+$string['configdisablecontrol_desc'] = 'Permet de choisir comment l\'auto-équipement de certains utilisateurs est désactivé.
+La désactivation peut être pilotée par les rôles en désignant une capacité précise, ou par des valeurs de champ de profil.';
+
+$string['configdisablecontrolvalue_desc'] = 'Définit la valeur de contrôle. Cela peut être le nom d\'une capacité ou le code
+d\'un champ de profil qui doit contenir une valeur non vide. Vous pouvez également utiliser une expression
+&lt;codechamp&gt;=&lt;valeur&gt; pour désactiver l\'équipement sur une valeur précise du champ de profil.';
+
 $string['ueinfo_tpl'] = '
-<p>Moodle est une application de plus en plus riche et complète. Il est probable que les administrateurs et les autres usagers de Moodle utilisent des fonctions
-dont vous ne vous servez pas du tout (ou aps encore). Le principe de l\'équipement utilisateur vous permet de sélectionner et de nettoyer les menus
- de choix de fonctions de Moodle afin de vous donner une vision plus claire de vos interfaces de gestion des cours.</p>
+<p>Moodle est une application de plus en plus riche et complète. Il est probable que les administrateurs et les autres usagers de Moodle
+utilisent des fonctions dont vous ne vous servez pas du tout (ou aps encore). Le principe de l\'équipement utilisateur vous permet
+de sélectionner et de nettoyer les menus de choix de fonctions de Moodle afin de vous donner une vision plus claire de vos interfaces de
+gestion des cours.</p>
 
 <h4>Comment cela fonctionne ?</h4>
 
-<p>Lorsque l\'équipement utilisateur est actif dans votre Moodle, chaque utiisateur peut contrôle par lui-même s\'il actve ou non les plugins installés dans la plate-forme.
-Comme nous gérons ces activations au niveau "Utilisateur", il n\'est pas raisonnable d\'explorer globalement tous les roles et tous les droits dont vous disposez dans
-tous les contextes de travail. De ce fait, les listes d\'équipement pourraient vous mentionner des fonctionnalités ou plugins dont
-vous n\'avez jamais entendu parler et qui de toutes façons vous seraient innaccessibles au regard de vos rôles.
-Nous avons essayé d\'être suffisament explicites pour que vous puissiez rapidement vous repérer dans les propositions et voir si elles correspondent
-à votre usage.</p>
+<p>Lorsque l\'équipement utilisateur est actif dans votre Moodle, chaque utiisateur peut contrôler par lui-même s\'il active
+ou non les plugins installés dans la plate-forme. Comme nous gérons ces activations au niveau "Utilisateur", il n\'est pas
+raisonnable d\'explorer globalement tous les roles et tous les droits dont vous disposez dans tous les contextes de travail.
+De ce fait, les listes d\'équipement pourraient vous mentionner des fonctionnalités ou plugins dont vous n\'avez jamais entendu
+parler et qui de toutes façons vous seraient innaccessibles au regard de vos rôles. Nous avons essayé d\'être suffisament
+explicites pour que vous puissiez rapidement vous repérer dans les propositions et voir si elles correspondent à votre usage.</p>
 
-<p>Naviguez dans les autres sections du formulaire pour examiner les listes de blocs, modules, et autres types de plugins qui pourraient constituer votre équipement personnel,
-tout en gardant en tête que certaines ne seront réellement disponibles que sous un ensemble de conditions autres telles que les décisions des administrateurs,
-vos rôles et le réglage des profils de rôle.</p>
+<p>Naviguez dans les autres sections du formulaire pour examiner les listes de blocs, modules, et autres types de plugins qui
+pourraient constituer votre équipement personnel, tout en gardant en tête que certains ne seront réellement disponibles que
+sous un ensemble de conditions autres telles que les décisions des administrateurs, vos rôles et le réglage des profils de rôle.</p>
 
 <p>Si vous supprimez tous les choix d\'équipement de votre profil, vous serez à nouveau en présence d\'un Moodle complet.</p>
 
 <h4>Profils d\'équipement</h4>
-<p>Il est possible que les administrateurs vous aient appliqué un profil d\'équipement prédéfini. Vous pouvez à tout moment réactiver ou au contraire
-réduire encore votre équipement en deà ou au dessus de ce profil. Si vous vous considérez sous-équipé, et n\'arrivez pas à récpérer l\'usage de telle
-ou telle fonction, contactez vos administrateurs de plate-forme pour faire le point avec eux.</p>
+<p>Il est possible que les administrateurs vous aient appliqué un profil d\'équipement prédéfini. Vous pouvez à tout moment
+réactiver ou au contraire réduire encore votre équipement en deçà ou au dessus de ce profil. Si vous vous considérez sous-équipé,
+et n\'arrivez pas à récupérer l\'usage de telle ou telle fonction, contactez vos administrateurs de plate-forme pour faire le
+point avec eux.</p>
 ';
+
+$string['ueselfinfo_tpl'] = '
+<h4>Me choisir un profil d\'équipement</h4>
+
+<p>Dans certains Moodles, vous pouvez vous choisir un profil d\'équipement directement sans passer par un administrateur. Cliquez sur un
+des boutons ci-dessous pour appliquer un profil. Ceci effacera tout votre équipement précédent et appliquera celui que vous avez choisi.
+Vous pourrez toujours réactiver des fonctionnalités individuelles en plus si elles ne sont pas proposées par le profil.</p>
+';
+
+$string['profilesimple_desc'] = 'Un profil simple pour ceux qui désirent les fonctions de base d\'un LMS uniquement, avec la possibilité
+de publier des ressources, de récolter des devoirs et de faire des quiz. Ce profil convient aux personnes ayant eu peu d\'expérience
+numérique antérieur et désireuses de démarrer un enseignement numérique basique mais essentiel.';
+
+$string['profilestandard_desc'] = 'Un profil exploitant les fonctionnalités standard de moodle, installées sur tous les sites de la même
+version. Ce profil convient pour ceux qui désirent constituer des volumes de cours transportables et compatibles avec d\'autres
+implantations de plates-formes et bénéficiant de fonctionnalités pédagogiques riches.';
+
+$string['profileextended_desc'] = 'Un profil enrichi avec des fonctionnalités pédagogiques supplémentaires, afin de pouvoir diversifier les
+activités et rendre l\'expérience d\'apprentissage plus dynamique.';
 
 require_once('plugin_descriptions.php');
