@@ -68,7 +68,8 @@ if ($data = $mform->get_data()) {
 if (empty($data)) {
     if (!empty($templateid)) {
         $data = $manager->fetch_equipement(null, $templateid);
-        $data['name'] = $DB->get_field('local_userequipment_tpl', 'name', array('id' => $templateid));
+        $templaterec = $DB->get_record('local_userequipment_tpl', array('id' => $templateid));
+        $data = array_merge($data, (array) $templaterec);
         $data['template'] = $templateid;
     } else {
         $data = @$config->defaultequipment;

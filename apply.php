@@ -42,7 +42,7 @@ $PAGE->set_context($context);
 $url = new moodle_url('/local/userequipment/apply.php');
 $PAGE->set_url($url);
 
-$renderer = $PAGE->get_renderer('local_user_equipment');
+$renderer = $PAGE->get_renderer('local_userequipment');
 
 // Security.
 

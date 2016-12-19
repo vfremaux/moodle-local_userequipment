@@ -22,7 +22,7 @@
  */
 defined('MOODLE_INTERNAL') || die;
 
-class local_user_equipement_renderer extends plugin_renderer_base {
+class local_userequipment_renderer extends plugin_renderer_base {
 
     public function addmembersform($templateid, &$toapplyselector, &$potentialmembersselector) {
         $str = '';
@@ -32,36 +32,44 @@ class local_user_equipement_renderer extends plugin_renderer_base {
         $str .= '<div>';
         $str .= '<input type="hidden" name="template" value="'.$templateid.'" />';
         $str .= '<input type="hidden" name="sesskey" value="'.sesskey().'" />';
+
         $str .= '<table class="generaltable generalbox pagemanagementtable boxaligncenter">';
+
         $str .= '<tr>';
+
         $str .= '<td id="existingcell">';
         $str .= '<p>';
         $str .= '<label for="removeselect">'.get_string('target', 'local_userequipment').'</label>';
         $str .= '</p>';
-        $str .= $toapplyselector->display();
+        $str .= $toapplyselector->display(true);
         $str .= '</td>';
+
         $str .= '<td id="buttonscell">';
         $str .= '<p class="arrow_button">';
         $str .= '<input name="add"
                         id="add"
                         type="submit"
-                        value="'.$OUTPUT->larrow().'&nbsp;'.get_string('add').'"
+                        value="'.$this->output->larrow().'&nbsp;'.get_string('add').'"
                         title="'.get_string('add').'" /><br />';
         $str .= '<input name="remove"
                         id="remove"
                         type="submit"
-                        value="'.get_string('remove').'&nbsp;'.$OUTPUT->rarrow().'"
+                        value="'.get_string('remove').'&nbsp;'.$this->output->rarrow().'"
                         title="'.get_string('remove').'" />';
         $str .= '</p>';
         $str .= '</td>';
+
         $str .= '<td id="potentialcell">';
         $str .= '<p>';
         $str .= '<label for="addselect">'.get_string('potentialmembers', 'local_userequipment').'</label>';
         $str .= '</p>';
-        $str .= $potentialmembersselector->display();
+        $str .= $potentialmembersselector->display(true);
         $str .= '</td>';
+
         $str .= '</tr>';
+
         $str .= '</table>';
+
         $str .= '</div>';
         $str .= '<center>';
         $str .= '<input type="checkbox" name="strict" value="1" /> '.get_string('applystrict', 'local_userequipment').'<br/>';

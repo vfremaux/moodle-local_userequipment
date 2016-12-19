@@ -59,7 +59,8 @@ if ($user->id == $USER->id) {
 
 $config = get_config('local_userequipment');
 
-if (!isset($config->defaultequipment)) {
+$usercleaned = $DB->get_field('user_preferences', 'value', array('userid' => $USER->id, 'name' => 'noequipment'));
+if (!isset($config->defaultequipment) && !$usercleaned) {
      $config->defaultequipment = userequipment_manager::init_defaults();
 }
 
@@ -77,15 +78,39 @@ if ($uemanager->is_enabled_for_user($USER)) {
     $form = new UserEquipmentForm();
 
     $cleanedup = optional_param('cleanedup', false, PARAM_BOOL);
+    $templated = optional_param('updated', false, PARAM_BOOL);
+
     if (!$form->is_cancelled()) {
         if ($data = $form->get_data()) {
             if (!empty($data->cleanup)) {
                 $uemanager->delete_equipment($USER);
-                $cleanedup = true;
-            } else {
-                $uemanager->add_update_user($data, $user->id);
+
+                // Mark in preference we DO NOT want equipment restrictions any more (no defaults).
+                if (!$oldrec = $DB->get_record('user_preferences', array('userid' => $USER->id, 'name' => 'noequipment'))) {
+                    $prefrec = new Stdclass();
+                    $prefrec->userid = $USER->id;
+                    $prefrec->name = 'noequipment';
+                    $prefrec->value = 1;
+                    $DB->insert_record('user_preferences', $prefrec);
+                } else {
+                    $oldrec->value = 1;
+                    $DB->update_record('user_preferences', $oldrec);
+                }
+
+                redirect(new moodle_url($url, array('cleanedup' => true)));
             }
-            redirect(new moodle_url($url, array('cleanedup' => $cleanedup)));
+
+            if ($usertemplates = $DB->get_records('local_userequipment_tpl', array('usercanchoose' => true))) {
+                foreach ($usertemplates as $tpl) {
+                    $key = 'applytpl'.$tpl->id;
+                    if (!empty($data->$key)) {
+                        $uemanager->apply_template($tpl->id, $USER->id, true); // Apply strictly removing all previous keys.
+                        redirect(new moodle_url($url, array('updated' => true)));
+                    }
+                }
+            }
+            $uemanager->add_update_user($data, $user->id);
+            redirect(new moodle_url($url, array('cleanedup' => false)));
         }
     }
 
@@ -102,7 +127,11 @@ if ($uemanager->is_enabled_for_user($USER)) {
         echo $OUTPUT->notification(get_string('equipmentcleaned', 'local_userequipment'));
     }
 
-    $form->set_data($data);
+    if ($templated) {
+        echo $OUTPUT->notification(get_string('templateapplied', 'local_userequipment'));
+    }
+
+    $form->set_data((object) $data);
     $form->display();
 } else {
     echo $OUTPUT->notification(get_string('disabledforuser', 'local_userequipment'));
