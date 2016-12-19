@@ -24,11 +24,11 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version  = 2016092100;   // The (date) version of this plugin.
+$plugin->version  = 2016112600;   // The (date) version of this plugin.
 $plugin->requires = 2015111000;   // Requires this Moodle version.
 $plugin->component = 'local_userequipment';
-$plugin->release = '3.0.0 (Build 2016092100)';
+$plugin->release = '3.0.0 (Build 2016112600)';
 $plugin->maturity = MATURITY_BETA;
 
 // Non moodle attributes.
-$plugin->codeincrement = '3.0.0000';
+$plugin->codeincrement = '3.0.0002';
