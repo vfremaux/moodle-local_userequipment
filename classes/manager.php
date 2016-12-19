@@ -39,6 +39,10 @@ class userequipment_manager {
     private function __construct() {
     }
 
+    public function supports_plugin_type($ptype) {
+        return in_array($ptype, array('mod', 'block', 'qtype', 'format'));
+    }
+
     public static function init_defaults() {
         return array(
          'block_activity_modules' => 1,
@@ -176,13 +180,16 @@ class userequipment_manager {
             return;
         }
 
+        $template = $DB->get_record('local_userequipment_tpl', array('id' => $templateid));
+
         if ($strict) {
             $DB->delete_records('local_userequipment', array('userid' => $userid));
         }
 
         if ($templatedefs = $DB->get_records('local_userequipment', array('template' => $templateid))) {
             foreach ($templatedefs as $td) {
-                if (!$DB->record_exists('local_userequipment', array('userid' => $userid, 'plugintype' => $td->plugintype, 'plugin' => $td->plugin))) {
+                $params = array('userid' => $userid, 'plugintype' => $td->plugintype, 'plugin' => $td->plugin);
+                if (!$DB->record_exists('local_userequipment', $params)) {
                     $def = new \StdClass;
                     $def->userid = $userid;
                     $def->plugintype = $td->plugintype;
@@ -194,6 +201,12 @@ class userequipment_manager {
                 }
             }
         }
+
+        if ($template->associatedseystemrole &&
+            $DB->record_exists('role', array('id' => $template->associatedseystemrole))) {
+            $context = context_system::instance();
+            role_assign($template->associatedseystemrole, $user->id, $context->id);
+        }
     }
 
     /**
@@ -201,17 +214,46 @@ class userequipment_manager {
      * @param object $data data from form.
      */
     public function add_update_template($data) {
-        global $DB;
+        global $DB, $CFG;
+
+        $context = \context_system::instance();
+
+        $options = array('trusttext' => true,
+                         'subdirs' => false,
+                         'maxfiles' => 100,
+                         'maxbytes' => $CFG->maxbytes,
+                         'context' => $context);
+
+        $data = file_postupdate_standard_editor($data, 'description', $options, $context,
+                                                'local_userequipment', 'templatedesc', $data->template);
+
+        if ($data->isdefault) {
+            // Remove all other defaults.
+            $DB->set_field('local_userequipment_tpl', 'isdefault', 0, array());
+        }
 
         if ($template = $DB->get_record('local_userequipment_tpl', array('id' => $data->template))) {
             $template->name = $data->name;
+            $template->description = $data->description;
+            $template->descriptionformat = $data->descriptionformat;
+            $template->usercanchoose = $data->usercanchoose;
+            $template->isdefault = $data->isdefault;
+            $template->associatedsystemrole = $data->associatedsystemrole;
+            $template->releaseroleon = $data->releaseroleon;
             $DB->update_record('local_userequipment_tpl', $template);
         } else {
             $template = new \StdClass;
             $template->name = $data->name;
-            $data->template = $DB->insert_record('local_userequipment_tpl', $template);
+            $template->description = $data->description;
+            $template->descriptionformat = $data->descriptionformat;
+            $template->usercanchoose = $data->usercanchoose;
+            $template->isdefault = $data->isdefault;
+            $template->associatedsystemrole = $data->associatedsystemrole;
+            $template->releaseroleon = $data->releaseroleon;
+            $template->id = $data->template = $DB->insert_record('local_userequipment_tpl', $template);
         }
 
+        // Now catch all pluginset and record it for template.
         $DB->delete_records('local_userequipment', array('template' => $data->template));
         $pluginmanager = \core_plugin_manager::instance();
         $allplugins = array_keys($pluginmanager->get_plugin_types());
@@ -222,7 +264,7 @@ class userequipment_manager {
                 $eqrec = new \StdClass;
                 $eqrec->plugintype = array_shift($parts);
                 $eqrec->plugin = implode('_', $parts);
-                $eqrec->user = 0;
+                $eqrec->userid = 0;
                 $eqrec->template = $data->template;
                 if (!empty($data->$eqkey)) {
                     $eqrec->available = 1;
@@ -234,7 +276,7 @@ class userequipment_manager {
     }
 
     /**
-     * Adds or updates a template in DB
+     * Adds or updates a template in DB for a user
      * @param object $data data from form.
      */
     public function add_update_user($data, $userid) {
@@ -365,5 +407,8 @@ class userequipment_manager {
                 break;
         }
         return false;
+    }
+
+    function remove_all_roles_on_cleanup($userid) {
     }
 }

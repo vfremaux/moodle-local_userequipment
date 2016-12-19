@@ -36,7 +36,7 @@ $url = new moodle_url('/local/userequipment/templates.php');
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('admin');
 
-// Default configuration
+// Default configuration.
 
 $config = get_config('local_userequipment');
 
@@ -62,24 +62,31 @@ if (empty($templates)) {
 } else {
     $namestr = get_string('name');
     $countstr = get_string('plugins', 'local_userequipment');
+    $canchoosestr = get_string('usercanchoose', 'local_userequipment');
     $table = new html_table();
-    $table->head = array($namestr, $countstr, '', '');
-    $table->align = array('left', 'left', 'left', 'right');
-    $table->size = array('60%', '10%', '20%', '10%');
+    $table->head = array($namestr, $countstr, $canchoosestr, '', '');
+    $table->align = array('left', 'left', 'center', 'left', 'right');
+    $table->size = array('60%', '10%', '10%', '10%', '10%');
     $table->width = '90%';
 
     foreach ($templates as $t) {
+
+        $isdefault = ($t->isdefault) ? get_string('default', 'local_userequipment') : '';
+
         $count = $DB->count_records('local_userequipment', array('template' => $t->id, 'available' => 1));
 
         $editurl = new moodle_url('/local/userequipment/template.php', array('template' => $t->id, 'id' => 0));
         $cmds = '<a href="'.$editurl.'" alt="'.get_string('update').'"><img src="'.$OUTPUT->pix_url('t/edit').'"></a>';
-        $deleteurl = new moodle_url('/local/userequipment/templates.php', array('what' => 'delete', 'template' => $t->id, 'sesskey' => sesskey()));
+        $params = array('what' => 'delete', 'template' => $t->id, 'sesskey' => sesskey());
+        $deleteurl = new moodle_url('/local/userequipment/templates.php', $params);
         $cmds .= '&nbsp;<a href="'.$deleteurl.'" alt="'.get_string('delete').'"><img src="'.$OUTPUT->pix_url('t/delete').'"></a>';
 
         $applyurl = new moodle_url('/local/userequipment/apply.php', array('template' => $t->id));
         $applybutton = $OUTPUT->single_button($applyurl, get_string('applytemplatebtn', 'local_userequipment'));
 
-        $table->data[] = array(format_string($t->name), (0 + @$count), $applybutton, $cmds);
+        $canchoose = ($t->usercanchoose) ? get_string('yes') : get_string('no');
+
+        $table->data[] = array(format_string($t->name).$isdefault, (0 + @$count), $canchoose, $applybutton, $cmds);
     }
 
     echo html_writer::table($table);

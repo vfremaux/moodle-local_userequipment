@@ -160,3 +160,7 @@
     display: block;
     z-index: 50;
 }
+
+userequipment-half-column {
+    width: 50%;
+}
