@@ -47,12 +47,14 @@ $PAGE->set_pagelayout('admin');
 
 if (!has_capability('local/userequipment:equip', $context)) {
     // Not authorised users can only self equip.
-    // Not that system enabled equip users can equip all users.
+    // Note that system enabled equip users can equip all users.
     $user = $USER;
 }
 
 if ($user->id == $USER->id) {
-    require_capability('local/userequipment:selfequip', $context);
+    if (!local_ue_has_capability_somewhere('local/userequipment:selfequip', false, false, false)) {
+        print_error('errornoselfequipementallowed', 'local_userequipment');
+    }
 }
 
 // Default configuration.
@@ -83,19 +85,9 @@ if ($uemanager->is_enabled_for_user($USER)) {
     if (!$form->is_cancelled()) {
         if ($data = $form->get_data()) {
             if (!empty($data->cleanup)) {
-                $uemanager->delete_equipment($USER);
 
-                // Mark in preference we DO NOT want equipment restrictions any more (no defaults).
-                if (!$oldrec = $DB->get_record('user_preferences', array('userid' => $USER->id, 'name' => 'noequipment'))) {
-                    $prefrec = new Stdclass();
-                    $prefrec->userid = $USER->id;
-                    $prefrec->name = 'noequipment';
-                    $prefrec->value = 1;
-                    $DB->insert_record('user_preferences', $prefrec);
-                } else {
-                    $oldrec->value = 1;
-                    $DB->update_record('user_preferences', $oldrec);
-                }
+                $uemanager->delete_equipment($USER);
+                $uemanager->mark_cleaned($USER);
 
                 redirect(new moodle_url($url, array('cleanedup' => true)));
             }

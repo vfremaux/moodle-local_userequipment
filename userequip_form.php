@@ -61,6 +61,18 @@ class UserEquipmentForm extends moodleform {
             $mform->addElement('editor', 'description_editor', get_string('description'), null, $this->editoroptions);
 
             $mform->addElement('advcheckbox', 'usercanchoose', get_string('usercanchoose', 'local_userequipment'), '', 0);
+
+            $mform->addElement('advcheckbox', 'isdefault', get_string('isdefault', 'local_userequipment'), '', 0);
+
+            $assignableroles = get_assignable_roles(context_system::instance());
+            $roleoptions = array('' => get_string('none', 'local_userequipment'));
+            $roleoptions = array_merge($roleoptions, $assignableroles);
+            $mform->addElement('select', 'associatedsystemrole', get_string('associatedsystemrole', 'local_userequipment'), $roleoptions, 0);
+
+            $options = array(0 => get_string('releasenever', 'local_userequipment'),
+                             1 => get_string('releaseonnewprofile', 'local_userequipment'),
+                             2 => get_string('releaseoncleanup', 'local_userequipment'));
+            $mform->addElement('select', 'releaseroleon', get_string('releaseroleon', 'local_userequipment'), $options, 0);
         } else {
             // End user informative about user profile.
             $mform->addElement('header', 'theader', get_string('userequipment', 'local_userequipment'));
@@ -223,6 +235,11 @@ class UserEquipmentForm extends moodleform {
                 ksort($modcategories);
 
                 foreach ($modcategories as $catshort => $catmods) {
+
+                    if (!is_dir($CFG->dirroot.'/mod/'.$mod->name)) {
+                        // Missing modules.
+                        continue;
+                    }
 
                     $group = array();
                     if (!array_key_exists($catshort, $modcats)) {

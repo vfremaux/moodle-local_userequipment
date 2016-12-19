@@ -204,6 +204,7 @@ abstract class question_bank {
         $allqtypes = self::get_all_qtypes();
 
         // PATCH+ : Add userequipement filter.
+        global $CFG;
         if (is_dir($CFG->dirroot.'/local/userequipment')) {
             include_once($CFG->dirroot.'/local/userequipment/lib.php');
             $config = get_config('local_userequipment');

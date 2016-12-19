@@ -30,4 +30,12 @@ $observers = array (
         'internal'    => true,
         'priority'    => 9999,
     ),
+
+    array(
+        'eventname'   => '\core\event\user_loggedin',
+        'callback'    => 'local_userequipment_event_observer::on_user_loggedin',
+        'includefile' => '/local/userequipment/observers.php',
+        'internal'    => true,
+        'priority'    => 9999,
+    ),
 );
