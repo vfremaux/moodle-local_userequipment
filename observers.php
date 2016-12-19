@@ -23,6 +23,9 @@
 defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->dirroot.'/local/userequipment/lib.php');
+require_once($CFG->dirroot.'/local/userequipment/classes/manager.php');
+
+use local_userequipment\userequipment_manager;
 
 class local_userequipment_event_observer {
 
@@ -53,6 +56,11 @@ class local_userequipment_event_observer {
         $config = get_config('local_userequipment');
 
         if (empty($config->ask_users_to_profile)) {
+            return;
+        }
+
+        $uemanager = userequipment_manager::instance();
+        if ($uemanager->is_marked_cleaned($e->userid)) {
             return;
         }
 

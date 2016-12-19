@@ -28,6 +28,9 @@ class userequipment_manager {
 
     protected static $instance;
 
+    /**
+     * Singleton pattern.
+     */
     public static function instance() {
         if (empty($instance)) {
             self::$instance = new userequipment_manager();
@@ -36,6 +39,9 @@ class userequipment_manager {
         return self::$instance;
     }
 
+    /**
+     * Forces passing through the singleton instanciator.
+     */
     private function __construct() {
     }
 
@@ -407,6 +413,50 @@ class userequipment_manager {
                 break;
         }
         return false;
+    }
+
+    /**
+     * Marks a user in preference as not wanting to be applied the default profile any more. User
+     * has cleaned his equipment profile to make his own choice.
+     * @param mixed $userorid
+     */
+    function mark_cleaned($userorid) {
+        global $DB;
+
+        if (is_object($userorid)) {
+            $userid = $userorid->id;
+        } else {
+            $userid = $userorid;
+        }
+
+        // Mark in preference we DO NOT want equipment restrictions any more (no defaults reloading).
+        if (!$oldrec = $DB->get_record('user_preferences', array('userid' => $userid, 'name' => 'noequipment'))) {
+            $prefrec = new Stdclass();
+            $prefrec->userid = $userid;
+            $prefrec->name = 'noequipment';
+            $prefrec->value = 1;
+            $DB->insert_record('user_preferences', $prefrec);
+        } else {
+            $oldrec->value = 1;
+            $DB->update_record('user_preferences', $oldrec);
+        }
+    }
+
+    /**
+     * Checks if a user has asked for cleaning his profile once, thus requiring no default
+     * equipement is required.
+     * @param object $userorid
+     */
+    function is_marked_cleaned($userorid) {
+        global $DB;
+
+        if (is_object($userorid)) {
+            $userid = $userorid->id;
+        } else {
+            $userid = $userorid;
+        }
+
+        return $DB->record_exists('user_preferences', array('userid' => $userid, 'name' => 'noequipment'));
     }
 
     function remove_all_roles_on_cleanup($userid) {

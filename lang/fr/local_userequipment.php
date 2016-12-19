@@ -58,6 +58,7 @@ $string['equipmentcleaned'] = 'Les marques d\'équipement ont été supprimées.
 $string['managetemplates'] = 'gestionnaire de profils d\'équipement';
 $string['notemplates'] = 'Aucun profil';
 $string['other'] = 'Autres';
+$string['marksinfo'] = 'Vous avez {$a} marques dans votre profil d\'équipement.';
 $string['pluginname'] = 'Equipement de l\'utilisateur';
 $string['plugins'] = 'Plugins';
 $string['potentialmembers'] = 'Utilisateurs potentiels';
