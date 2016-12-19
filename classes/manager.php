@@ -28,6 +28,9 @@ class userequipment_manager {
 
     protected static $instance;
 
+    /**
+     * Singleton pattern.
+     */
     public static function instance() {
         if (empty($instance)) {
             self::$instance = new userequipment_manager();
@@ -36,6 +39,9 @@ class userequipment_manager {
         return self::$instance;
     }
 
+    /**
+     * Forces passing through the singleton instanciator.
+     */
     private function __construct() {
     }
 
