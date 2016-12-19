@@ -28,6 +28,9 @@
         <FIELD NAME="description" TYPE="text" LENGTH="medium" NOTNULL="false" SEQUENCE="false" ENUM="false" />
         <FIELD NAME="descriptionformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" ENUM="false" />
         <FIELD NAME="usercanchoose" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" ENUM="false" />
+        <FIELD NAME="isdefault" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" ENUM="false" />
+        <FIELD NAME="associatedsystemrole" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" ENUM="false" />
+        <FIELD NAME="releaseroleon" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" ENUM="false" />
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Templates ID"/>

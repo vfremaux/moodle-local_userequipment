@@ -123,5 +123,38 @@ function xmldb_local_userequipment_upgrade($oldversion = 0) {
         upgrade_plugin_savepoint(true, 2016112600, 'local', 'userequipment');
     }
 
+    if ($oldversion < 2016121500) {
+        // Define table to be updated.
+        $table = new xmldb_table('local_userequipment_tpl');
+
+        // Define field to add.
+        $field = new xmldb_field('isdefault');
+        $field->set_attributes(XMLDB_TYPE_INTEGER, 1, null, null, null, 0, 'usercanchoose');
+
+        // Launch add field.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Define field to add.
+        $field = new xmldb_field('associatedsystemrole');
+        $field->set_attributes(XMLDB_TYPE_INTEGER, 4, null, null, null, 0, 'isdefault');
+
+        // Launch add field.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Define field to add.
+        $field = new xmldb_field('releaseroleon');
+        $field->set_attributes(XMLDB_TYPE_INTEGER, 4, null, null, null, 0, 'associatedsystemrole');
+
+        // Launch add field.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        upgrade_plugin_savepoint(true, 2016121500, 'local', 'userequipment');
+    }
+
     return $result;
 }

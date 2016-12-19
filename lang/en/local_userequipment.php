@@ -27,6 +27,13 @@ $string['userequipment:override'] = 'Overrides the equipment limitations';
 $string['userequipment:selfequip'] = 'Can configure his own equipment';
 $string['userequipment:equip'] = 'Can configure equipment of other users';
 
+$string['associatedsystemrole'] = 'Associated system role';
+$string['releaseroleon'] = 'Release associated role on';
+$string['releasenever'] = 'Never release';
+$string['releaseonnewprofile'] = 'Release when applying new profile';
+$string['releaseoncleanup'] = 'Release on equipment cleanup';
+$string['none'] = 'No role';
+$string['isdefault'] = 'Is default profile';
 $string['pluginname'] = 'User equipment';
 $string['enableuserequipment'] = 'Enable per user feature equipment';
 $string['equipme'] = 'Manage my equipment';
@@ -38,6 +45,11 @@ $string['capabilitycontrol'] = 'Disable by capability';
 $string['profilefieldcontrol'] = 'disable by profile field';
 $string['configdisablecontrol'] = 'Disable control source';
 $string['configdisablecontrolvalue'] = 'Disable control value';
+$string['configautosetupnewusers'] = 'Auto setup new users';
+$string['configautosetupnewusers_desc'] = 'If enabled, all new created users will be applied the default profile';
+$string['configaskuserstoprofile'] = 'Ask users to self profile';
+$string['configaskuserstoprofile_desc'] = 'If enabled, all users with edition capability will be asked to choose an application profile when first login.';
+$string['default'] = ' (default)';
 $string['disabledforuser'] = 'Self equipment has been disabled for you.';
 $string['cancel'] = 'Cancel';
 $string['target'] = 'Target Users';
@@ -57,10 +69,14 @@ $string['applystrict']  = 'Apply strict template';
 $string['applytoselection'] = 'Apply to selected users';
 $string['usersupdated'] = 'Users had equipment profile updated';
 $string['usercanchoose'] = 'User choice';
+$string['isdefault'] = 'Is default';
 $string['profilesimple'] = 'Elementary';
 $string['profilestandard'] = 'Standard only';
 $string['profileextended'] = 'Extended';
 $string['userequipment'] = 'User feature self-equipment';
+
+$string['isdefault_desc'] = 'If this user equipement profile is the default profile, then any new user created will be setup with this profile.
+Checking this checkbox will superseede any other default choice.';
 
 $string['enableuserequipment_desc'] = 'If enabled, each user (editing users) can self-equipe their profile with available features,
 or cleanup their GUIs from unused or unnecessary items.';

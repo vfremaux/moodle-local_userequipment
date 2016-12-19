@@ -27,6 +27,13 @@ $string['userequipment:override'] = 'Surchage les limites d\'équipement';
 $string['userequipment:selfequip'] = 'Peut configurer son propre équipement';
 $string['userequipment:equip'] = 'Peut configurer l\'équipement d\'autres utilisateurs';
 
+$string['associatedsystemrole'] = 'Rôle system associé';
+$string['releaseroleon'] = 'Désassigner les roles';
+$string['releasenever'] = 'Laisser assigné';
+$string['releaseonnewprofile'] = 'Désassigner sur application d\'un nouveau profil';
+$string['releaseoncleanup'] = 'Désassigner sur la suppression des marques d\'équipement';
+$string['none'] = 'Aucun role';
+$string['isdefault'] = 'Est le profil par défaut';
 $string['addtemplate'] = 'Ajouter un nouveau profil';
 $string['allusers'] = 'Tous les utilisateurs activés';
 $string['applystrict'] = 'Profil strict';
@@ -39,6 +46,11 @@ $string['capabilitycontrol'] = 'Désactiver par capacité';
 $string['cleanup'] = 'Supprimer mes marques d\'équipement';
 $string['configdisablecontrol'] = 'Source de désactivation';
 $string['configdisablecontrolvalue'] = 'Valeur de contrôle';
+$string['configautosetupnewusers'] = 'Initialiser les nouveaux utilisateurs';
+$string['configautosetupnewusers_desc'] = 'Si actif, tout nouvel utilisateur créé se verra appliquer le profil par défaut.';
+$string['configaskuserstoprofile'] = 'Demander de choisir un profil à la connexion';
+$string['configaskuserstoprofile_desc'] = 'Si actif, tout utilisateur se connectant pour la première fois et susceptible d\'avoir un rôle éditeur se verra proposer de choisir son profil.';
+$string['default'] = ' (défaut)';
 $string['disabledforuser'] = 'L\'équipement utilisateur a été désactivé pour votre catégorie d\'utilisateur.';
 $string['enableuserequipment'] = 'Activer le plan d\'équipement individuel des utilisateurs';
 $string['equipme'] = 'Gérer mes équipements';
@@ -59,8 +71,12 @@ $string['templateapplied'] = 'Un nouveau profil d\'équipement a été chargé.'
 $string['templatename'] = 'Nom du profil d\'équipement';
 $string['templates'] = 'Profils d\'équipement';
 $string['usercanchoose'] = 'Peut être auto-appliqué';
+$string['isdefault'] = 'Appliqué par défaut';
 $string['userequipment'] = 'Equipement de l\'utilisateur';
 $string['usersupdated'] = 'Les profils des utilisateurs sélectionnés ont été mis à jour';
+
+$string['isdefault_desc'] = 'Si ce profil d\'équipement est le profil par défaut, tout nouvel utilisateur créé se verra appliquer ce profil.
+Marquer ce profil supprime l\'affectation, par défaut précédente.';
 
 $string['applystrict_desc'] = 'Avec cette option activée, vous supprimez toutes les autorisations non prévues dans ce profil.';
 
