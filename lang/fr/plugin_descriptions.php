@@ -93,6 +93,7 @@ $string['plugdesc_block_selfcompletion'] = 'Accède à un rapport personnel d\'a
 $string['plugdesc_block_settings'] = 'Un bloc général de réglages.';
 $string['plugdesc_block_sharedresources'] = 'Ceci est un outil de l\'enseignant donnant accès à des fonctions de gestion des ressources mutualisées.';
 $string['plugdesc_block_shop_access'] = 'Accède à une instance de boutique intégrée Moodle.';
+$string['plugdesc_block_shop_course_seats'] = 'Permet de gérer l\'attribution de sièges achetés via la boutique Moodle depuis le cours.';
 $string['plugdesc_block_shop_bills'] = 'Affiche un résumé des factures et paiements opérés par une boutique Moodle.';
 $string['plugdesc_block_shop_products'] = 'Affiche un résumé des produits achetés et en permet la gestion.';
 $string['plugdesc_block_shop_total'] = 'Affiche un résumé du caddie en cours.';

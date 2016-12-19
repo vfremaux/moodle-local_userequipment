@@ -14,14 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * @package   local_userequipment
  * @category  local
  * @author    Valery Fremaux (valery.fremaux@gmail.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die();
 
 /**
  * Standard upgrade handler.
@@ -34,7 +33,7 @@ function xmldb_local_userequipment_upgrade($oldversion = 0) {
 
     $dbman = $DB->get_manager();
 
-    if ($result && $oldversion < 2016092100) { //New version in version.php
+    if ($oldversion < 2016092100) {
 
         // Define table local_shop to be created.
         $table = new xmldb_table('local_userequipment');
@@ -50,7 +49,7 @@ function xmldb_local_userequipment_upgrade($oldversion = 0) {
 
         // Adding keys to table local_userequipment.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
-        $table->add_index('ix_unique_plugin', XMLDB_INDEX_UNIQUE, array('plugintype','plugin'));
+        $table->add_index('ix_unique_plugin', XMLDB_INDEX_UNIQUE, array('plugintype', 'plugin'));
         $table->add_index('ix_userid', XMLDB_INDEX_NOTUNIQUE, array('userid'));
         $table->add_index('ix_template', XMLDB_INDEX_NOTUNIQUE, array('template'));
 
@@ -75,6 +74,49 @@ function xmldb_local_userequipment_upgrade($oldversion = 0) {
         }
 
         upgrade_plugin_savepoint(true, 2016092100, 'local', 'userequipment');
+    }
+
+    if ($oldversion < 2016111300) {
+
+        // Define table to be updated.
+        $table = new xmldb_table('local_userequipment_tpl');
+
+        // Define field to add.
+        $field = new xmldb_field('usercanchoose');
+        $field->set_attributes(XMLDB_TYPE_INTEGER, '1', null, null, null, null, 'name');
+
+        // Launch add field.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        upgrade_plugin_savepoint(true, 2016111300, 'local', 'userequipment');
+    }
+
+    if ($oldversion < 2016112600) {
+
+        // Define table to be updated.
+        $table = new xmldb_table('local_userequipment_tpl');
+
+        // Define field to add.
+        $field = new xmldb_field('description');
+        $field->set_attributes(XMLDB_TYPE_TEXT, 'medium', null, null, null, null, 'name');
+
+        // Launch add field.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Define field to add.
+        $field = new xmldb_field('descriptionformat');
+        $field->set_attributes(XMLDB_TYPE_INTEGER, '4', null, XMLDB_NOTNULL, null, 0, 'description');
+
+        // Launch add field.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        upgrade_plugin_savepoint(true, 2016112600, 'local', 'userequipment');
     }
 
     return $result;
