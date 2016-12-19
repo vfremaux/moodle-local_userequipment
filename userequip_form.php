@@ -36,6 +36,15 @@ class UserEquipmentForm extends moodleform {
 
         $mform = $this->_form;
 
+        $context = context_system::instance();
+        $maxbytes = $CFG->maxbytes;
+        $maxfiles = 100;
+        $this->editoroptions = array('trusttext' => true,
+                                     'subdirs' => false,
+                                     'maxfiles' => $maxfiles,
+                                     'maxbytes' => $maxbytes,
+                                     'context' => $context);
+
         if ($this->_customdata['istemplate']) {
             $mform->addElement('header', 'theader', get_string('template', 'local_userequipment'));
 
@@ -48,13 +57,43 @@ class UserEquipmentForm extends moodleform {
             $mform->addElement('text', 'name', get_string('templatename', 'local_userequipment'));
             $mform->setType('name', PARAM_TEXT);
             $mform->addRule('name', null, 'required', null, 'client');
+
+            $mform->addElement('editor', 'description_editor', get_string('description'), null, $this->editoroptions);
+
+            $mform->addElement('advcheckbox', 'usercanchoose', get_string('usercanchoose', 'local_userequipment'), '', 0);
+
+            $mform->addElement('advcheckbox', 'isdefault', get_string('isdefault', 'local_userequipment'), '', 0);
+
+            $assignableroles = get_assignable_roles(context_system::instance());
+            $roleoptions = array('' => get_string('none', 'local_userequipment'));
+            $roleoptions = array_merge($roleoptions, $assignableroles);
+            $mform->addElement('select', 'associatedsystemrole', get_string('associatedsystemrole', 'local_userequipment'), $roleoptions, 0);
+
+            $options = array(0 => get_string('releasenever', 'local_userequipment'),
+                             1 => get_string('releaseonnewprofile', 'local_userequipment'),
+                             2 => get_string('releaseoncleanup', 'local_userequipment'));
+            $mform->addElement('select', 'releaseroleon', get_string('releaseroleon', 'local_userequipment'), $options, 0);
         } else {
             // End user informative about user profile.
             $mform->addElement('header', 'theader', get_string('userequipment', 'local_userequipment'));
 
             $mform->addElement('html', get_string('ueinfo_tpl', 'local_userequipment'));
 
+            if ($selfusabletemplates = $DB->get_records('local_userequipment_tpl', array('usercanchoose' => true))) {
+                $mform->addElement('html', get_string('ueselfinfo_tpl', 'local_userequipment'));
+                foreach ($selfusabletemplates as $tpl) {
+                    $group = array();
+                    $label = get_string('applytemplate', 'local_userequipment', $tpl->name);
+                    $group[] = $mform->createElement('submit', 'applytpl'.$tpl->id, $label);
+                    $descstr = format_text($tpl->description, $tpl->descriptionformat);
+                    $desc = '<div class="pull-right userequipment-half-column">'.$descstr.'</div>';
+                    $group[] = $mform->createElement('static', 'chk'.$tpl->id);
+                    $mform->addGroup($group, 'group'.$tpl->id, '', array($desc), false, false);
+                }
+            }
+
             $mform->addElement('submit', 'cleanup', get_string('cleanup', 'local_userequipment'));
+
         }
 
         $manager = core_plugin_manager::instance();
@@ -114,6 +153,11 @@ class UserEquipmentForm extends moodleform {
                         continue;
                     }
 
+                    // Deleted blocks.
+                    if (!is_dir($CFG->dirroot.'/blocks/'.$block->name)) {
+                        continue;
+                    }
+
                     $blockshort = str_replace('block_', '', $block->name);
                     $pageplugin = $DB->get_record('format_page_plugins', array('type' => 'block', 'plugin' => $blockshort));
 
@@ -135,7 +179,12 @@ class UserEquipmentForm extends moodleform {
                         $blockobject = block_instance($block->name);
                         $blockname = @$blockobject->title;
                         if (empty($blockname)) {
-                            $blockname = get_string('blockname', 'block_'.$block->name);
+                            if ($sm->string_exists('blockname', 'block_'.$block->name)) {
+                                $blockname = get_string('blockname', 'block_'.$block->name);
+                            } else {
+                                // Last try.
+                                $blockname = get_string('pluginname', 'block_'.$block->name);
+                            }
                         }
                         if ($sm->string_exists('plugdesc_block_'.$block->name, 'local_userequipment')) {
                             $blockdesc = get_string('plugdesc_block_'.$block->name, 'local_userequipment');
@@ -147,7 +196,7 @@ class UserEquipmentForm extends moodleform {
                         $group[] = $mform->createElement('checkbox', 'block_'.$block->name, '', $blocknamespan);
                         $allplugins[] = 'block_'.$block->name;
                     }
-                    $mform->addGroup($group, 'groupcat'.$catshort, $catname, '', false);
+                    $mform->addGroup($group, 'groupcat'.$catshort, $catname, array(''), false);
                 }
             }
         }
@@ -187,6 +236,11 @@ class UserEquipmentForm extends moodleform {
 
                 foreach ($modcategories as $catshort => $catmods) {
 
+                    if (!is_dir($CFG->dirroot.'/mod/'.$mod->name)) {
+                        // Missing modules.
+                        continue;
+                    }
+
                     $group = array();
                     if (!array_key_exists($catshort, $modcats)) {
                         $catname = get_string('other', 'local_userequipment');
@@ -205,7 +259,7 @@ class UserEquipmentForm extends moodleform {
                         $group[] = $mform->createElement('checkbox', 'mod_'.$mod->name, '', $modnamespan.' ');
                         $allplugins[] = 'mod_'.$mod->name;
                     }
-                    $mform->addGroup($group, 'groupmods'.$catshort, $catname, ' ', false);
+                    $mform->addGroup($group, 'groupmods'.$catshort, $catname, array(''), false);
                 }
             }
         }
@@ -218,10 +272,26 @@ class UserEquipmentForm extends moodleform {
                 $group[] = $mform->createElement('checkbox', 'qtype_'.$qtype->name, '', $qtypevisiblename);
                 $allplugins[] = 'qtype_'.$qtype->name;
             }
-            $mform->addGroup($group, 'groupquiztype', get_string('questiontype', 'question'), '', array(' '));
+            $mform->addGroup($group, 'groupquiztype', get_string('questiontype', 'question'), array(''), false);
         }
 
         $this->add_action_buttons(true);
     }
 
+    public function set_data($defaults) {
+
+        $context = $this->editoroptions['context'];
+
+        $descdraftideditor = file_get_submitted_draft_itemid('description_editor');
+        $currenttext = file_prepare_draft_area($descdraftideditor, $context->id, 'local_userequipment',
+                                               'description_editor', @$defaults->id, array('subdirs' => true),
+                                               @$defaults->description);
+        $defaults = file_prepare_standard_editor($defaults, 'description', $this->editoroptions, $context,
+                                                 'local_userequipment', 'templatedesc', @$defaults->id);
+        $defaults->description = array('text' => $currenttext,
+                                       'format' => $defaults->descriptionformat,
+                                       'itemid' => $descdraftideditor);
+
+        parent::set_data($defaults);
+    }
 }

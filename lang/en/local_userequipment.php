@@ -27,20 +27,29 @@ $string['userequipment:override'] = 'Overrides the equipment limitations';
 $string['userequipment:selfequip'] = 'Can configure his own equipment';
 $string['userequipment:equip'] = 'Can configure equipment of other users';
 
+$string['associatedsystemrole'] = 'Associated system role';
+$string['releaseroleon'] = 'Release associated role on';
+$string['releasenever'] = 'Never release';
+$string['releaseonnewprofile'] = 'Release when applying new profile';
+$string['releaseoncleanup'] = 'Release on equipment cleanup';
+$string['none'] = 'No role';
+$string['isdefault'] = 'Is default profile';
 $string['pluginname'] = 'User equipment';
 $string['enableuserequipment'] = 'Enable per user feature equipment';
-$string['enableuserequipment_desc'] = 'If enabled, each user (editing users) can self-equipe their profile with available features, or cleanup their GUIs from unused or unnecessary items.';
 $string['equipme'] = 'Manage my equipment';
 $string['cleanup'] = 'Delete all my equipment marks';
 $string['equipmentcleaned'] = 'Equipment marks have been successfully deleted';
-
 $string['allusers'] = 'All users enabled';
+$string['applytemplate'] = 'Apply profile : "{$a}"';
 $string['capabilitycontrol'] = 'Disable by capability';
 $string['profilefieldcontrol'] = 'disable by profile field';
 $string['configdisablecontrol'] = 'Disable control source';
-$string['configdisablecontrol_desc'] = 'Allows selecting the way some users may be equipement disabled';
 $string['configdisablecontrolvalue'] = 'Disable control value';
-$string['configdisablecontrolvalue_desc'] = 'Set value for control. Value may be a capability name or a custom user control field name.';
+$string['configautosetupnewusers'] = 'Auto setup new users';
+$string['configautosetupnewusers_desc'] = 'If enabled, all new created users will be applied the default profile';
+$string['configaskuserstoprofile'] = 'Ask users to self profile';
+$string['configaskuserstoprofile_desc'] = 'If enabled, all users with edition capability will be asked to choose an application profile when first login.';
+$string['default'] = ' (default)';
 $string['disabledforuser'] = 'Self equipment has been disabled for you.';
 $string['cancel'] = 'Cancel';
 $string['target'] = 'Target Users';
@@ -49,6 +58,7 @@ $string['potentialmembers'] = 'Potential users';
 $string['plugins'] = 'Plugins';
 $string['template'] = 'Template';
 $string['templatename'] = 'Template name';
+$string['templateapplied'] = 'The template has been applied to your profile';
 $string['templates'] = 'Templates';
 $string['notemplates'] = 'No templates';
 $string['addtemplate'] = 'Add new template';
@@ -56,11 +66,30 @@ $string['managetemplates'] = 'manage templates facility';
 $string['applytemplate'] = 'Apply template: {$a}';
 $string['applytemplatebtn'] = 'Apply template';
 $string['applystrict']  = 'Apply strict template';
-$string['applystrict_desc'] = 'Using strict application will erase all previous activation in the targetted user\'s profiles.';
 $string['applytoselection'] = 'Apply to selected users';
 $string['usersupdated'] = 'Users had equipment profile updated';
-
+$string['usercanchoose'] = 'User choice';
+$string['isdefault'] = 'Is default';
+$string['profilesimple'] = 'Elementary';
+$string['profilestandard'] = 'Standard only';
+$string['profileextended'] = 'Extended';
 $string['userequipment'] = 'User feature self-equipment';
+
+$string['isdefault_desc'] = 'If this user equipement profile is the default profile, then any new user created will be setup with this profile.
+Checking this checkbox will superseede any other default choice.';
+
+$string['enableuserequipment_desc'] = 'If enabled, each user (editing users) can self-equipe their profile with available features,
+or cleanup their GUIs from unused or unnecessary items.';
+
+$string['applystrict_desc'] = 'Using strict application will erase all previous activation in the targetted user\'s profiles.';
+
+$string['configdisablecontrol_desc'] = 'Allows selecting the way some users may be equipement disabled. you can choose using a specific capability
+and manage equipment availability by roles, or drive it using profile fields.';
+
+$string['configdisablecontrolvalue_desc'] = 'Set value for control. Value may be a capability name or a custom user control field name that has to contain
+a non empty value. you may also defined the value as a fieldname=value expression, in which case the field will have to contain the exact value to
+disable equipment.';
+
 $string['ueinfo_tpl'] = '
 <p>Moodle is becoming a very complete and rich application. Probably administrators and other users do use different features you really need. User Feature
 Self Equipement principle will help you to tune the Moodle menus and features choice to better fit your needs and avoid loosing time in finding things
@@ -78,9 +107,25 @@ the feature accessibility might depend on other factors, such as global settings
 <p>Removing all profile equipment choices will let you using a full featured moodle again.</p>
 
 <h4>User Equipement Profiles</h4>
-<p>the administrators may have applied a preset profile to you. In all case you can add or remove features from this starting point. If you feel really underequiped,
+<p>The administrators may have applied a preset profile to you. In all case you can add or remove features from this starting point. If you feel really underequiped,
 contact your administrators to be applied a richer profile, or to get some information about real availability of this or that feature.</p>
 
 ';
+
+$string['ueselfinfo_tpl'] = '
+<h4>My Equipment Profiles</h4>
+
+<p>In some Moodle you may apply some profiles for yourself directly without asking an administrator do do it for you. Click on one of the following buttons to change
+your profile. This will reset all your equipement and apply the profile equipement. You may toggle on additional features individually later if the profile do not
+provide them.</p>
+';
+
+$string['profilesimple_desc'] = 'Elementary profile that accesses to the very basic features such as forum assign, publishing files,
+url and video and making quiz.';
+
+$string['profilestandard_desc'] = 'A profile that only activates standard plugins, making course more compatbile with any Moodle
+installation of same version level.';
+
+$string['profileextended_desc'] = 'An extended profile activating valuable pedagogic additions.';
 
 require_once('plugin_descriptions.php');

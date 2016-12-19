@@ -22,6 +22,8 @@
  */
 defined('MOODLE_INTERNAL') || die;
 
+require_once($CFG->dirroot.'/local/userequipment/lib.php');
+
 class local_userequipment_event_observer {
 
     /**
@@ -33,28 +35,30 @@ class local_userequipment_event_observer {
 
         $config = get_config('local_userequipment');
 
-        $DB->delete_records('local_user_equipment', array('user' => $e->userid));
-
-        // Transfer default equipement to user equipement.
-        if (!empty($config->defaultequipment)) {
-            foreach ($config->defaultequipment as $key => $available) {
-                $record = new StdClass();
-                $record->user = $e->id;
-                $parts = explode('_', $key);
-                $record->plugintype = array_shift($parts);
-                $record->plugin = implde('_', $parts);
-                $record->available = $available;
-                $DB->insert_record('local_user_equipment', $record);
-            }
+        if (empty($config->auto_setup_new_users)) {
+            return;
         }
+
+        $defaulttemplate = $DB->get_record('local_userequipment', array('isdefault' => 1));
+
+        $DB->delete_records('local_userequipment', array('user' => $e->userid));
+
+        $uemanager = userequipment_manager::instance();
+        $uemanager->apply_template($defaulttemplate->id, $e->userid, true);
     }
 
     public static function on_user_loggedin($e) {
         global $DB;
 
+        $config = get_config('local_userequipment');
+
+        if (empty($config->ask_users_to_profile)) {
+            return;
+        }
+
         $userpref = $DB->get_record('user_preferences', array('userid' => $e->userid, 'name' => 'moodleuserlevel'));
         if (!$userpref) {
-            if (local_has_capability_somewhere('moodle/course:manageactivities')) {
+            if (local_ue_has_capability_somewhere('local/userequipment:selfequip', false, false, false)) {
                 redirect(new moodle_url('/local/userequipment/profile_init.php', array('id' => $e->userid)));
             }
         }
