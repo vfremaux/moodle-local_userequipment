@@ -28,6 +28,9 @@ class userequipment_manager {
 
     protected static $instance;
 
+    /**
+     * Singleton pattern.
+     */
     public static function instance() {
         if (empty($instance)) {
             self::$instance = new userequipment_manager();
@@ -36,6 +39,9 @@ class userequipment_manager {
         return self::$instance;
     }
 
+    /**
+     * Forces passing through the singleton instanciator.
+     */
     private function __construct() {
     }
 
@@ -180,6 +186,8 @@ class userequipment_manager {
             return;
         }
 
+        $template = $DB->get_record('local_userequipment_tpl', array('id' => $templateid));
+
         if ($strict) {
             $DB->delete_records('local_userequipment', array('userid' => $userid));
         }
@@ -198,6 +206,12 @@ class userequipment_manager {
                     $DB->insert_record('local_userequipment', $def);
                 }
             }
+        }
+
+        if ($template->associatedseystemrole &&
+            $DB->record_exists('role', array('id' => $template->associatedseystemrole))) {
+            $context = context_system::instance();
+            role_assign($template->associatedseystemrole, $user->id, $context->id);
         }
     }
 
@@ -219,11 +233,19 @@ class userequipment_manager {
         $data = file_postupdate_standard_editor($data, 'description', $options, $context,
                                                 'local_userequipment', 'templatedesc', $data->template);
 
+        if ($data->isdefault) {
+            // Remove all other defaults.
+            $DB->set_field('local_userequipment_tpl', 'isdefault', 0, array());
+        }
+
         if ($template = $DB->get_record('local_userequipment_tpl', array('id' => $data->template))) {
             $template->name = $data->name;
             $template->description = $data->description;
             $template->descriptionformat = $data->descriptionformat;
             $template->usercanchoose = $data->usercanchoose;
+            $template->isdefault = $data->isdefault;
+            $template->associatedsystemrole = $data->associatedsystemrole;
+            $template->releaseroleon = $data->releaseroleon;
             $DB->update_record('local_userequipment_tpl', $template);
         } else {
             $template = new \StdClass;
@@ -231,9 +253,13 @@ class userequipment_manager {
             $template->description = $data->description;
             $template->descriptionformat = $data->descriptionformat;
             $template->usercanchoose = $data->usercanchoose;
+            $template->isdefault = $data->isdefault;
+            $template->associatedsystemrole = $data->associatedsystemrole;
+            $template->releaseroleon = $data->releaseroleon;
             $template->id = $data->template = $DB->insert_record('local_userequipment_tpl', $template);
         }
 
+        // Now catch all pluginset and record it for template.
         $DB->delete_records('local_userequipment', array('template' => $data->template));
         $pluginmanager = \core_plugin_manager::instance();
         $allplugins = array_keys($pluginmanager->get_plugin_types());
@@ -256,7 +282,7 @@ class userequipment_manager {
     }
 
     /**
-     * Adds or updates a template in DB
+     * Adds or updates a template in DB for a user
      * @param object $data data from form.
      */
     public function add_update_user($data, $userid) {
@@ -387,5 +413,52 @@ class userequipment_manager {
                 break;
         }
         return false;
+    }
+
+    /**
+     * Marks a user in preference as not wanting to be applied the default profile any more. User
+     * has cleaned his equipment profile to make his own choice.
+     * @param mixed $userorid
+     */
+    function mark_cleaned($userorid) {
+        global $DB;
+
+        if (is_object($userorid)) {
+            $userid = $userorid->id;
+        } else {
+            $userid = $userorid;
+        }
+
+        // Mark in preference we DO NOT want equipment restrictions any more (no defaults reloading).
+        if (!$oldrec = $DB->get_record('user_preferences', array('userid' => $userid, 'name' => 'noequipment'))) {
+            $prefrec = new Stdclass();
+            $prefrec->userid = $userid;
+            $prefrec->name = 'noequipment';
+            $prefrec->value = 1;
+            $DB->insert_record('user_preferences', $prefrec);
+        } else {
+            $oldrec->value = 1;
+            $DB->update_record('user_preferences', $oldrec);
+        }
+    }
+
+    /**
+     * Checks if a user has asked for cleaning his profile once, thus requiring no default
+     * equipement is required.
+     * @param object $userorid
+     */
+    function is_marked_cleaned($userorid) {
+        global $DB;
+
+        if (is_object($userorid)) {
+            $userid = $userorid->id;
+        } else {
+            $userid = $userorid;
+        }
+
+        return $DB->record_exists('user_preferences', array('userid' => $userid, 'name' => 'noequipment'));
+    }
+
+    function remove_all_roles_on_cleanup($userid) {
     }
 }
