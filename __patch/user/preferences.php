@@ -69,7 +69,6 @@ if (!$currentuser) {
 
 // PATCH+ : Add user equipement hook.
 // Add user equipement.
-echo "Adding UE ";
 if (is_dir($CFG->dirroot.'/local/userequipment')) {
     include_once($CFG->dirroot.'/local/userequipment/lib.php');
     $config = get_config('local_userequipment');
