@@ -61,6 +61,16 @@ if ($hassiteconfig) {
     $desc = get_string('configdisablecontrolvalue_desc', 'local_userequipment');
     $settings->add(new admin_setting_configtext($key, $label, $desc, 'local/userequipment:isdisabled', PARAM_TEXT));
 
+    $key = 'local_userequipment/auto_setup_new_users';
+    $label = get_string('configautosetupnewusers', 'local_userequipment');
+    $desc = get_string('configautosetupnewusers_desc', 'local_userequipment');
+    $settings->add(new admin_setting_configcheckbox($key, $label, $desc, 0));
+
+    $key = 'local_userequipment/ask_users_to_profile';
+    $label = get_string('configaskuserstoprofile', 'local_userequipment');
+    $desc = get_string('configaskuserstoprofile_desc', 'local_userequipment');
+    $settings->add(new admin_setting_configcheckbox($key, $label, $desc, 0));
+
     $label = get_string('templates', 'local_userequipment');
     $settings->add(new admin_setting_heading('templates', $label, '<a href="'.$templatesurl.'">'.$managetemplatesstr.'</a>'));
 

@@ -46,8 +46,13 @@ $PAGE->set_url($url);
 $PAGE->set_pagelayout('admin');
 $PAGE->set_context($context);
 
-require_capability('local/userequipment:selfequip', $context);
+if (!local_ue_has_capability_somewhere('local/userequipment:selfequip', false, false, false)) {
+    print_error('errornoselfequipementallowed', 'local_userequipment');
+}
 
+redirect(new moodle_url('/local/userequipment/index.php'));
+
+/*
 $profilewizardmanager = new local_userequipement_profile_wizard();
 
 echo $OUTPUT->header();
@@ -60,3 +65,4 @@ if ($userpref) {
 }
 
 echo $OUTPUT->footer();
+*/
