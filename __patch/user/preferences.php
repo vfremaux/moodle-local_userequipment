@@ -66,6 +66,18 @@ if (!$currentuser) {
     $settings->make_active();
 }
 
+// PATCH+ : Add user equipement hook.
+// Add user equipement.
+if (is_dir($CFG->dirroot.'/local/userequipment')) {
+    include_once($CFG->dirroot.'/local/userequipment/lib.php');
+    $config = get_config('local_userequipment');
+    if ($config->enabled && local_ue_has_capability_somewhere('local/userequipment:selfequip', false, false, true)) {
+        $settings->add(get_string('equipme', 'local_userequipment'), new moodle_url('/local/userequipment/index.php',
+                array('id' => $user->id)), navigation_node::TYPE_SETTING, null, 'myequipment');
+    }
+}
+// PATCH-.
+
 // Identifying the nodes.
 $groups = array();
 $orphans = array();
