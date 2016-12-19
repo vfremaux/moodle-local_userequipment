@@ -70,6 +70,9 @@ if (empty($templates)) {
     $table->width = '90%';
 
     foreach ($templates as $t) {
+
+        $isdefault = ($t->isdefault) ? get_string('default', 'local_userequipment') : '';
+
         $count = $DB->count_records('local_userequipment', array('template' => $t->id, 'available' => 1));
 
         $editurl = new moodle_url('/local/userequipment/template.php', array('template' => $t->id, 'id' => 0));
@@ -83,7 +86,7 @@ if (empty($templates)) {
 
         $canchoose = ($t->usercanchoose) ? get_string('yes') : get_string('no');
 
-        $table->data[] = array(format_string($t->name), (0 + @$count), $canchoose, $applybutton, $cmds);
+        $table->data[] = array(format_string($t->name).$isdefault, (0 + @$count), $canchoose, $applybutton, $cmds);
     }
 
     echo html_writer::table($table);

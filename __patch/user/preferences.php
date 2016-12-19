@@ -27,16 +27,11 @@ require_once($CFG->libdir . '/navigationlib.php');
 
 require_login(null, false);
 if (isguestuser()) {
-    throw new require_login_exception();
+    throw new require_login_exception('Guests are not allowed here.');
 }
 
 $userid = optional_param('userid', $USER->id, PARAM_INT);
 $currentuser = $userid == $USER->id;
-
-// Only administrators can access another user's preferences.
-if (!$currentuser && !is_siteadmin($USER)) {
-    throw new moodle_exception('cannotedituserpreferences', 'error');
-}
 
 // Check that the user is a valid user.
 $user = core_user::get_user($userid);
@@ -53,10 +48,16 @@ $PAGE->set_heading(fullname($user));
 
 if (!$currentuser) {
     $PAGE->navigation->extend_for_user($user);
-    $settings = $PAGE->settingsnav->find('userviewingsettings' . $user->id, null);
-    $settings->make_active();
+    // Need to check that settings exist.
+    if ($settings = $PAGE->settingsnav->find('userviewingsettings' . $user->id, null)) {
+        $settings->make_active();
+    }
     $url = new moodle_url('/user/preferences.php', array('userid' => $userid));
     $navbar = $PAGE->navbar->add(get_string('preferences', 'moodle'), $url);
+    // Show an error if there are no preferences that this user has access to.
+    if (!$PAGE->settingsnav->can_view_user_preferences($userid)) {
+        throw new moodle_exception('cannotedituserpreferences', 'error');
+    }
 } else {
     // Shutdown the users node in the navigation menu.
     $usernode = $PAGE->navigation->find('users', null);
@@ -65,6 +66,18 @@ if (!$currentuser) {
     $settings = $PAGE->settingsnav->find('usercurrentsettings', null);
     $settings->make_active();
 }
+
+// PATCH+ : Add user equipement hook.
+// Add user equipement.
+if (is_dir($CFG->dirroot.'/local/userequipment')) {
+    include_once($CFG->dirroot.'/local/userequipment/lib.php');
+    $config = get_config('local_userequipment');
+    if ($config->enabled && local_ue_has_capability_somewhere('local/userequipment:selfequip', false, false, true)) {
+        $settings->add(get_string('equipme', 'local_userequipment'), new moodle_url('/local/userequipment/index.php',
+                array('id' => $user->id)), navigation_node::TYPE_SETTING, null, 'myequipment');
+    }
+}
+// PATCH-.
 
 // Identifying the nodes.
 $groups = array();
