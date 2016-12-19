@@ -70,6 +70,7 @@ $string['applytoselection'] = 'Apply to selected users';
 $string['usersupdated'] = 'Users had equipment profile updated';
 $string['usercanchoose'] = 'User choice';
 $string['isdefault'] = 'Is default';
+$string['marksinfo'] = 'You have {$a} profile marks in your equipment profile.';
 $string['profilesimple'] = 'Elementary';
 $string['profilestandard'] = 'Standard only';
 $string['profileextended'] = 'Extended';
