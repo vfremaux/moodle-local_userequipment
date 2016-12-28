@@ -59,10 +59,14 @@
     content: attr(data-tooltip);
     display: none;
     line-height: 1.4;
-    min-width: 180px;
+    min-width: 280px;
     padding: 8px 8px;
     position: absolute;
     text-align: center;
+}
+
+[data-tooltip].activity:before {
+    min-width: 380px;
 }
 
 /* Dynamic horizontal centering */
