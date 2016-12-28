@@ -42,7 +42,7 @@ class local_userequipment_event_observer {
             return;
         }
 
-        $defaulttemplate = $DB->get_record('local_userequipment', array('isdefault' => 1));
+        $defaulttemplate = $DB->get_record('local_userequipment_tpl', array('isdefault' => 1));
 
         $DB->delete_records('local_userequipment', array('user' => $e->userid));
 
