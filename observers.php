@@ -42,12 +42,13 @@ class local_userequipment_event_observer {
             return;
         }
 
-        $defaulttemplate = $DB->get_record('local_userequipment', array('isdefault' => 1));
+        if ($defaulttemplate = $DB->get_record('local_userequipment_tpl', array('isdefault' => 1))) {
 
-        $DB->delete_records('local_userequipment', array('user' => $e->userid));
-
-        $uemanager = userequipment_manager::instance();
-        $uemanager->apply_template($defaulttemplate->id, $e->userid, true);
+            $DB->delete_records('local_userequipment', array('userid' => $e->userid));
+    
+            $uemanager = userequipment_manager::instance();
+            $uemanager->apply_template($defaulttemplate->id, $e->userid, true);
+        }
     }
 
     public static function on_user_loggedin($e) {

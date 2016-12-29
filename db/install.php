@@ -68,7 +68,11 @@ function xmldb_local_userequipment_install() {
             $uerec->plugintype = $feature[0];
             $uerec->plugin = $feature[1];
             $uerec->available = 1;
-            $DB->insert_record('local_userequipment', $uerec);
+            $uerec->timemodified = time();
+            $params = array('template' => $tplrec->id, 'plugintype' => $feature[0], 'plugin' => $feature[1]);
+            if (!$DB->record_exists('local_userequipment', $params)) {
+                $DB->insert_record('local_userequipment', $uerec);
+            }
         }
     }
 }
@@ -185,7 +189,8 @@ function ue_extended_features() {
 
     // Check the additional features are installed in this moodle.
     foreach ($additionalfeatures as $f) {
-        if (!empty($pluginman->get_plugin_info($f[0].'_'.$f[1]))) {
+        $info = $pluginman->get_plugin_info($f[0].'_'.$f[1]);
+        if (!empty($info)) {
             $features[] = $f;
         }
     }
