@@ -67,11 +67,13 @@ class UserEquipmentForm extends moodleform {
                 $roleoptions[$rid] = $name;
             }
             $mform->addElement('select', 'associatedsystemrole', get_string('associatedsystemrole', 'local_userequipment'), $roleoptions, '');
+            $mform->setAdvanced('associatedsystemrole');
 
             $options = array(0 => get_string('releasenever', 'local_userequipment'),
                              1 => get_string('releaseonnewprofile', 'local_userequipment'),
                              2 => get_string('releaseoncleanup', 'local_userequipment'));
             $mform->addElement('select', 'releaseroleon', get_string('releaseroleon', 'local_userequipment'), $options, 0);
+            $mform->setAdvanced('releaseroleon');
         } else {
             // End user informative about user profile.
             $mform->addElement('header', 'theader', get_string('userequipment', 'local_userequipment'));
@@ -92,7 +94,7 @@ class UserEquipmentForm extends moodleform {
             }
 
             $group = array();
-            $marks = $DB->count_records('local_userequipment', array('userid' => $USER->id));
+            $marks = $DB->count_records('local_userequipment', array('userid' => $USER->id, 'available' => 1));
             if ($marks) {
                 $descstr = get_string('marksinfo', 'local_userequipment', $marks);
                 $desc = '<div class="pull-left userequipment-half-column">'.$descstr.'</div>';
@@ -198,7 +200,7 @@ class UserEquipmentForm extends moodleform {
                         } else {
                             $blockdesc = '';
                         }
-                        $blocknamespan = '<span data-tooltip="'.$blockdesc.'" data-tooltip-position="bottom">';
+                        $blocknamespan = '<span data-tooltip="'.str_replace('"', '\\"', $blockdesc).'" data-tooltip-position="bottom">';
                         $blocknamespan .= $blockname.' </span>';
                         $group[] = $mform->createElement('checkbox', 'block_'.$block->name, '', $blocknamespan);
                         $allplugins[] = 'block_'.$block->name;
@@ -243,11 +245,6 @@ class UserEquipmentForm extends moodleform {
 
                 foreach ($modcategories as $catshort => $catmods) {
 
-                    if (!is_dir($CFG->dirroot.'/mod/'.$mod->name)) {
-                        // Missing modules.
-                        continue;
-                    }
-
                     $group = array();
                     if (!array_key_exists($catshort, $modcats)) {
                         $catname = get_string('other', 'local_userequipment');
@@ -256,9 +253,14 @@ class UserEquipmentForm extends moodleform {
                     }
 
                     foreach ($catmods as $mod) {
+                        if (!is_dir($CFG->dirroot.'/mod/'.$mod->name)) {
+                            // Missing modules.
+                            continue;
+                        }
+
                         if ($sm->string_exists('modulename_help', $mod->name)) {
                             $moddesc = strip_tags(get_string('modulename_help', $mod->name));
-                            $modnamespan = '<span data-tooltip="'.$moddesc.'" data-tooltip-position="bottom">';
+                            $modnamespan = '<span class="activity" data-tooltip="'.str_replace('"', '\\"', $moddesc).'" data-tooltip-position="bottom">';
                             $modnamespan .= get_string('pluginname', $mod->name).'</span>';
                         } else {
                             $modnamespan = get_string('pluginname', $mod->name);
