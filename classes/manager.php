@@ -24,6 +24,8 @@ namespace local_userequipment;
 
 defined('MOODLE_INTERNAL') || die();
 
+use \StdClass;
+
 class userequipment_manager {
 
     protected static $instance;
@@ -196,7 +198,7 @@ class userequipment_manager {
             foreach ($templatedefs as $td) {
                 $params = array('userid' => $userid, 'plugintype' => $td->plugintype, 'plugin' => $td->plugin);
                 if (!$DB->record_exists('local_userequipment', $params)) {
-                    $def = new \StdClass;
+                    $def = new StdClass();
                     $def->userid = $userid;
                     $def->plugintype = $td->plugintype;
                     $def->plugin = $td->plugin;
@@ -208,10 +210,10 @@ class userequipment_manager {
             }
         }
 
-        if ($template->associatedseystemrole &&
-            $DB->record_exists('role', array('id' => $template->associatedseystemrole))) {
-            $context = context_system::instance();
-            role_assign($template->associatedseystemrole, $user->id, $context->id);
+        if ($template->associatedsystemrole &&
+            $DB->record_exists('role', array('id' => $template->associatedsystemrole))) {
+            $context = \context_system::instance();
+            role_assign($template->associatedsystemrole, $userid, $context->id);
         }
     }
 
@@ -248,7 +250,7 @@ class userequipment_manager {
             $template->releaseroleon = $data->releaseroleon;
             $DB->update_record('local_userequipment_tpl', $template);
         } else {
-            $template = new \StdClass;
+            $template = new StdClass();
             $template->name = $data->name;
             $template->description = $data->description;
             $template->descriptionformat = $data->descriptionformat;
@@ -267,7 +269,7 @@ class userequipment_manager {
             $pluginkeys = preg_grep('/^'.$pl.'_/', array_keys($_REQUEST));
             foreach ($pluginkeys as $eqkey) {
                 $parts = explode('_', $eqkey);
-                $eqrec = new \StdClass;
+                $eqrec = new StdClass();
                 $eqrec->plugintype = array_shift($parts);
                 $eqrec->plugin = implode('_', $parts);
                 $eqrec->userid = 0;
@@ -295,7 +297,7 @@ class userequipment_manager {
             $enabled = $pluginmanager->get_enabled_plugins($type);
             if (!empty($enabled)) {
                 foreach ($enabled as $plug) {
-                    $eqrec = new \StdClass;
+                    $eqrec = new StdClass();
                     $eqrec->plugintype = $type;
                     $eqrec->plugin = $plug;
                     $eqrec->userid = $userid;
@@ -388,7 +390,8 @@ class userequipment_manager {
         $config = get_config('local_userequipment');
 
         if (!$config->enabled) {
-            return true; // Everything allowed.
+            // Everything allowed.
+            return true;
         }
 
         switch (@$config->disable_control) {
@@ -399,7 +402,7 @@ class userequipment_manager {
                 if (empty($config->disable_control_value)) {
                     return true;
                 }
-                $context = context_course::instance($COURSE->id);
+                $context = \context_course::instance($COURSE->id);
                 if (has_capability($config->disable_control_value, $context, $user->id)) {
                     return true;
                 }
