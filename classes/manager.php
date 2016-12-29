@@ -22,9 +22,9 @@
  */
 namespace local_userequipment;
 
-use \StdClass;
-
 defined('MOODLE_INTERNAL') || die();
+
+use \StdClass;
 
 class userequipment_manager {
 
@@ -213,7 +213,7 @@ class userequipment_manager {
         if ($template->associatedsystemrole &&
             $DB->record_exists('role', array('id' => $template->associatedsystemrole))) {
             $context = \context_system::instance();
-            role_assign($template->associatedsystemrole, $user->id, $context->id);
+            role_assign($template->associatedsystemrole, $userid, $context->id);
         }
     }
 
