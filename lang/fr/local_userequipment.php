@@ -27,38 +27,33 @@ $string['userequipment:override'] = 'Surchage les limites d\'équipement';
 $string['userequipment:selfequip'] = 'Peut configurer son propre équipement';
 $string['userequipment:equip'] = 'Peut configurer l\'équipement d\'autres utilisateurs';
 
-$string['associatedsystemrole'] = 'Rôle system associé';
-$string['releaseroleon'] = 'Désassigner les roles';
-$string['releasenever'] = 'Laisser assigné';
-$string['releaseonnewprofile'] = 'Désassigner sur application d\'un nouveau profil';
-$string['releaseoncleanup'] = 'Désassigner sur la suppression des marques d\'équipement';
-$string['none'] = 'Aucun role';
-$string['isdefault'] = 'Est le profil par défaut';
 $string['addtemplate'] = 'Ajouter un nouveau profil';
 $string['allusers'] = 'Tous les utilisateurs activés';
 $string['applystrict'] = 'Profil strict';
-$string['applytemplate'] = 'Appliquer le profil : {$a}';
-$string['applytemplate'] = 'M\'appliquer le profil : "{$a}"';
+$string['applytemplate'] = 'M\'appliquer l\'équipement : "{$a}"';
 $string['applytemplatebtn'] = 'Appliquer le profil';
 $string['applytoselection'] = 'Appliquer à la sélection';
+$string['associatedsystemrole'] = 'Rôle system associé';
 $string['cancel'] = 'Annuler';
 $string['capabilitycontrol'] = 'Désactiver par capacité';
-$string['cleanup'] = 'Supprimer mes marques d\'équipement';
+$string['cleanup'] = 'Revenir à l\'équipement complet';
+$string['configaskuserstoprofile'] = 'Demander de choisir un équipement à la connexion';
+$string['configaskuserstoprofile_desc'] = 'Si actif, tout utilisateur se connectant pour la première fois et susceptible d\'avoir un rôle éditeur se verra proposer de choisir son équipement.';
+$string['configautosetupnewusers'] = 'Initialiser les nouveaux utilisateurs';
+$string['configautosetupnewusers_desc'] = 'Si actif, tout nouvel utilisateur créé se verra appliquer un équipement par défaut.';
 $string['configdisablecontrol'] = 'Source de désactivation';
 $string['configdisablecontrolvalue'] = 'Valeur de contrôle';
-$string['configautosetupnewusers'] = 'Initialiser les nouveaux utilisateurs';
-$string['configautosetupnewusers_desc'] = 'Si actif, tout nouvel utilisateur créé se verra appliquer le profil par défaut.';
-$string['configaskuserstoprofile'] = 'Demander de choisir un profil à la connexion';
-$string['configaskuserstoprofile_desc'] = 'Si actif, tout utilisateur se connectant pour la première fois et susceptible d\'avoir un rôle éditeur se verra proposer de choisir son profil.';
 $string['default'] = ' (défaut)';
 $string['disabledforuser'] = 'L\'équipement utilisateur a été désactivé pour votre catégorie d\'utilisateur.';
 $string['enableuserequipment'] = 'Activer le plan d\'équipement individuel des utilisateurs';
 $string['equipme'] = 'Gérer mes équipements';
-$string['equipmentcleaned'] = 'Les marques d\'équipement ont été supprimées.';
-$string['managetemplates'] = 'gestionnaire de profils d\'équipement';
+$string['equipmentcleaned'] = 'L\'équipement a été supprimé. Vous avez accès à toutes les fonctionnalités.';
+$string['isdefault'] = 'Est l\'équipement par défaut';
+$string['managetemplates'] = 'Gestionnaire de profils d\'équipement';
+$string['marksinfo'] = 'Vous avez {$a} outils dans votre équipement.';
+$string['none'] = 'Aucun role';
 $string['notemplates'] = 'Aucun profil';
 $string['other'] = 'Autres';
-$string['marksinfo'] = 'Vous avez {$a} marques dans votre profil d\'équipement.';
 $string['pluginname'] = 'Equipement de l\'utilisateur';
 $string['plugins'] = 'Plugins';
 $string['potentialmembers'] = 'Utilisateurs potentiels';
@@ -66,15 +61,18 @@ $string['profileextended'] = 'Etendu';
 $string['profilefieldcontrol'] = 'Désactiver par champ de profil';
 $string['profilesimple'] = 'Elémentaire';
 $string['profilestandard'] = 'Standard';
+$string['releasenever'] = 'Laisser assigné';
+$string['releaseoncleanup'] = 'Désassigner sur la suppression des marques d\'équipement';
+$string['releaseonnewprofile'] = 'Désassigner sur application d\'un nouveau profil';
+$string['releaseroleon'] = 'Désassigner les roles';
 $string['target'] = 'Utilisateurs à traiter';
 $string['template'] = 'Profil';
-$string['templateapplied'] = 'Un nouveau profil d\'équipement a été chargé.';
-$string['templatename'] = 'Nom du profil d\'équipement';
+$string['templateapplied'] = 'Une nouvelle définition d\'équipement a été chargée.';
+$string['templatename'] = 'Nom de l\'équipement';
 $string['templates'] = 'Profils d\'équipement';
 $string['usercanchoose'] = 'Peut être auto-appliqué';
-$string['isdefault'] = 'Appliqué par défaut';
 $string['userequipment'] = 'Equipement de l\'utilisateur';
-$string['usersupdated'] = 'Les profils des utilisateurs sélectionnés ont été mis à jour';
+$string['usersupdated'] = 'Les équipements utilisateurs sélectionnés ont été mis à jour';
 
 $string['isdefault_desc'] = 'Si ce profil d\'équipement est le profil par défaut, tout nouvel utilisateur créé se verra appliquer ce profil.
 Marquer ce profil supprime l\'affectation, par défaut précédente.';
@@ -93,13 +91,13 @@ d\'un champ de profil qui doit contenir une valeur non vide. Vous pouvez égalem
 
 $string['ueinfo_tpl'] = '
 <p>Moodle est une application de plus en plus riche et complète. Il est probable que les administrateurs et les autres usagers de Moodle
-utilisent des fonctions dont vous ne vous servez pas du tout (ou aps encore). Le principe de l\'équipement utilisateur vous permet
+utilisent des fonctions dont vous ne vous servez pas du tout (ou pas encore). Le principe de l\'équipement utilisateur vous permet
 de sélectionner et de nettoyer les menus de choix de fonctions de Moodle afin de vous donner une vision plus claire de vos interfaces de
 gestion des cours.</p>
 
 <h4>Comment cela fonctionne ?</h4>
 
-<p>Lorsque l\'équipement utilisateur est actif dans votre Moodle, chaque utiisateur peut contrôler par lui-même s\'il active
+<p>L\'équipement utilisateur est actif dans votre Moodle. Chaque utiisateur peut contrôler par lui-même s\'il active
 ou non les plugins installés dans la plate-forme. Comme nous gérons ces activations au niveau "Utilisateur", il n\'est pas
 raisonnable d\'explorer globalement tous les roles et tous les droits dont vous disposez dans tous les contextes de travail.
 De ce fait, les listes d\'équipement pourraient vous mentionner des fonctionnalités ou plugins dont vous n\'avez jamais entendu
