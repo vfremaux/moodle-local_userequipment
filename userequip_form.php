@@ -66,7 +66,8 @@ class UserEquipmentForm extends moodleform {
             foreach ($assignableroles as $rid => $name) {
                 $roleoptions[$rid] = $name;
             }
-            $mform->addElement('select', 'associatedsystemrole', get_string('associatedsystemrole', 'local_userequipment'), $roleoptions, '');
+            $label = get_string('associatedsystemrole', 'local_userequipment');
+            $mform->addElement('select', 'associatedsystemrole', $label, $roleoptions, '');
             $mform->setAdvanced('associatedsystemrole');
 
             $options = array(0 => get_string('releasenever', 'local_userequipment'),
@@ -200,7 +201,8 @@ class UserEquipmentForm extends moodleform {
                         } else {
                             $blockdesc = '';
                         }
-                        $blocknamespan = '<span data-tooltip="'.str_replace('"', '\\"', $blockdesc).'" data-tooltip-position="bottom">';
+                        $blocknamespan = '<span data-tooltip="'.str_replace('"', '\\"', $blockdesc).'"
+                                                data-tooltip-position="bottom">';
                         $blocknamespan .= $blockname.' </span>';
                         $group[] = $mform->createElement('checkbox', 'block_'.$block->name, '', $blocknamespan);
                         $allplugins[] = 'block_'.$block->name;
@@ -260,7 +262,9 @@ class UserEquipmentForm extends moodleform {
 
                         if ($sm->string_exists('modulename_help', $mod->name)) {
                             $moddesc = strip_tags(get_string('modulename_help', $mod->name));
-                            $modnamespan = '<span class="activity" data-tooltip="'.str_replace('"', '\\"', $moddesc).'" data-tooltip-position="bottom">';
+                            $modnamespan = '<span class="activity"
+                                                  data-tooltip="'.str_replace('"', '\\"', $moddesc).'"
+                                                  data-tooltip-position="bottom">';
                             $modnamespan .= get_string('pluginname', $mod->name).'</span>';
                         } else {
                             $modnamespan = get_string('pluginname', $mod->name);
