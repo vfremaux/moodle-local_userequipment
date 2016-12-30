@@ -423,7 +423,7 @@ class userequipment_manager {
      * has cleaned his equipment profile to make his own choice.
      * @param mixed $userorid
      */
-    function mark_cleaned($userorid) {
+    public function mark_cleaned($userorid) {
         global $DB;
 
         if (is_object($userorid)) {
@@ -450,7 +450,7 @@ class userequipment_manager {
      * equipement is required.
      * @param object $userorid
      */
-    function is_marked_cleaned($userorid) {
+    public function is_marked_cleaned($userorid) {
         global $DB;
 
         if (is_object($userorid)) {
@@ -462,6 +462,6 @@ class userequipment_manager {
         return $DB->record_exists('user_preferences', array('userid' => $userid, 'name' => 'noequipment'));
     }
 
-    function remove_all_roles_on_cleanup($userid) {
+    public function remove_all_roles_on_cleanup($userid) {
     }
 }
