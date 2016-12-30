@@ -45,7 +45,7 @@ class local_userequipment_event_observer {
         if ($defaulttemplate = $DB->get_record('local_userequipment_tpl', array('isdefault' => 1))) {
 
             $DB->delete_records('local_userequipment', array('userid' => $e->userid));
-    
+
             $uemanager = userequipment_manager::instance();
             $uemanager->apply_template($defaulttemplate->id, $e->userid, true);
         }
