@@ -34,6 +34,7 @@ $string['applytemplate'] = 'Apply template : "{$a}"';
 $string['applytemplatebtn'] = 'Apply template';
 $string['applytoselection'] = 'Apply to selected users';
 $string['associatedsystemrole'] = 'Associated system role';
+$string['backtodashboard'] = 'Back to dashboard';
 $string['cancel'] = 'Cancel';
 $string['capabilitycontrol'] = 'Disable by capability';
 $string['cleanup'] = 'Delete all my equipment marks. You will have access to all features.';
