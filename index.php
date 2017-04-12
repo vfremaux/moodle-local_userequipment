@@ -129,7 +129,4 @@ if ($uemanager->is_enabled_for_user($USER)) {
     echo $OUTPUT->notification(get_string('disabledforuser', 'local_userequipment'));
 }
 
-$buttonurl = $CFG->wwwroot.'/my';
-echo $OUTPUT->single_button($buttonurl, get_string('backtodashboard', 'local_userequipment'));
-
 echo $OUTPUT->footer();
