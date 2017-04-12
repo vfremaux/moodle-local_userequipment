@@ -34,6 +34,7 @@ $string['applytemplate'] = 'M\'appliquer l\'équipement : "{$a}"';
 $string['applytemplatebtn'] = 'Appliquer le profil';
 $string['applytoselection'] = 'Appliquer à la sélection';
 $string['associatedsystemrole'] = 'Rôle system associé';
+$string['backtodashboard'] = 'Revenir au tableau de bord';
 $string['cancel'] = 'Annuler';
 $string['capabilitycontrol'] = 'Désactiver par capacité';
 $string['cleanup'] = 'Revenir à l\'équipement complet';
