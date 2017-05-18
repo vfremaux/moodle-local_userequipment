@@ -108,14 +108,14 @@ class block_manager {
      * Will be an array region-name => array(db rows loaded in load_blocks);
      * @var array
      */
-    protected $birecordsbyregion = null;
+    public $birecordsbyregion = null;
 
     /**
      * array region-name => array(block objects); populated as necessary by
      * the ensure_instances_exist method.
      * @var array
      */
-    protected $blockinstances = array();
+    public $blockinstances = array();
 
     /**
      * array region-name => array(block_contents objects) what actually needs to
