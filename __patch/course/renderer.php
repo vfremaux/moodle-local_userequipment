@@ -754,7 +754,7 @@ class core_course_renderer extends plugin_renderer_base {
         global $CFG;
         $output = '';
         if (!$mod->uservisible && empty($mod->availableinfo)) {
-            // nothing to be displayed to the user
+            // Nothing to be displayed to the user.
             return $output;
         }
         $url = $mod->url;
