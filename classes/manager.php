@@ -356,6 +356,7 @@ class userequipment_manager {
         global $DB;
 
         if (!$this->is_enabled_for_user($USER)) {
+            // Is equipment engine enabled for this user ? If not do not filter anything.
             return true;
         }
 
@@ -367,7 +368,7 @@ class userequipment_manager {
             $checkcache = array();
         }
 
-        if (!$DB->record_exists('local_userequipment', array('userid' => $userid))) {
+        if (!$DB->record_exists('local_userequipment', array('userid' => $userid, 'available' => 1))) {
             return true;
         }
 
