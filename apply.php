@@ -76,12 +76,11 @@ if (optional_param('remove', false, PARAM_BOOL) && confirm_sesskey()) {
 
 $message = '';
 if (optional_param('apply', false, PARAM_BOOL) && confirm_sesskey()) {
-    $strict = optional_param('strict', false, PARAM_BOOL);
     $userstoapply = @$SESSION->ue_selection;
     $manager = get_ue_manager();
     if (!empty($userstoapply)) {
         foreach ($userstoapply as $u) {
-            $manager->apply_template($templateid, $u->id, $strict);
+            $manager->apply_template($templateid, $u->id);
         }
         $message = get_string('usersupdated', 'local_userequipment');
     }
