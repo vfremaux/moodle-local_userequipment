@@ -76,10 +76,10 @@ if (empty($templates)) {
         $count = $DB->count_records('local_userequipment', array('template' => $t->id, 'available' => 1));
 
         $editurl = new moodle_url('/local/userequipment/template.php', array('template' => $t->id, 'id' => 0));
-        $cmds = '<a href="'.$editurl.'" alt="'.get_string('update').'"><img src="'.$OUTPUT->pix_url('t/edit').'"></a>';
+        $cmds = '<a href="'.$editurl.'" alt="'.get_string('update').'"><img src="'.$OUTPUT->image_url('t/edit').'"></a>';
         $params = array('what' => 'delete', 'template' => $t->id, 'sesskey' => sesskey());
         $deleteurl = new moodle_url('/local/userequipment/templates.php', $params);
-        $cmds .= '&nbsp;<a href="'.$deleteurl.'" alt="'.get_string('delete').'"><img src="'.$OUTPUT->pix_url('t/delete').'"></a>';
+        $cmds .= '&nbsp;<a href="'.$deleteurl.'" alt="'.get_string('delete').'"><img src="'.$OUTPUT->image_url('t/delete').'"></a>';
 
         $applyurl = new moodle_url('/local/userequipment/apply.php', array('template' => $t->id));
         $applybutton = $OUTPUT->single_button($applyurl, get_string('applytemplatebtn', 'local_userequipment'));
