@@ -27,6 +27,14 @@ require_once($CFG->dirroot.'/local/userequipment/classes/manager.php');
 use local_userequipment\userequipment_manager;
 
 /**
+ * This function is not implemented in thos plugin, but is needed to mark
+ * the vf documentation custom volume availability.
+ */
+function local_userequipment_supports_feature() {
+    assert(1);
+}
+
+/**
  *
  *
  */
@@ -182,4 +190,16 @@ function local_ue_has_capability_somewhere($capability, $excludesystem = true, $
     }
 
     return false;
+}
+
+function local_userequipment_enable() {
+    set_config('enabled', 1, 'local_userequipment');
+}
+
+function local_userequipment_disable() {
+    set_config('enabled', 0, 'local_userequipment');
+}
+
+function local_userequipment_enabled() {
+    return get_config('local_userequipment', 'enabled');
 }
