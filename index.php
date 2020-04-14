@@ -52,7 +52,7 @@ if (!has_capability('local/userequipment:equip', $context)) {
 }
 
 if ($user->id == $USER->id) {
-    if (!local_ue_has_capability_somewhere('local/userequipment:selfequip', false, false, false)) {
+    if (!local_ue_has_capability_somewhere('local/userequipment:selfequip', false, false, true)) {
         print_error('errornoselfequipementallowed', 'local_userequipment');
     }
 }
