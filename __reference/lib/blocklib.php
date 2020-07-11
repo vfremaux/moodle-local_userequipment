@@ -707,7 +707,7 @@ class block_manager {
         if ($includeinvisible) {
             $visiblecheck = '';
         } else {
-            $visiblecheck = 'AND (bp.visible = 1 OR bp.visible IS NULL)';
+            $visiblecheck = 'AND (bp.visible = 1 OR bp.visible IS NULL) AND (bs.visible = 1 OR bs.visible IS NULL)';
         }
 
         $context = $this->page->context;
@@ -728,24 +728,26 @@ class block_manager {
         $ccjoin = "LEFT JOIN {context} ctx ON (ctx.instanceid = bi.id AND ctx.contextlevel = :contextlevel)";
 
         $systemcontext = context_system::instance();
-        list($bpcontext, $bpcontextidparams) = $DB->get_in_or_equal(array($context->id, $systemcontext->id),
-                SQL_PARAMS_NAMED, 'bpcontextid');
         $params = array(
             'contextlevel' => CONTEXT_BLOCK,
             'subpage1' => $this->page->subpage,
             'subpage2' => $this->page->subpage,
+            'subpage3' => $this->page->subpage,
             'contextid1' => $context->id,
             'contextid2' => $context->id,
             'contextid3' => $systemcontext->id,
+            'contextid4' => $systemcontext->id,
             'pagetype' => $this->page->pagetype,
+            'pagetype2' => $this->page->pagetype,
         );
         if ($this->page->subpage === '') {
             $params['subpage1'] = '';
             $params['subpage2'] = '';
+            $params['subpage3'] = '';
         }
         $sql = "SELECT
                     bi.id,
-                    bp.id AS blockpositionid,
+                    COALESCE(bp.id, bs.id) AS blockpositionid,
                     bi.blockname,
                     bi.parentcontextid,
                     bi.showinsubcontexts,
@@ -754,18 +756,22 @@ class block_manager {
                     bi.subpagepattern,
                     bi.defaultregion,
                     bi.defaultweight,
-                    COALESCE(bp.visible, 1) AS visible,
-                    COALESCE(bp.region, bi.defaultregion) AS region,
-                    COALESCE(bp.weight, bi.defaultweight) AS weight,
+                    COALESCE(bp.visible, bs.visible, 1) AS visible,
+                    COALESCE(bp.region, bs.region, bi.defaultregion) AS region,
+                    COALESCE(bp.weight, bs.weight, bi.defaultweight) AS weight,
                     bi.configdata
                     $ccselect
 
                 FROM {block_instances} bi
                 JOIN {block} b ON bi.blockname = b.name
                 LEFT JOIN {block_positions} bp ON bp.blockinstanceid = bi.id
-                                                  AND bp.contextid $bpcontext
+                                                  AND bp.contextid = :contextid1
                                                   AND bp.pagetype = :pagetype
                                                   AND bp.subpage = :subpage1
+                LEFT JOIN {block_positions} bs ON bs.blockinstanceid = bi.id
+                                                  AND bs.contextid = :contextid4
+                                                  AND bs.pagetype = :pagetype2
+                                                  AND bs.subpage = :subpage3
                 $ccjoin
 
                 WHERE
@@ -777,12 +783,11 @@ class block_manager {
                 $requiredbythemecheck
 
                 ORDER BY
-                    COALESCE(bp.region, bi.defaultregion),
-                    COALESCE(bp.weight, bi.defaultweight),
+                    COALESCE(bp.region, bs.region, bi.defaultregion),
+                    COALESCE(bp.weight, bs.weight, bi.defaultweight),
                     bi.id";
 
-        $allparams = $params + $parentcontextparams + $pagetypepatternparams + $requiredbythemeparams;
-        $allparams = $allparams + $requiredbythemenotparams + $bpcontextidparams;
+        $allparams = $params + $parentcontextparams + $pagetypepatternparams + $requiredbythemeparams + $requiredbythemenotparams;
         $blockinstances = $DB->get_recordset_sql($sql, $allparams);
 
         $this->birecordsbyregion = $this->prepare_per_region_arrays();
@@ -795,6 +800,7 @@ class block_manager {
                 $unknown[] = $bi;
             }
         }
+        $blockinstances->close();
 
         // Pages don't necessarily have a defaultregion. The  one time this can
         // happen is when there are no theme block regions, but the script itself
@@ -1370,6 +1376,30 @@ class block_manager {
                 $str,
                 array('class' => 'editing_delete')
             );
+        }
+
+        if (!empty($CFG->contextlocking) && has_capability('moodle/site:managecontextlocks', $block->context)) {
+            $parentcontext = $block->context->get_parent_context();
+            if (empty($parentcontext) || empty($parentcontext->locked)) {
+                if ($block->context->locked) {
+                    $lockicon = 'i/unlock';
+                    $lockstring = get_string('managecontextunlock', 'admin');
+                } else {
+                    $lockicon = 'i/lock';
+                    $lockstring = get_string('managecontextlock', 'admin');
+                }
+                $controls[] = new action_menu_link_secondary(
+                    new moodle_url(
+                        '/admin/lock.php',
+                        [
+                            'id' => $block->context->id,
+                        ]
+                    ),
+                    new pix_icon($lockicon, $lockstring, 'moodle', array('class' => 'iconsmall', 'title' => '')),
+                    $lockstring,
+                    ['class' => 'editing_lock']
+                );
+            }
         }
 
         return $controls;
@@ -1953,6 +1983,20 @@ function block_method_result($blockname, $method, $param = NULL) {
         return NULL;
     }
     return call_user_func(array('block_'.$blockname, $method), $param);
+}
+
+/**
+ * Returns a new instance of the specified block instance id.
+ *
+ * @param int $blockinstanceid
+ * @return block_base the requested block instance.
+ */
+function block_instance_by_id($blockinstanceid) {
+    global $DB;
+
+    $blockinstance = $DB->get_record('block_instances', ['id' => $blockinstanceid]);
+    $instance = block_instance($blockinstance->blockname, $blockinstance);
+    return $instance;
 }
 
 /**
@@ -2563,7 +2607,7 @@ function blocks_add_default_system_blocks() {
         $subpagepattern = null;
     }
 
-    $newblocks = array('private_files', 'online_users', 'badges', 'calendar_month', 'calendar_upcoming');
-    $newcontent = array('lp', 'myoverview');
+    $newblocks = array('timeline', 'private_files', 'online_users', 'badges', 'calendar_month', 'calendar_upcoming');
+    $newcontent = array('lp', 'recentlyaccessedcourses', 'myoverview');
     $page->blocks->add_blocks(array(BLOCK_POS_RIGHT => $newblocks, 'content' => $newcontent), 'my-index', $subpagepattern);
 }

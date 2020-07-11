@@ -137,7 +137,7 @@ class UserEquipmentForm extends moodleform {
                 // Standard implementation, give the block list flat and uncategorized.
                 foreach ($blocks as $block) {
                     if ($bck = $DB->get_record('block', array('name' => $block->name))) {
-                        if (!$bck->visible) {
+                        if (!$bck->visible || !is_dir($CFG->dirroot.'/blocks/'.$block->name)) {
                             continue;
                         }
                         $blockobject = block_instance($block->name);
@@ -145,7 +145,12 @@ class UserEquipmentForm extends moodleform {
                         if (empty($blockname)) {
                             $blockname = get_string('blockname', 'block_'.$block->name);
                         }
-                        $blockdesc = get_string('blockdesc_block_'.$block->name, 'local_userequipment');
+                        $blockdesc = '';
+                        if ($sm->string_exists('plugdesc_block_'.$block->name, 'local_userequipment')) {
+                            $blockdesc = get_string('plugdesc_block_'.$block->name, 'local_userequipment');
+                        } else if ($sm->string_exists('plugdesc_block_'.$block->name, 'block_'.$block->name)) {
+                            $blockdesc = get_string('plugdesc_block_'.$block->name, 'block_'.$block->name);
+                        }
 
                         $mform->addElement('checkbox', 'block_'.$block->name, $blockname, $blockdesc);
                         $allplugins[] = 'block_'.$block->name;
@@ -196,10 +201,11 @@ class UserEquipmentForm extends moodleform {
                                 $blockname = get_string('pluginname', 'block_'.$block->name);
                             }
                         }
+                        $blockdesc = '';
                         if ($sm->string_exists('plugdesc_block_'.$block->name, 'local_userequipment')) {
                             $blockdesc = get_string('plugdesc_block_'.$block->name, 'local_userequipment');
-                        } else {
-                            $blockdesc = '';
+                        } else if ($sm->string_exists('plugdesc_block_'.$block->name, 'block_'.$block->name)) {
+                            $blockdesc = get_string('plugdesc_block_'.$block->name, 'block_'.$block->name);
                         }
                         $blocknamespan = '<span data-tooltip="'.str_replace('"', '\\"', $blockdesc).'"
                                                 data-tooltip-position="bottom">';
@@ -218,7 +224,7 @@ class UserEquipmentForm extends moodleform {
                 foreach ($modules as $mod) {
                     $mname = $mod->name;
                     $module = $DB->get_record('modules', array('name' => $mname));
-                    if (empty($module) || !$module->visible) {
+                    if (empty($module) || !$module->visible || !is_dir($CFG->dirroot.'/mod/'.$mname)) {
                         continue;
                     }
                     $mform->addElement('checkbox', 'mod_'.$mname, get_string('pluginname', $mname));
@@ -281,9 +287,11 @@ class UserEquipmentForm extends moodleform {
         if (!empty($qtypes)) {
             $group = array();
             foreach ($qtypes as $qtype) {
-                $qtypevisiblename = $qtype->displayname;
-                $group[] = $mform->createElement('checkbox', 'qtype_'.$qtype->name, '', $qtypevisiblename);
-                $allplugins[] = 'qtype_'.$qtype->name;
+                if (is_dir($CFG->dirroot.'/question/type/'.$qtype->name)) {
+                    $qtypevisiblename = $qtype->displayname;
+                    $group[] = $mform->createElement('checkbox', 'qtype_'.$qtype->name, '', $qtypevisiblename);
+                    $allplugins[] = 'qtype_'.$qtype->name;
+                }
             }
             $mform->addGroup($group, 'groupquiztype', get_string('questiontype', 'question'), array(''), false);
         }
