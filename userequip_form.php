@@ -115,6 +115,8 @@ class UserEquipmentForm extends moodleform {
         $qtypes = $manager->get_plugins_of_type('qtype');
 
         $formats = $manager->get_plugins_of_type('format');
+        
+        $categories = $manager->get_plugins_of_type('categorie');
 
         $allplugins = array();
 
@@ -295,7 +297,6 @@ class UserEquipmentForm extends moodleform {
             }
             $mform->addGroup($group, 'groupquiztype', get_string('questiontype', 'question'), array(''), false);
         }
-
         $this->add_action_buttons(true);
     }
 

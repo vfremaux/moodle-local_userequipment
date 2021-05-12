@@ -22,17 +22,9 @@
  */
 defined('MOODLE_INTERNAL') || die;
 
-// Settings default init.
+require_once($CFG->dirroot.'/local/userequipment/lib.php');
 
-if (is_dir($CFG->dirroot.'/local/adminsettings')) {
-    // Integration driven code.
-    require_once($CFG->dirroot.'/local/adminsettings/lib.php');
-    list($hasconfig, $hassiteconfig, $capability) = local_adminsettings_access();
-} else {
-    // Standard Moodle code.
-    $capability = 'moodle/site:config';
-    $hasconfig = $hassiteconfig = has_capability($capability, context_system::instance());
-}
+// Settings default init.
 
 if ($hassiteconfig) {
     $settings = new admin_settingpage('userequipment', get_string('pluginname', 'local_userequipment'));
@@ -43,9 +35,6 @@ if ($hassiteconfig) {
     $label = get_string('enableuserequipment', 'local_userequipment');
     $desc = get_string('enableuserequipment_desc', 'local_userequipment');
     $settings->add(new admin_setting_configcheckbox($key, $label, $desc, ''));
-
-    $templatesurl = new moodle_url('/local/userequipment/templates.php');
-    $managetemplatesstr = get_string('managetemplates', 'local_userequipment');
 
     $options = array();
     $options['0'] = get_string('allusers', 'local_userequipment');
@@ -71,8 +60,19 @@ if ($hassiteconfig) {
     $desc = get_string('configaskuserstoprofile_desc', 'local_userequipment');
     $settings->add(new admin_setting_configcheckbox($key, $label, $desc, 0));
 
+    $templatesurl = new moodle_url('/local/userequipment/templates.php');
+    $managetemplatesstr = get_string('managetemplates', 'local_userequipment');
     $label = get_string('templates', 'local_userequipment');
     $settings->add(new admin_setting_heading('templates', $label, '<a href="'.$templatesurl.'">'.$managetemplatesstr.'</a>'));
+
+    if (local_userequipment_supports_feature('emulate/community') == 'pro') {
+        include_once($CFG->dirroot.'/local/userequipment/pro/prolib.php');
+        \local_userequipment\pro_manager::add_settings($ADMIN, $settings);
+    } else {
+        $label = get_string('plugindist', 'local_userequipment');
+        $desc = get_string('plugindist_desc', 'local_userequipment');
+        $settings->add(new admin_setting_heading('plugindisthdr', $label, $desc));
+    }
 
 }
 

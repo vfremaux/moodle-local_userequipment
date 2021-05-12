@@ -22,12 +22,17 @@
  * @package local_userequipment
  * @category local
  */
+defined('MOODLE_INTERNAL') || die();
+
+require_once($CFG->dirroot.'/local/userequipment/lib.php');
 
 $string['userequipment:override'] = 'Surchage les limites d\'équipement';
 $string['userequipment:selfequip'] = 'Peut configurer son propre équipement';
 $string['userequipment:equip'] = 'Peut configurer l\'équipement d\'autres utilisateurs';
 
 $string['addtemplate'] = 'Ajouter un nouveau profil';
+$string['addcategory'] = 'Ajouter une catégorie';
+$string['addplugins'] = 'Ajouter des plugins';
 $string['allusers'] = 'Tous les utilisateurs activés';
 $string['applystrict'] = 'Profil strict';
 $string['applytemplate'] = 'M\'appliquer l\'équipement : "{$a}"';
@@ -37,6 +42,20 @@ $string['associatedsystemrole'] = 'Rôle system associé';
 $string['backtodashboard'] = 'Revenir au tableau de bord';
 $string['cancel'] = 'Annuler';
 $string['capabilitycontrol'] = 'Désactiver par capacité';
+$string['categories'] = 'Categories';
+$string['categorization'] = 'Catégorisation des plugins';
+$string['catname'] = 'Nom de la catégorie';
+$string['catdesc'] = 'Description de la catégorie';
+$string['catcolour'] = 'Couleur de la catégorie';
+$string['catedit'] = 'Modifier';
+$string['catadd'] = 'Ajouter';
+$string['colour'] = 'Couleur';
+$string['editcategorie'] = 'Ajouter ou modifier';
+$string['catpng'] = 'Associé un plugin';
+$string['emptycat'] = 'Pas de sélecteur d\'activité créé';
+$string['placeholder_catname'] = 'nom';
+$string['placeholder_catdesc'] = 'description';
+$string['placeholder_catcolours'] = '#00000';
 $string['cleanup'] = 'Revenir à l\'équipement complet';
 $string['configaskuserstoprofile'] = 'Demander de choisir un équipement à la connexion';
 $string['configaskuserstoprofile_desc'] = 'Si actif, tout utilisateur se connectant pour la première fois et susceptible d\'avoir un rôle éditeur se verra proposer de choisir son équipement.';
@@ -50,10 +69,13 @@ $string['enableuserequipment'] = 'Activer le plan d\'équipement individuel des 
 $string['equipme'] = 'Gérer mes équipements';
 $string['equipmentcleaned'] = 'L\'équipement a été supprimé. Vous avez accès à toutes les fonctionnalités.';
 $string['isdefault'] = 'Est l\'équipement par défaut';
+$string['managecategories'] = 'Gestionnaire des catégories de plugins';
 $string['managetemplates'] = 'Gestionnaire de profils d\'équipement';
 $string['marksinfo'] = 'Vous avez {$a} outils dans votre équipement.';
 $string['none'] = 'Aucun role';
 $string['notemplates'] = 'Aucun profil';
+$string['nocategories'] = 'Aucune catégorie';
+$string['noplugins'] = 'Aucun plugin';
 $string['other'] = 'Autres';
 $string['pluginname'] = 'Equipement de l\'utilisateur';
 $string['plugins'] = 'Plugins';
@@ -137,4 +159,5 @@ implantations de plates-formes et bénéficiant de fonctionnalités pédagogique
 $string['profileextended_desc'] = 'Un profil enrichi avec des fonctionnalités pédagogiques supplémentaires, afin de pouvoir diversifier les
 activités et rendre l\'expérience d\'apprentissage plus dynamique.';
 
-require_once('plugin_descriptions.php');
+include(__DIR__.'/pro_additional_strings.php');
+include(__DIR__.'/plugin_descriptions.php');
