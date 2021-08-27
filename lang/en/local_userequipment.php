@@ -40,6 +40,7 @@ $string['applytemplatebtn'] = 'Apply template';
 $string['applytoselection'] = 'Apply to selected users';
 $string['associatedsystemrole'] = 'Associated system role';
 $string['backtodashboard'] = 'Back to dashboard';
+$string['buttonopenmodal'] = '';
 $string['cancel'] = 'Cancel';
 $string['capabilitycontrol'] = 'Disable by capability';
 $string['categories'] = 'Categories';

@@ -237,23 +237,37 @@ class UserEquipmentForm extends moodleform {
             if (!empty($modules)) {
                 // Page enhanced implementation, get categorization.
 
-                $modcats = $DB->get_records('format_page_pfamily', array('type' => 'mod'), 'shortname', 'shortname,id,name');
-                $modcategories = array();
+                //$modcats = $DB->get_records('format_page_pfamily', array('type' => 'mod'), 'shortname', 'shortname,id,name');
+                //$modcategories = array();
 
                 foreach ($modules as $id => $mod) {
+
+                    $mname = $mod->name;
+                    $module = $DB->get_record('modules', array('name' => $mname));
 
                     if (!$DB->get_field('modules', 'visible', array('name' => $mod->name))) {
                         continue;
                     }
 
-                    $modshort = str_replace('block_', '', $mod->name);
-                    $pageplugin = $DB->get_record('format_page_plugins', array('type' => 'mod', 'plugin' => $modshort));
-                    $modcategories[@$modcats[$pageplugin->familyname]->shortname][] = $mod;
+                    if (!is_dir($CFG->dirroot.'/mod/'.$mod->name)) {
+                        // Missing modules.
+                        continue;
+                    }
+
+                    $mform->addElement('checkbox', 'mod_'.$mname, get_string('pluginname', $mname));
+                    $mform->addElement('button', 'openmodal', get_string('buttonopenmodal', 'local_userequipment'));
+                    $allplugins[] = 'mod_'.$mname;
+
+                    //$modshort = str_replace('block_', '', $mod->name);
+                    //$pageplugin = $DB->get_record('format_page_plugins', array('type' => 'mod', 'plugin' => $modshort));
+                    //var_dump($pageplugin);
+
+                    //$modcategories[@$modcats[$pageplugin->familyname]->shortname][] = $mod;
                 }
+                
+                //ksort($modcategories);
 
-                ksort($modcategories);
-
-                foreach ($modcategories as $catshort => $catmods) {
+                /*foreach ($modcategories as $catshort => $catmods) {
 
                     $group = array();
                     if (!array_key_exists($catshort, $modcats)) {
@@ -281,7 +295,7 @@ class UserEquipmentForm extends moodleform {
                         $allplugins[] = 'mod_'.$mod->name;
                     }
                     $mform->addGroup($group, 'groupmods'.$catshort, $catname, array(''), false);
-                }
+                }*/
             }
         }
 
@@ -297,6 +311,17 @@ class UserEquipmentForm extends moodleform {
             }
             $mform->addGroup($group, 'groupquiztype', get_string('questiontype', 'question'), array(''), false);
         }
+
+        $mform->addElement('header', 'cheader', get_string('categories', 'local_userequipment'));
+
+        $mform->addElement('text', 'catname', get_string('catname', 'local_userequipment'));
+        $mform->setType('catname', PARAM_TEXT);
+
+        $mform->addElement('editor', 'catdescription', get_string('catdesc', 'local_userequipment'));
+
+        $mform->addElement('text', 'catcolor', get_string('catcolour', 'local_userequipment'));
+        $mform->setType('catcolor', PARAM_TEXT);
+        
         $this->add_action_buttons(true);
     }
 

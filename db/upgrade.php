@@ -198,8 +198,8 @@ function xmldb_local_userequipment_upgrade($oldversion = 0) {
         $table->add_index('ix-category', XMLDB_INDEX_NOTUNIQUE, ['categoryid']);
 
         // Conditionally launch add field id.
-        if (!$dbman->table_exists($table, $field)) {
-            $dbman->create_table($table, $field);
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
         }
 
         // Userequipment savepoint reached.
