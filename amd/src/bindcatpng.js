@@ -19,20 +19,18 @@ define(['jquery', 'core/config', 'core/log', 'local_userequipment/bootstrap-sele
             waiter += cfg.wwwroot + '/pix/i/ajaxloader.gif" /></center></div>';
             $('#catpng-edit-inner-form').html(waiter);
 
-            var id = that.attr('id').replace(/issue-edit-(.*?)-handle-/, '');
-            var mode = that.attr('data-mode');
-            var ctx = that.attr('data-context');
+            var plugintype = that.attr('data-plugintype');
+            var pluginname = that.attr('data-pluginname');
 
             var url = cfg.wwwroot + '/local/userequipment/ajax/service.php';
-            url += '?what=getmodalform';
-            url += '&mode=' + mode;
-            url += '&id=' + id;
-            url += '&ctx=' + ctx;
+            url += '?what=getplugincategories';
+            url += '&plugintype=' + plugintype;
+            url += '&pluginname=' + pluginname;
 
             $.get(url, function(data) {
                 $('#catpng-edit-inner-form').html(data);
-                $("#modal-status-save").attr('data-issue', id);
-                $("#modal-status-save").attr('data-purpose', mode);
+                $("#modal-status-save").attr('data-plugintype', plugintype);
+                $("#modal-status-save").attr('data-pluginname', pluginname);
                 $('.selectpicker').selectpicker();
             }, 'html');
         },
@@ -40,60 +38,21 @@ define(['jquery', 'core/config', 'core/log', 'local_userequipment/bootstrap-sele
         submit_change_form: function() {
             var that = $(this);
 
-            var issueid = that.attr('data-issue');
-            var purpose = that.attr('data-purpose');
+            var pluginname = that.attr('data-pluginname');
+            var plugintype = that.attr('data-plugin');
             var url = cfg.wwwroot + '/local/userequipment/ajax/service.php';
-            url += '?what=update' + purpose;
-            url += '&id=' + issueid;
-            var selectkey = '#' + purpose + '-select-' + issueid;
-            url += '&' + purpose + '=' + $(selectkey).val();
+            url += '?what=update';
+            url += '&name=' + pluginname;
+            url += '&type=' + plugintype;
+            var selectkey = '#cat-select-' + plugintype + '-' + pluginname;
+            url += '&categories=' + $(selectkey).val();
 
             $.get(url, function(data) {
                 if (data.result === 'success') {
-                    if (purpose == 'status') {
-                        var oldclassname = 'status-' + moodlebindcatpng.get_status_code(data.oldvalue);
-                        $('.issue-list-status-' + issueid).removeClass(oldclassname);
-                        var newclassname = 'status-' + moodlebindcatpng.get_status_code(data.newvalue);
-                        $('.issue-list-status-' + issueid).addClass(newclassname);
-                    }
-                    $('#tracker-' + purpose + '-' + issueid).html(data.newlabel);
+                    $('#plugin-categories-' + plugintype + '-' + pluginname).html(data.catset);
                     $('#catpng-edit-form').modal('hide'); // Close the modal dialog.
                 }
             }, 'json');
-        },
-
-        get_status_code: function (statusix) {
-            var statuscodes = ['posted',
-                'open',
-                'resolving',
-                'waiting',
-                'resolved',
-                'abandonned',
-                'transfered',
-                'testing',
-                'validated',
-                'published'
-            ];
-
-            return statuscodes[statusix];
-        },
-
-        solve_issue: function() {
-            var that = $(this);
-
-            var issueid = that.attr('id').replace('resolve-', '');
-            var cmid = that.attr('data-cmid');
-            var url = cfg.wwwroot + '/local/userequipment/view.php?id=' + cmid;
-            url += '&view=view';
-            url += '&screen=mytickets';
-            url += '&what=solve';
-            url += '&issueid=' + issueid;
-            url += '&sesskey=' + cfg.sesskey;
-            window.location = url;
-        },
-
-        quick_find: function() {
-            $('#id-quick-find-form').submit();
         }
 
     };

@@ -85,4 +85,36 @@ class local_userequipment_renderer extends plugin_renderer_base {
         return $str;
     }
 
+    /**
+     * Renders all divs that show plugin categories
+     */
+    public function list_plugin_bindings($plugintype, $pluginname) {
+        global $DB;
+        static $categories;
+
+        $template = new StdClass;
+
+        if (is_null($categories)) {
+            $categories = $DB->get_records('local_userequipment_cat');
+        }
+
+        $pbindings = $DB->get_records('local_userequipment_cat_png', ['plugintype' => $plugintype, 'pluginname' => $pluginname]);
+        $template->plugintype = $plugintype;
+        $template->pluginname = $pluginname;
+        $template->pluginvisiblename = get_string('pluginname', $plugintype.'_'.$pluginname);
+
+        if (!empty($pbindings)) {
+            foreach ($pbindings as $bnd) {
+                $bindtpl = new StdClass;
+                $bindtpl->id = $bnd->id;
+                $bindtpl->categoryid = $bnd->categoryid;
+                $bindtpl->colour = $categories[$bnd->categoryid]->colour;
+                $bindtpl->categoryname = format_string($categories[$bnd->categoryid]->name);
+
+                $template->categories[] = $bindtpl;
+            }
+        }
+
+        return $OUTPUT->render_from_template('local_userequipenent/plugin_categories', $template);
+    }
 }

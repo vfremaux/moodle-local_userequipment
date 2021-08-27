@@ -230,6 +230,7 @@ class UserEquipmentForm extends moodleform {
                         continue;
                     }
                     $mform->addElement('checkbox', 'mod_'.$mname, get_string('pluginname', $mname));
+                    $mform->addElement('button', 'openmodal_'.$mname, get_string('buttonopenmodal', 'local_userequipment'));
                     $allplugins[] = 'mod_'.$mname;
                 }
             }
@@ -255,7 +256,8 @@ class UserEquipmentForm extends moodleform {
                     }
 
                     $mform->addElement('checkbox', 'mod_'.$mname, get_string('pluginname', $mname));
-                    $mform->addElement('button', 'openmodal', get_string('buttonopenmodal', 'local_userequipment'));
+                    $mform->addElement('button', 'openmodal_'.$mname, get_string('buttonopenmodal', 'local_userequipment'));
+                    $mform->addElement('html', 'openmodal_categories_'.$mname, '<div class="plugin_categories" id="plugin_categories_'.$mname.'"></div>');
                     $allplugins[] = 'mod_'.$mname;
 
                     //$modshort = str_replace('block_', '', $mod->name);
