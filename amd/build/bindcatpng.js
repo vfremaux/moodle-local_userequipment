@@ -7,7 +7,8 @@ define(['jquery', 'core/config', 'core/log', 'local_userequipment/bootstrap-sele
 
         init: function() {
             log.debug('Start AMD Userequipment CatPng initialized');
-            $("#id_openmodal").bind('click', this.load_change_form);
+            var plugin = $(this).attr('data-value');
+            $("#id_openmodal"+ plugin).bind('click', this.load_change_form);
             $("#modal-status-save").bind('click', this.submit_change_form);
             log.debug('AMD Userequipment CatPng initialized');
         },
