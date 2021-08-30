@@ -256,7 +256,7 @@ class UserEquipmentForm extends moodleform {
                     }
 
                     $mform->addElement('checkbox', 'mod_'.$mname, get_string('pluginname', $mname));
-                    $mform->addElement('button', 'openmodal_'.$mname, get_string('buttonopenmodal', 'local_userequipment'), ['data-value' => $mname]);
+                    $mform->addElement('button', 'openmodal_'.$mname, get_string('buttonopenmodal', 'local_userequipment'), ['data-value' => $mname, 'class' => 'assignment_button', 'value' => get_string('categorize', 'local_userequipment')]);
                     $mform->addElement('html', '<div class="plugin_categories" id="plugin_categories_'.$mname.'"></div>');
                     $allplugins[] = 'mod_'.$mname;
 

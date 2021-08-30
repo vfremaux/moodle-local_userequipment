@@ -6,9 +6,7 @@ define(['jquery', 'core/config', 'core/log', 'local_userequipment/bootstrap-sele
     var moodlebindcatpng = {
 
         init: function() {
-            log.debug('Start AMD Userequipment CatPng initialized');
-            var plugin = $(this).attr('data-value');
-            $("#id_openmodal_"+ plugin).bind('click', this.load_change_form);
+            $(".assignment_button").bind('click', this.load_change_form);
             $("#modal-status-save").bind('click', this.submit_change_form);
             log.debug('AMD Userequipment CatPng initialized');
         },

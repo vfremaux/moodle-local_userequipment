@@ -44,6 +44,7 @@ $string['buttonopenmodal'] = '';
 $string['cancel'] = 'Cancel';
 $string['capabilitycontrol'] = 'Disable by capability';
 $string['categories'] = 'Categories';
+$string['categorize'] = 'Categorize';
 $string['categorization'] = 'Plugin Categorization';
 $string['catname'] = 'Categories Name';
 $string['catdesc'] = 'Categories Description';

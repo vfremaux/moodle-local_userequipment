@@ -48,6 +48,7 @@ $string['catname'] = 'Nom de la catégorie';
 $string['catdesc'] = 'Description de la catégorie';
 $string['catcolour'] = 'Couleur de la catégorie';
 $string['catedit'] = 'Modifier';
+$string['categorize'] = 'Catégoriser';
 $string['catadd'] = 'Ajouter';
 $string['colour'] = 'Couleur';
 $string['editcategorie'] = 'Ajouter ou modifier';
