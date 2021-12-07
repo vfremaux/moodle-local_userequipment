@@ -22,12 +22,27 @@
  * @package local_userequipment
  * @category local
  */
+defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->dirroot.'/local/userequipment/lib.php');
+
+$string['aria:defaulttab'] = 'Default activities';
+$string['aria:favouritestab'] = 'Starred activities';
+$string['aria:recommendedtab'] = 'Recommended activities';
 $string['userequipment:override'] = 'Overrides the equipment limitations';
 $string['userequipment:selfequip'] = 'Can configure his own equipment';
 $string['userequipment:equip'] = 'Can configure equipment of other users';
 
+$string['assignplugins'] = 'Assign plugins';
+$string['activities'] = 'Activities';
+$string['resources'] = 'Resources';
+$string['testactivity'] = 'Test Dev';
+$string['activitieschooser'] = 'Add activity or ressources';
 $string['addtemplate'] = 'Add new template';
+$string['addcategory'] = 'Add category';
+$string['addamodule'] = 'Add plugins or resources';
+$string['addplugins'] = 'Add plugins';
+$string['addone'] = 'Add a category';
 $string['allusers'] = 'All users enabled';
 $string['applystrict']  = 'Apply strict template';
 $string['applytemplate'] = 'Apply template : "{$a}"';
@@ -35,8 +50,25 @@ $string['applytemplatebtn'] = 'Apply template';
 $string['applytoselection'] = 'Apply to selected users';
 $string['associatedsystemrole'] = 'Associated system role';
 $string['backtodashboard'] = 'Back to dashboard';
+$string['buttonopenmodal'] = '';
 $string['cancel'] = 'Cancel';
 $string['capabilitycontrol'] = 'Disable by capability';
+$string['categories'] = 'Categories';
+$string['categorize'] = 'Categorize';
+$string['categoryassignedplugins'] = 'Category assigned plugins';
+$string['categorization'] = 'Plugin Categorization';
+$string['catname'] = 'Categories Name';
+$string['catdesc'] = 'Categories Description';
+$string['catcolour'] = 'Categories Colour';
+$string['catedit'] = 'Edit category';
+$string['catadd'] = 'Add category';
+$string['colour'] = 'Colour';
+$string['editcategory'] = 'Edit category';
+$string['catpng'] = 'bing plugin';
+$string['emptycat'] = 'Not activities selector created';
+$string['placeholder_catname'] = 'colours1';
+$string['placeholder_catdesc'] = 'description';
+$string['placeholder_catcolour'] = '#00000';
 $string['cleanup'] = 'Delete all my equipment marks. You will have access to all features.';
 $string['configaskuserstoprofile'] = 'Ask users to self profile';
 $string['configaskuserstoprofile_desc'] = 'If enabled, all users with edition capability will be asked to choose an application profile when first login.';
@@ -44,19 +76,29 @@ $string['configautosetupnewusers'] = 'Auto setup new users';
 $string['configautosetupnewusers_desc'] = 'If enabled, all new created users will be applied the default profile';
 $string['configdisablecontrol'] = 'Disable control source';
 $string['configdisablecontrolvalue'] = 'Disable control value';
+$string['configuseenhancedmodchooser'] = 'Use enhanced mod chooser';
+$string['configuseenhancedmodchooser_desc'] = 'If enable replaces the old modchooser by pedagogically categorized and userequipment controlled modchooser';
 $string['default'] = ' (default)';
 $string['disabledforuser'] = 'Self equipment has been disabled for you.';
 $string['enableuserequipment'] = 'Enable per user feature equipment';
 $string['equipme'] = 'Manage my equipment';
 $string['equipmentcleaned'] = 'Equipment marks have been successfully deleted';
+$string['shortname'] = 'Plugin code';
+$string['fullname'] = 'Plugin full name';
 $string['isdefault'] = 'Is default profile';
-$string['managetemplates'] = 'manage templates facility';
+$string['managecategories'] = 'Manage plugin categories';
+$string['managetemplates'] = 'Manage templates facility';
 $string['marksinfo'] = 'You have {$a} profile marks in your equipment profile.';
 $string['none'] = 'No role';
+$string['noplugins'] = 'No plugins';
 $string['notemplates'] = 'No templates';
+$string['nocategories'] = 'No categories';
+$string['noplugincategories'] = 'No categories have been set for plugin classification.';
 $string['other'] = 'Other';
 $string['pluginname'] = 'User equipment';
 $string['plugins'] = 'Plugins';
+$string['pluginsettings'] = 'Plugin settings';
+$string['gotopluginsettings'] = 'Go to site plugin settings';
 $string['potentialmembers'] = 'Potential users';
 $string['profileextended'] = 'Extended';
 $string['profilefieldcontrol'] = 'disable by profile field';
@@ -74,6 +116,8 @@ $string['templates'] = 'Templates';
 $string['usercanchoose'] = 'User choice';
 $string['userequipment'] = 'User feature self-equipment';
 $string['usersupdated'] = 'Users had equipment profile updated';
+$string['categories'] = 'Plugin categories';
+$string['categoryplugins'] = 'Associated plugins';
 
 $string['isdefault_desc'] = 'If this user equipement profile is the default profile, then any new user created will be setup with this profile.
 Checking this checkbox will superseede any other default choice.';
@@ -128,4 +172,5 @@ installation of same version level.';
 
 $string['profileextended_desc'] = 'An extended profile activating valuable pedagogic additions.';
 
-require_once('plugin_descriptions.php');
+include(__DIR__.'/pro_additional_strings.php');
+require(__DIR__.'/plugin_descriptions.php');

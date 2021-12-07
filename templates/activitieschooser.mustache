@@ -1,0 +1,118 @@
+<!-- local_userequipment/activitieschooser -->
+
+<div id="userequipment_activitychooser" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body" id="activitychooser">
+                <div class="filter-section">
+                    <h6 class="filter-main-title"> Filtres d'activités </h6>
+
+                    {{#filters}}
+                    <div type="button" class="filter" data-category="{{id}}">
+                        <h6 class="filter-title"> {{name}} </h6>
+                        <div class="filter-bar" style="background-color:{{colour}};"></div>
+                    </div>
+                    {{/filters}}
+
+                </div>
+                <div class="main-section">
+                    <h5 class="modal-title">{{#str}}activitieschooser, local_userequipment{{/str}}</h5>
+                    <button type="button" class="selector-close-btn" data-dismiss="modal" aria-label="{{#str}}cancel{{/str}}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+
+                    <div class="activities-section">
+                        <h3 class="activities-title">{{#str}}activities, local_userequipment{{/str}}</h3>
+                        <div class="activities-container">
+                            {{#plugins}}
+                            <div class="activity-element {{catclasses}}">
+                                <a href="#" role="button" class="activity-info" title="{{name}}" data-toggle="popover" data-content="{{plugindesc}}"><i class="info fa fa-info fa-2x"></i></a>
+                                <div class="activity-content" data-value="{{modname}}">
+                                    <a href="{{{addmodurl}}}">
+                                        <div class="activity-name">
+                                            <div class="activity-icon">{{{image}}}</div>
+                                            <h6 class="activity-title">{{name}}</h6>
+                                        </div>
+                                    </a>
+                                <div class="activity-categories">
+                                    {{#categories}}
+                                        <div class="category-bar {{classes}}" style="background-color: {{colour}}"
+                                             alt="{{name}}" title="{{name}}" id="{{pluginname}}-{{id}}"></div>
+                                    {{/categories}}
+                                    </div>
+                                </div>
+                            </div>
+                            {{/plugins}}
+                        </div>
+                    </div>
+                    <div class="resources-section">
+                    <h3 class="resources-title">{{#str}}resources, local_userequipment{{/str}}</h3>
+                    <div class="resources-container">
+                        {{#resources}}
+                        <div class="resources-element {{catclasses}}" data-value="{{modname}}">
+                            <a href="#" role="button" class="resources-info" title="Pluginname" data-toggle="popover" data-content="{{plugindesc}}"><i class="info fa fa-info fa-2x"></i></a>
+                            <div class="resources-content">
+                                <a href="{{{addmodurl}}}">
+                                <div class="resources-name">
+                                    <div class="resource-icon">{{{image}}}</div>
+                                    <h6 class="resources-title">{{name}}</h6>
+                                </div>
+                                </a>
+                                <div class="resources-categories">
+                                    {{#categories}}
+                                    <div class="category-bar {{classes}}" style="background-color: {{colour}}"
+                                         alt="{{name}}" title="{{name}}" id="{{pluginname}}-{{id}}"></div>
+                                    {{/categories}}
+                                </div>
+                            </div>
+                            </div>
+                            {{/resources}}
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item" data-region="help"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{#js}}
+require([
+    'jquery',
+], function($) {
+    $(document).ready(function(){
+        $('.filter').click(function() {
+            if ($(this).hasClass('selected')) {
+                // if selected an isolated, release filter.
+                // process button
+                $(this).removeClass('selected'); // unmark me
+                $('.filter').css('opacity', 'unset'); // unshadow all
+
+                // process activities and resource elements
+                $('.activity-element, .resources-element').removeClass('decline');
+                $('.activity-element, .resources-element').show(500);
+            } else {
+                // if not yet selected, enable filter.
+                // process button
+                $('.filter').removeClass('selected'); // remove to all
+                $(this).addClass('selected'); // and add to me.
+                $('.filter').css('opacity', 0.2); // shadow all
+                $(this).css('opacity', 'unset'); // unshadow me.
+
+                // get category id
+                catid = $(this).attr('data-category');
+
+                // process activities and resource elements
+                $('.activity-element, .resources-element').not('.cat-' + catid).addClass('decline');
+                $('.activity-element, .resources-element').not('.cat-' + catid).hide(500);
+                $('.activity-element.cat-' + catid).removeClass('decline');
+                $('.resources-element.cat-' + catid).removeClass('decline');
+                $('.activity-element.cat-' + catid).show(500);
+                $('.resources-element.cat-' + catid).show(500);
+            }
+         });
+    });
+});
+{{/js}}
+
+<!-- /local_userequipment/activitieschooser -->
