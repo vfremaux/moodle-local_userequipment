@@ -351,6 +351,10 @@ div.userequipment-plugincategory-colour {
     width: 4em;
 }
 
+#userequipment_activitychooser .description_plugin.decline, #userequipment_activitychooser .description.decline {
+    display: none;
+}
+
 /* new style plugin selection */
 
 #page-local-userequipment-index #id_mheader .fcontainer.clearfix, #page-local-userequipment-index #id_bheader .fcontainer.clearfix {

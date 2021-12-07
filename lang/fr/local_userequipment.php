@@ -34,6 +34,7 @@ $string['assignplugins'] = 'Assigner les plugins';
 $string['activities'] = 'Activités';
 $string['resources'] = 'Ressources';
 $string['activitieschooser'] = 'Ajouter une activité ou une ressource';
+$string['activityfilters'] = 'Filtre sur les activités';
 $string['addtemplate'] = 'Ajouter un nouveau profil';
 $string['addcategory'] = 'Ajouter une catégorie';
 $string['addplugins'] = 'Ajouter des plugins';

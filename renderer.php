@@ -172,23 +172,30 @@ class local_userequipment_renderer extends plugin_renderer_base {
         return $OUTPUT->render_from_template('local_userequipment/editcatpng_reload', $template);
     }
 
-    public function render_modchooser_link() {
+    /**
+     * Renders the modchooser lauch button
+     * @param $section when the modchooser needs to be attached to a return section (section enabled formats) the section num.
+     * @return a full "add module" button activating the modal modchooser.
+     */
+    public function render_modchooser_link($section = 0) {
         $args = [
             'class' => 'assignment_link',
             'href' => '#',
             'data-toggle' => 'modal',
+            'data-sectionid' => $section,
             'data-target' => '#userequipment_activitychooser',
             'id' => 'openmodal_activitychooser'
         ];
         return html_writer::tag('button', get_string('addamodule', 'local_userequipment'), $args);
     }
 
-    public function render_modchooser($section = 0) {
+    public function render_modchooser() {
         global $DB, $OUTPUT, $COURSE;
  
         $pluginmanager = core_plugin_manager::instance();
         $activities = $pluginmanager->get_enabled_plugins('mod');
         $uemanager = get_ue_manager();
+        $sm = get_string_manager();
 
         $template = new StdClass;
         $template->filters = [];
@@ -211,12 +218,16 @@ class local_userequipment_renderer extends plugin_renderer_base {
                     continue;
                 }
             }
-
+            $help = '';
             $plugintpl = new StdClass;
             $plugintpl->modname = $modname;
+            if ($sm->string_exists('modulename_help', $modname)) {
+                $help = get_string('modulename_help', $modname);
+            }
+            $plugintpl->help = $help;
             $plugintpl->name = get_string('pluginname', $modname);
             $plugintpl->image = $OUTPUT->pix_icon('icon', '', $modname); 
-            $plugintpl->addmodurl = new moodle_url('/course/mod.php', ['id' => $COURSE->id, 'add' => $modname, 'section' => $section]);
+            $plugintpl->addmodurl = new moodle_url('/course/mod.php', ['id' => $COURSE->id, 'add' => $modname]);
             $plugintpl->categories = [];
             // get categories assigned to this module.
             $catpngs = $DB->get_records('local_userequipment_cat_png', ['plugintype' => 'mod', 'pluginname' => $modname]);
@@ -238,12 +249,16 @@ class local_userequipment_renderer extends plugin_renderer_base {
                 $plugintpl->catclasses = implode(' ', $catclasses);
             }
 
+            // for those who want to separate resources and activities.
+            /*
             $archetype = plugin_supports('mod', $modname, FEATURE_MOD_ARCHETYPE, MOD_ARCHETYPE_OTHER);
             if ($archetype == MOD_CLASS_RESOURCE) {
                 $template->resources[] = $plugintpl;
             } else {
                 $template->plugins[] = $plugintpl;
             }
+            */
+            $template->plugins[] = $plugintpl;
         }
 
         return $OUTPUT->render_from_template('local_userequipment/activitieschooser', $template);

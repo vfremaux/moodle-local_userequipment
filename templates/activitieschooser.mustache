@@ -1,11 +1,11 @@
 <!-- local_userequipment/activitieschooser -->
 
-<div id="userequipment_activitychooser" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+<div id="userequipment_activitychooser" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="z-index:1000">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body" id="activitychooser">
                 <div class="filter-section">
-                    <h6 class="filter-main-title"> Filtres d'activités </h6>
+                    <h6 class="filter-main-title">{{#str}}activityfilters, local_userequipment{{/str}}</h6>
 
                     {{#filters}}
                     <div type="button" class="filter" data-category="{{id}}">
@@ -22,13 +22,13 @@
                     </button>
 
                     <div class="activities-section">
-                        <h3 class="activities-title">{{#str}}activities, local_userequipment{{/str}}</h3>
+                        <!-- <h3 class="activities-title">{{#str}}activities, local_userequipment{{/str}}</h3> -->
                         <div class="activities-container">
                             {{#plugins}}
                             <div class="activity-element {{catclasses}}">
-                                <a href="#" role="button" class="activity-info" title="{{name}}" data-toggle="popover" data-content="{{plugindesc}}"><i class="info fa fa-info fa-2x"></i></a>
+                                <div role="button" class="activity-info optionaction" title="{{name}}" data-action="show-option-summary" data-value="{{modname}}" data-link="{{addmodurl}}"><i class="info fa fa-info fa-2x"></i></div>
                                 <div class="activity-content" data-value="{{modname}}">
-                                    <a href="{{{addmodurl}}}">
+                                    <a class="add-module-link" href="{{{addmodurl}}}">
                                         <div class="activity-name">
                                             <div class="activity-icon">{{{image}}}</div>
                                             <h6 class="activity-title">{{name}}</h6>
@@ -45,32 +45,8 @@
                             {{/plugins}}
                         </div>
                     </div>
-                    <div class="resources-section">
-                    <h3 class="resources-title">{{#str}}resources, local_userequipment{{/str}}</h3>
-                    <div class="resources-container">
-                        {{#resources}}
-                        <div class="resources-element {{catclasses}}" data-value="{{modname}}">
-                            <a href="#" role="button" class="resources-info" title="Pluginname" data-toggle="popover" data-content="{{plugindesc}}"><i class="info fa fa-info fa-2x"></i></a>
-                            <div class="resources-content">
-                                <a href="{{{addmodurl}}}">
-                                <div class="resources-name">
-                                    <div class="resource-icon">{{{image}}}</div>
-                                    <h6 class="resources-title">{{name}}</h6>
-                                </div>
-                                </a>
-                                <div class="resources-categories">
-                                    {{#categories}}
-                                    <div class="category-bar {{classes}}" style="background-color: {{colour}}"
-                                         alt="{{name}}" title="{{name}}" id="{{pluginname}}-{{id}}"></div>
-                                    {{/categories}}
-                                </div>
-                            </div>
-                            </div>
-                            {{/resources}}
-                        </div>
-                    </div>
                 </div>
-                <div class="carousel-item" data-region="help"></div>
+                <div class="carousel-item m-auto" data-region="help">{{> local_userequipment/help }}</div>
             </div>
         </div>
     </div>
@@ -81,6 +57,28 @@ require([
     'jquery',
 ], function($) {
     $(document).ready(function(){
+
+        // bind the event that injects 
+        //$('#userequipment_activitychooser').on('show.bs.modal', function(e) {
+          //  var sr = e.relatedTarget.attr('data-sectionid');
+          //$('.add-module-link').attr('href', );
+        //});
+
+        //$('#userequipment_activitychooser').click(function(){
+          //  if($(this).siblings().not('.show')){
+            //    $(this).reload();
+            //}
+        //});
+
+        $('#openmodal_activitychooser').click(function(){
+            sectionid = $(this).attr('data-sectionid');
+            console.log(sectionid);
+
+            $('.add-module-link').each(function(){
+                this.href = this.href.replace($('.add-module-link').attr('href'), $('.add-module-link').attr('href')+'&section='+sectionid);
+            });
+        });
+
         $('.filter').click(function() {
             if ($(this).hasClass('selected')) {
                 // if selected an isolated, release filter.
@@ -89,8 +87,8 @@ require([
                 $('.filter').css('opacity', 'unset'); // unshadow all
 
                 // process activities and resource elements
-                $('.activity-element, .resources-element').removeClass('decline');
-                $('.activity-element, .resources-element').show(500);
+                $('.activity-element').removeClass('decline');
+                $('.activity-element').show(500);
             } else {
                 // if not yet selected, enable filter.
                 // process button
@@ -103,13 +101,39 @@ require([
                 catid = $(this).attr('data-category');
 
                 // process activities and resource elements
-                $('.activity-element, .resources-element').not('.cat-' + catid).addClass('decline');
-                $('.activity-element, .resources-element').not('.cat-' + catid).hide(500);
+                $('.activity-element').not('.cat-' + catid).addClass('decline');
+                $('.activity-element').not('.cat-' + catid).hide(500);
                 $('.activity-element.cat-' + catid).removeClass('decline');
-                $('.resources-element.cat-' + catid).removeClass('decline');
                 $('.activity-element.cat-' + catid).show(500);
-                $('.resources-element.cat-' + catid).show(500);
             }
+         });
+
+         $('.optionaction').click(function() {
+
+            $('.carousel-item').fadeIn();
+
+            $('.main-section').hide();
+            $('.filter-section').hide();
+            
+            // get plugin name and link
+            pluginname = $(this).attr('data-value');
+            pluginlink = $(this).attr('data-link');
+            sectionlink = '&section=' + sectionid;
+            pluginlink = pluginlink.replace(/&amp;/g, '&');
+            sectionlink = sectionlink.replace(/&amp;/g, '&');
+
+            $('.addoption').attr('href', pluginlink + sectionlink);
+            $('.description_plugin').not('.' + pluginname).addClass('decline');
+            $('.description').not('.' + pluginname).addClass('decline');
+         });
+
+         $('.back_selector').click(function() {
+            $('.carousel-item').hide();
+            $('.main-section').fadeIn();
+            $('.filter-section').fadeIn();
+
+            $('.description_plugin').removeClass('decline');
+            $('.description').removeClass('decline');
          });
     });
 });

@@ -38,6 +38,7 @@ $string['activities'] = 'Activities';
 $string['resources'] = 'Resources';
 $string['testactivity'] = 'Test Dev';
 $string['activitieschooser'] = 'Add activity or ressources';
+$string['activityfilters'] = 'Filter on activities';
 $string['addtemplate'] = 'Add new template';
 $string['addcategory'] = 'Add category';
 $string['addamodule'] = 'Add plugins or resources';

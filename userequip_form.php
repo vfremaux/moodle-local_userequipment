@@ -235,16 +235,6 @@ class UserEquipmentForm extends moodleform {
             $mform->addGroup($group, 'groupquiztype', get_string('questiontype', 'question'), array(''), false);
         }
 
-        $mform->addElement('header', 'selectheader', get_string('testactivity', 'local_userequipment'));
-
-        $args = [
-            'class' => 'assignment_button',
-            'data-toggle' => 'modal',
-            'data-target' => '#userequipment_activitychooser'
-        ];
-        $mform->addElement('button', 'openmodal_activitychooser', get_string('categorize', 'local_userequipment'), $args);
-        
-
         $this->add_action_buttons(true);
     }
 

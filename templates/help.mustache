@@ -34,14 +34,26 @@
 }}
 <div class="optionsummary" tabindex="-1" data-region="chooser-option-summary-container" aria-labelledby="optionsummary_label" aria-describedby="optionsumary_desc">
     <div class="content text-left mb-5 p-2 px-sm-5 py-sm-4" data-region="chooser-option-summary-content-container">
+        {{#plugins}}
         <div class="heading mb-4">
-            <h5 id="optionsummary_label-{{uniqid}}" data-region="summary-header" tabindex="0">
-                {{{icon}}}
-                {{title}}
+            <h5 id="optionsummary_label-{{modname}}" class="description_plugin {{modname}}" data-region="summary-header" tabindex="0">
+                {{{image}}}
+                {{name}}
             </h5>
         </div>
-        <div id="optionsumary_desc-{{uniqid}}" class="description" tabindex="0">
+        <div id="optionsumary_desc-{{modname}}" class="description {{modname}}" tabindex="0">
             {{{help}}}
+        </div>
+        {{/plugins}}
+    </div>
+    <div class="fixed-bottom position-absolute py-3 px-4 border-top modal-footer">
+        <div class="w-100 d-flex justify-content-between" data-region="chooser-option-summary-actions-container">
+            <button class="back_selector btn btn-secondary" tabindex="0">
+                {{#str}} back {{/str}}
+            </button>
+            <a href="{{{addmodurl}}}" title="{{#str}} addnew, moodle, {{title}} {{/str}}" data-action="add-chooser-option" class="addoption btn btn-primary" tabindex="0">
+                {{#str}} add {{/str}}
+            </a>
         </div>
     </div>
 </div>
