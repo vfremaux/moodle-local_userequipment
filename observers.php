@@ -65,8 +65,9 @@ class local_userequipment_event_observer {
             return;
         }
 
-        $userpref = $DB->get_record('user_preferences', array('userid' => $e->userid, 'name' => 'moodleuserlevel'));
-        if (!$userpref) {
+        $userpref = $DB->get_record('user_preferences', ['userid' => $e->userid, 'name' => 'moodleuserlevel']);
+        $hasuserequipment = $DB->count_records('local_userequipment', ['userid' => $e->userid]);
+        if (!$userpref && !$hasuserequipment) {
             if (local_ue_has_capability_somewhere('local/userequipment:selfequip', false, false, false)) {
                 redirect(new moodle_url('/local/userequipment/profile_init.php', array('id' => $e->userid)));
             }

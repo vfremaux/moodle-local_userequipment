@@ -176,9 +176,10 @@ class userequipment_manager {
     /**
      * Applies an equipment template to a user. If strict, will replace existing equipment
      * with the template deleting eventual previous allowance.
-     * @param int $userid
-     * @param int $templateid
-     * @param bool $strict
+     * @param int $templateid the template id.
+     * @param int $userid the current user id.
+     * @param bool $strict if strict, a template subroggates to any changes the user has precedently done on his own 
+     * equipment profile.
      * @return void
      */
     public function apply_template($templateid, $userid, $strict = false) {
@@ -209,6 +210,8 @@ class userequipment_manager {
                 }
             }
         }
+
+        $this->unmark_cleaned($userid);
 
         if ($template->associatedsystemrole &&
             $DB->record_exists('role', array('id' => $template->associatedsystemrole))) {
@@ -293,6 +296,7 @@ class userequipment_manager {
         $DB->delete_records('local_userequipment', array('userid' => $userid));
         $pluginmanager = \core_plugin_manager::instance();
         $allplugins = array_keys($pluginmanager->get_plugin_types());
+        $needsunmark = false;
         foreach ($allplugins as $type) {
             $enabled = $pluginmanager->get_enabled_plugins($type);
             if (!empty($enabled)) {
@@ -309,8 +313,13 @@ class userequipment_manager {
                     }
                     $eqrec->timemodified = time();
                     $DB->insert_record('local_userequipment', $eqrec);
+                    $needsunmark = true;
                 }
             }
+        }
+
+        if ($needsunmark) {
+            $this->unmark_cleaned($userid);
         }
     }
 
@@ -444,6 +453,24 @@ class userequipment_manager {
             $oldrec->value = 1;
             $DB->update_record('user_preferences', $oldrec);
         }
+    }
+
+    /**
+     * Marks a user in preference as not wanting to be applied the default profile any more. User
+     * has cleaned his equipment profile to make his own choice.
+     * @param mixed $userorid
+     */
+    public function unmark_cleaned($userorid) {
+        global $DB;
+
+        if (is_object($userorid)) {
+            $userid = $userorid->id;
+        } else {
+            $userid = $userorid;
+        }
+
+        // Mark in preference we DO NOT want equipment restrictions any more (no defaults reloading).
+        $DB->delete_records('user_preferences', ['userid' => $userid, 'name' => 'noequipment']);
     }
 
     /**

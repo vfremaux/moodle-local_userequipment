@@ -1,0 +1,19 @@
+<!-- local_userequipment/editcarpng_reload -->
+
+<h1>{{{plugindisplayname}}}</h1>
+{{#nocategories}}
+{{#str}}noplugincategories, local_userequipment{{/str}}
+{{/nocategories}}
+{{^nocategories}}
+
+<input type="hidden" name="plugintype" value="{{{plugintype}}}" />
+<input type="hidden" name="pluginname" value="{{{pluginname}}}" />
+
+<select class="selectpicker" multiple>
+  {{#categories}}
+  <option style="background-color: {{{colour}}}" {{selected}} value="{{id}}">{{{name}}}</option>
+  {{/categories}}
+</select>
+{{/nocategories}}
+
+<!-- /local_userequipment/editcarpng_reload -->
