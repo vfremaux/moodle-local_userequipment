@@ -58,7 +58,7 @@ if ($hassiteconfig) {
     $ADMIN->add('users', $settings);
 
     // Needs this condition or there is error on login page.
-    $pluginsettings = new admin_settingpage('local_userequipment', get_string('pluginname', 'local_userequipment'));
+    $pluginsettings = new admin_settingpage('localsettinguserequipment', get_string('pluginname', 'local_userequipment'));
     $ADMIN->add('localplugins', $pluginsettings);
 
     $key = 'local_userequipment/enabled';
@@ -88,7 +88,7 @@ if ($hassiteconfig) {
 
     if (local_userequipment_supports_feature('emulate/community') == 'pro') {
         include_once($CFG->dirroot.'/local/userequipment/pro/prolib.php');
-        $promanager = local_courseindex\pro_manager::instance();
+        $promanager = local_userequipment\pro_manager::instance();
         $promanager->add_settings($ADMIN, $pluginsettings);
     } else {
         $label = get_string('plugindist', 'local_userequipment');
