@@ -224,6 +224,7 @@ class local_userequipment_renderer extends plugin_renderer_base {
                 uc.sortorder
         ";
         $allcats = $DB->get_records_sql($sql, []);
+
         foreach ($allcats as $cat) {
             $filtertpl = new StdClass;
             $filtertpl->id = $cat->id;
