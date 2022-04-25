@@ -64,12 +64,14 @@ if (empty($templates)) {
     $countstr = get_string('plugins', 'local_userequipment');
     $canchoosestr = get_string('usercanchoose', 'local_userequipment');
     $table = new html_table();
-    $table->head = array($namestr, $countstr, $canchoosestr, '', '');
-    $table->align = array('left', 'left', 'center', 'left', 'right');
-    $table->size = array('60%', '10%', '10%', '10%', '10%');
-    $table->width = '90%';
+    $table->head = array($namestr, '' /* description */, $countstr, $canchoosestr, '', '');
+    $table->align = array('left', 'left', 'left', 'center', 'left', 'right');
+    $table->size = array('20%', '40%', '10%', '10%', '10%', '10%');
+    $table->width = '98%';
 
     foreach ($templates as $t) {
+
+        $description = shorten_text(format_text($t->description, FORMAT_MOODLE), 250);
 
         $isdefault = ($t->isdefault) ? get_string('default', 'local_userequipment') : '';
 
@@ -86,7 +88,7 @@ if (empty($templates)) {
 
         $canchoose = ($t->usercanchoose) ? get_string('yes') : get_string('no');
 
-        $table->data[] = array(format_string($t->name).$isdefault, (0 + @$count), $canchoose, $applybutton, $cmds);
+        $table->data[] = array(format_string($t->name).$isdefault, $description, (0 + @$count), $canchoose, $applybutton, $cmds);
     }
 
     echo html_writer::table($table);

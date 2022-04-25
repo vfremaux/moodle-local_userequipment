@@ -21,27 +21,31 @@ defined('MOODLE_INTERNAL') || die();
  *
  * Contains HTML class for a colourpicker type element
  *
- * @package   local_vflibs
+ * @package   local_userequipment
  * @copyright 2020 Valery Fremaux <valery.fremaux@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-global $CFG;
+
 require_once($CFG->dirroot.'/lib/pear/HTML/QuickForm.php');
 
 if (!class_exists('MoodleQuickForm_colourpicker')) {
-    require_once ($CFG->dirroot."/local/userequipment/__extras/HTML/QuickForm/colourpicker.php");
+    if (file_exists($CFG->dirroot.'/local/vflibs/forms/HTML/QuickForm/colourpicker.php')) {
+        require_once($CFG->dirroot.'/local/vflibs/forms/HTML/QuickForm/colourpicker.php');
+    } else {
+        require_once($CFG->dirroot."/local/userequipment/__other/HTML/QuickForm/colourpicker.php");
+    }
 
-/**
- * HTML class for a colourpicker type element
- *
- * Overloaded {@link HTML_QuickForm_button} to add help button
- *
- * @package   local_userequipment
- * @category  form
- * @copyright 2020 Valery Fremaux <valery.fremaux@gmail.com>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-class MoodleQuickForm_colourpicker extends HTML_QuickForm_ColourPicker {
+    /**
+     * HTML class for a colourpicker type element
+     *
+     * Overloaded {@link HTML_QuickForm_button} to add help button
+     *
+     * @package   local_boardz_admin
+     * @category  form
+     * @copyright 2020 Valery Fremaux <valery.fremaux@gmail.com>
+     * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+     */
+    class MoodleQuickForm_colourpicker extends HTML_QuickForm_ColourPicker {
 
         /** @var string html for help button, if empty then no help */
         public $_helpbutton = '';
@@ -103,5 +107,9 @@ class MoodleQuickForm_colourpicker extends HTML_QuickForm_ColourPicker {
         }
     }
 
-    MoodleQuickForm::registerElementType('colourpicker', $CFG->dirroot.'/local/userequipment/__extras/colourpicker.php', 'MoodleQuickForm_colourpicker');
+    if (file_exists($CFG->dirroot.'/local/vflibs/forms/HTML/colourpicker.php')) {
+        MoodleQuickForm::registerElementType('colourpicker', $CFG->dirroot.'/local/vflibs/forms/HTML/colourpicker.php', 'MoodleQuickForm_colourpicker');
+    } else {
+        MoodleQuickForm::registerElementType('colourpicker', $CFG->dirroot.'/local/userequipment/__other/colourpicker.php', 'MoodleQuickForm_colourpicker');
+    }
 }

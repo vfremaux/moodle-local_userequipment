@@ -22,6 +22,9 @@
  */
 defined('MOODLE_INTERNAL') || die;
 
+require_once($CFG->dirroot.'/course/lib.php');
+require_once($CFG->dirroot.'/local/userequipment/lib.php');
+
 class local_userequipment_renderer extends plugin_renderer_base {
 
     public function addmembersform($templateid, &$toapplyselector, &$potentialmembersselector) {
@@ -115,6 +118,181 @@ class local_userequipment_renderer extends plugin_renderer_base {
             }
         }
 
-        return $OUTPUT->render_from_template('local_userequipenent/plugin_categories', $template);
+        return $OUTPUT->render_from_template('local_userequipement/plugin_categories', $template);
+    }
+
+    /**
+     * Renders a form for selecting associated categories. form is post formatted by a boostrap selectpicker.
+     * @param string $plugintype the type of the plugin
+     * @param string $pluginname the canonical name of the plugin
+     */
+    public function list_plugin_bindings_form($plugintype, $pluginname) {
+        global $DB, $OUTPUT;
+
+        $template = new StdClass;
+
+        $categories = $DB->get_records('local_userequipment_cat');
+
+        if (empty($pluginname) || empty($plugintype)) {
+            throw new moodle_exception("plugintye and plugin name expected ");
+        }
+
+        $pbindings = $DB->get_records('local_userequipment_cat_png', ['plugintype' => $plugintype, 'pluginname' => $pluginname]);
+        $selectedcats = [];
+        if (!empty($pbindings)) {
+            foreach ($pbindings as $pbinding) {
+                $selectedcats[] = $pbinding->categoryid;
+            }
+        }
+
+        if ($plugintype != 'mod') {
+            $template->plugindisplayname = get_string('pluginname', $plugintype.'_'.$pluginname);
+        } else {
+            $template->plugindisplayname = get_string('pluginname', $pluginname);
+        }
+
+        if (!empty($categories)) {
+
+            foreach ($categories as $cat) {
+                $cattpl = new StdClass;
+                $cattpl->id = $cat->id;
+                $cattpl->name = $cat->name;
+                $cattpl->desc = $cat->description;
+                $cattpl->colour = $cat->colour;
+                if (in_array($cat->id, $selectedcats)) {
+                    $cattpl->selected = 'selected';
+                }
+
+                $template->categories[] = $cattpl;
+            }
+        } else {
+            $template->nocategories = true;
+        }
+
+        return $OUTPUT->render_from_template('local_userequipment/editcatpng_reload', $template);
+    }
+
+    /**
+     * Renders the modchooser lauch button
+     * @param $section when the modchooser needs to be attached to a return section (section enabled formats) the section num.
+     * @return a full "add module" button activating the modal modchooser.
+     */
+    public function render_modchooser_link($sectionid = 0, $sectionnum = 0) {
+        $args = [
+            'class' => 'openmodal-activitychooser-link',
+            'href' => '#',
+            'data-toggle' => 'modal',
+            'data-sectionid' => $sectionid,
+            'data-sectionnum' => $sectionnum,
+            'data-target' => '#userequipment-activitychooser',
+            'id' => 'openmodal-activitychooser-'.$sectionid
+        ];
+        return html_writer::tag('button', get_string('addamodule', 'local_userequipment'), $args);
+    }
+
+    /**
+     * Render modchooser modal. Should be rendered only once.
+     */
+    public function render_modchooser() {
+        global $DB, $OUTPUT, $COURSE, $PAGE, $CFG;
+        static $ueinitialized = false;
+
+        if ($ueinitialized) {
+            return '';
+        }
+
+        $ueinitialized = true;
+        $PAGE->requires->js_call_amd('local_userequipment/modchooser', 'init');
+ 
+        $pluginmanager = core_plugin_manager::instance();
+        $activities = $pluginmanager->get_enabled_plugins('mod');
+        $sm = get_string_manager();
+
+        $template = new StdClass;
+        $template->filters = [];
+
+        // Get them once and cache in variable.
+        $sql = "
+            SELECT DISTINCT
+                uc.*
+            FROM
+                {local_userequipment_cat} uc,
+                {local_userequipment_cat_png} ucp
+            WHERE
+                ucp.categoryid = uc.id
+            ORDER BY
+                uc.sortorder
+        ";
+        $allcats = $DB->get_records_sql($sql, []);
+        foreach ($allcats as $cat) {
+            $filtertpl = new StdClass;
+            $filtertpl->id = $cat->id;
+            $filtertpl->name = $cat->name;
+            $filtertpl->colour = $cat->colour;
+            $template->filters[] = $cat;
+        }
+
+        $ueconfig = get_config('local_userequipment');
+        $uemanager = get_ue_manager();
+        foreach (array_keys($activities) as $modname) {
+
+            // User Equipement additions if installed.
+            if (!empty($ueconfig->enabled)) {
+                if (!$uemanager->check_user_equipment('mod', $modname)) {
+                    continue;
+                }
+            }
+            $help = '';
+            $plugintpl = new StdClass;
+            $plugintpl->modname = $modname;
+            if ($sm->string_exists('modulename_help', $modname)) {
+                $help = get_string('modulename_help', $modname);
+            }
+            $plugintpl->help = $help;
+            $plugintpl->name = get_string('pluginname', $modname);
+            $plugintpl->image = $OUTPUT->pix_icon('icon', '', $modname);
+            if ($COURSE->format == 'page') {
+                // This sideway ensures the $SESSION->format_page_cm_insertion_page will be set.
+                include_once($CFG->dirroot.'/course/format/page/classes/page.class.php');
+                $page = format\page\course_page::get_current_page();
+                $sectionnum = $page->get_section();
+                $plugintpl->addmodurl = new moodle_url('/course/format/page/mod.php', ['id' => $COURSE->id, 'add' => $modname, 'section' => $sectionnum, 'sr' => $sectionnum, 'insertinpage' => $page->id, 'sesskey' => sesskey()]);
+            } else {
+                $plugintpl->addmodurl = new moodle_url('/course/mod.php', ['id' => $COURSE->id, 'add' => $modname, 'section' => 0, 'sr' => 0]);
+            }
+            $plugintpl->categories = [];
+            // get categories assigned to this module.
+            $catpngs = $DB->get_records('local_userequipment_cat_png', ['plugintype' => 'mod', 'pluginname' => $modname]);
+
+            $catclasses = [];
+            if (!empty($catpngs)) {
+                foreach ($catpngs as $catpng) {
+                    $cattpl = new StdClass;
+                    $cattpl->id = $allcats[$catpng->categoryid]->id;
+                    $cattpl->name = $allcats[$catpng->categoryid]->name;
+                    $cattpl->colour = $allcats[$catpng->categoryid]->colour;
+                    $cattpl->classes = 'cat-n'.$allcats[$catpng->categoryid]->id;
+                    $plugintpl->categories[] = $cattpl;
+                    $catclasses[] = 'cat-'.$cattpl->id;
+                }
+            }
+
+            if (!empty($catclasses)) {
+                $plugintpl->catclasses = implode(' ', $catclasses);
+            }
+
+            // for those who want to separate resources and activities.
+            /*
+            $archetype = plugin_supports('mod', $modname, FEATURE_MOD_ARCHETYPE, MOD_ARCHETYPE_OTHER);
+            if ($archetype == MOD_CLASS_RESOURCE) {
+                $template->resources[] = $plugintpl;
+            } else {
+                $template->plugins[] = $plugintpl;
+            }
+            */
+            $template->plugins[] = $plugintpl;
+        }
+
+        return $OUTPUT->render_from_template('local_userequipment/activitieschooser', $template);
     }
 }

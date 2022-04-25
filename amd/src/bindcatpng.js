@@ -23,8 +23,8 @@ define(['jquery', 'core/config', 'core/log', 'local_userequipment/bootstrap-sele
 
             var url = cfg.wwwroot + '/local/userequipment/ajax/service.php';
             url += '?what=getplugincategories';
-            url += '&plugintype=' + plugintype;
-            url += '&pluginname=' + pluginname;
+            url += '&type=' + plugintype;
+            url += '&name=' + pluginname;
 
             $.get(url, function(data) {
                 $('#catpng-edit-inner-form').html(data);
@@ -38,22 +38,26 @@ define(['jquery', 'core/config', 'core/log', 'local_userequipment/bootstrap-sele
             var that = $(this);
 
             var pluginname = that.attr('data-pluginname');
-            var plugintype = that.attr('data-plugin');
+            var plugintype = that.attr('data-plugintype');
             var url = cfg.wwwroot + '/local/userequipment/ajax/service.php';
-            url += '?what=update';
+            url += '?what=updateplugincategories';
             url += '&name=' + pluginname;
             url += '&type=' + plugintype;
-            var selectkey = '#cat-select-' + plugintype + '-' + pluginname;
-            url += '&categories=' + $(selectkey).val();
-
+            var categories = $('.selectpicker').val();
+            url += '&categories=' + categories;
+            console.log(url);
             $.get(url, function(data) {
                 if (data.result === 'success') {
                     $('#plugin-categories-' + plugintype + '-' + pluginname).html(data.catset);
-                    $('#catpng-edit-form').modal('hide'); // Close the modal dialog.
+                    $('#catpng-inner-form').modal('hide'); // Close the modal dialog.
                 }
+
+                // Update the plugin's in-form category monitor.
+
+                // Hide modal.
+                $('#catpng-inner-form').modal('hide');
             }, 'json');
         }
-
     };
 
     return moodlebindcatpng;

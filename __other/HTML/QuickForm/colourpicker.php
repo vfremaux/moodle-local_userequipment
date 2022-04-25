@@ -36,7 +36,7 @@ class HTML_QuickForm_ColourPicker extends HTML_QuickForm_input {
     /**
      *
      */
-    var $_options = [];
+    var $_options;
 
     /**
      * Constructor
@@ -93,29 +93,6 @@ class HTML_QuickForm_ColourPicker extends HTML_QuickForm_input {
     function toHtml() {
         assert(1);
         // Let moodle element to the job.
-    }
-
-    /**
-     * Called by HTML_QuickForm whenever form event is made on this element
-     *
-     * @param     string  Name of event
-     * @param     mixed   event arguments
-     * @param     object  calling object
-     * @access    public
-     * @return    bool    true
-     */
-    function onQuickFormEvent($event, $arg, &$caller) {
-        switch ($event) {
-            case 'updateValue': {
-                //store form for use in addRow
-                $this->_form =& $caller;
-                break;
-            }
-
-            default:
-                parent::onQuickFormEvent($event, $arg, $caller);
-        }
-        return true;
     }
 }
 

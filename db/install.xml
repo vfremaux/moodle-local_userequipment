@@ -7,7 +7,7 @@
     <TABLE NAME="local_userequipment" COMMENT="stores user attached information about available modules for the user">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" />
-        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false"  />
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" />
         <FIELD NAME="plugintype" TYPE="char" LENGTH="32" NOTNULL="true" SEQUENCE="false" COMMENT="block, module, or resourcetype, questiontype, assessmenttype" />
         <FIELD NAME="plugin" TYPE="char" LENGTH="32" NOTNULL="true" SEQUENCE="false" />
         <FIELD NAME="available" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" />
@@ -16,7 +16,7 @@
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key for userfiles_link"/>
-       </KEYS>
+      </KEYS>
       <INDEXES>
           <INDEX NAME="ix_template" UNIQUE="false" FIELDS="template"/>
           <INDEX NAME="ix_userid" UNIQUE="false" FIELDS="userid"/>
@@ -44,7 +44,7 @@
         <FIELD NAME="name" TYPE="char" LENGTH="64" NOTNULL="true" SEQUENCE="false" />
         <FIELD NAME="description" TYPE="text" LENGTH="medium" NOTNULL="false" SEQUENCE="false" />
         <FIELD NAME="descriptionformat" TYPE="int" LENGTH="4" NOTNULL="false" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" />
-        <FIELD NAME="colour" TYPE="char" LENGTH="64" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
+        <FIELD NAME="colour" TYPE="char" LENGTH="8" NOTNULL="true" DEFAULT="0" SEQUENCE="false" />
         <FIELD NAME="sortorder" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>

@@ -27,28 +27,8 @@ require_once($CFG->dirroot.'/local/userequipment/lib.php');
 // Settings default init.
 
 if ($hassiteconfig) {
+
     $settings = new admin_settingpage('userequipment', get_string('pluginname', 'local_userequipment'));
-
-    $ADMIN->add('users', $settings);
-
-    $key = 'local_userequipment/enabled';
-    $label = get_string('enableuserequipment', 'local_userequipment');
-    $desc = get_string('enableuserequipment_desc', 'local_userequipment');
-    $settings->add(new admin_setting_configcheckbox($key, $label, $desc, ''));
-
-    $options = array();
-    $options['0'] = get_string('allusers', 'local_userequipment');
-    $options['capability'] = get_string('capabilitycontrol', 'local_userequipment');
-    $options['profilefield'] = get_string('profilefieldcontrol', 'local_userequipment');
-    $key = 'local_userequipment/disable_control';
-    $label = get_string('configdisablecontrol', 'local_userequipment');
-    $desc = get_string('configdisablecontrol_desc', 'local_userequipment');
-    $settings->add(new admin_setting_configselect($key, $label, $desc, 'capability', $options));
-
-    $key = 'local_userequipment/disable_control_value';
-    $label = get_string('configdisablecontrolvalue', 'local_userequipment');
-    $desc = get_string('configdisablecontrolvalue_desc', 'local_userequipment');
-    $settings->add(new admin_setting_configtext($key, $label, $desc, 'local/userequipment:isdisabled', PARAM_TEXT));
 
     $key = 'local_userequipment/auto_setup_new_users';
     $label = get_string('configautosetupnewusers', 'local_userequipment');
@@ -66,13 +46,54 @@ if ($hassiteconfig) {
     $settings->add(new admin_setting_heading('templates', $label, '<a href="'.$templatesurl.'">'.$managetemplatesstr.'</a>'));
 
     if (local_userequipment_supports_feature('emulate/community') == 'pro') {
+        include_once($CFG->dirroot.'/local/userequipment/pro/localprolib.php');
+        \local_userequipment\local_pro_manager::add_settings($ADMIN, $settings);
+    }
+
+    $settingsurl = new moodle_url('/admin/settings.php', ['section' => 'local_userequipment']);
+    $managesettingsstr = get_string('gotopluginsettings', 'local_userequipment');
+    $label = get_string('pluginsettings', 'local_userequipment');
+    $settings->add(new admin_setting_heading('mainsettings', $label, '<a href="'.$settingsurl.'">'.$managesettingsstr.'</a>'));
+
+    $ADMIN->add('users', $settings);
+
+    // Needs this condition or there is error on login page.
+    $pluginsettings = new admin_settingpage('localsettinguserequipment', get_string('pluginname', 'local_userequipment'));
+    $ADMIN->add('localplugins', $pluginsettings);
+
+    $key = 'local_userequipment/enabled';
+    $label = get_string('enableuserequipment', 'local_userequipment');
+    $desc = get_string('enableuserequipment_desc', 'local_userequipment');
+    $pluginsettings->add(new admin_setting_configcheckbox($key, $label, $desc, ''));
+
+    $options = array();
+    $options['0'] = get_string('allusers', 'local_userequipment');
+    $options['capability'] = get_string('capabilitycontrol', 'local_userequipment');
+    $options['profilefield'] = get_string('profilefieldcontrol', 'local_userequipment');
+    $key = 'local_userequipment/disable_control';
+    $label = get_string('configdisablecontrol', 'local_userequipment');
+    $desc = get_string('configdisablecontrol_desc', 'local_userequipment');
+    $pluginsettings->add(new admin_setting_configselect($key, $label, $desc, 'capability', $options));
+
+    $key = 'local_userequipment/disable_control_value';
+    $label = get_string('configdisablecontrolvalue', 'local_userequipment');
+    $desc = get_string('configdisablecontrolvalue_desc', 'local_userequipment');
+    $pluginsettings->add(new admin_setting_configtext($key, $label, $desc, 'local/userequipment:isdisabled', PARAM_TEXT));
+
+    $key = 'local_userequipment/useenhancedmodchooser';
+    $label = get_string('configuseenhancedmodchooser', 'local_userequipment');
+    $desc = get_string('configuseenhancedmodchooser_desc', 'local_userequipment');
+    $default = 1;
+    $pluginsettings->add(new admin_setting_configcheckbox($key, $label, $desc, $default));
+
+    if (local_userequipment_supports_feature('emulate/community') == 'pro') {
         include_once($CFG->dirroot.'/local/userequipment/pro/prolib.php');
-        \local_userequipment\pro_manager::add_settings($ADMIN, $settings);
+        $promanager = local_userequipment\pro_manager::instance();
+        $promanager->add_settings($ADMIN, $pluginsettings);
     } else {
         $label = get_string('plugindist', 'local_userequipment');
         $desc = get_string('plugindist_desc', 'local_userequipment');
-        $settings->add(new admin_setting_heading('plugindisthdr', $label, $desc));
+        $pluginsettings->add(new admin_setting_heading('plugindisthdr', $label, $desc));
     }
-
 }
 

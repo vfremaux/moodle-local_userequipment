@@ -326,7 +326,7 @@ class core_course_renderer extends plugin_renderer_base {
 	        }
 	
             foreach ($modules as $module) {
-            	// Note : ue config may neve exist !
+            	// Note : ue config may not exist at all !
 	            if (!empty($config->enabled)) {
 	                if (!$uemanager->check_user_equipment('mod', $module->name)) {
 	                    unset($modules[$module->name]);

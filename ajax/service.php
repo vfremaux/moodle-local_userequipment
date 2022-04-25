@@ -27,6 +27,8 @@ require('../../../config.php');
 require_once($CFG->dirroot.'/mod/tracker/locallib.php');
 require_once($CFG->dirroot.'/mod/tracker/lib.php');
 
+$context = context_system::instance();
+$PAGE->set_context($context);
 require_login();
 
 $action = required_param('what', PARAM_TEXT);
@@ -34,22 +36,23 @@ $action = required_param('what', PARAM_TEXT);
 if ($action == 'getplugincategories') {
 
     $args = new StdClass;
-    $args->plugintype = required_param('plugintype', PARAM_TEXT);
-    $args->pluginname = required_param('^pluginname', PARAM_INT);
+    $plugintype = required_param('type', PARAM_TEXT);
+    $pluginname = required_param('name', PARAM_TEXT);
 
     $context = context_system::instance();
     $PAGE->set_context($context);
 
     $renderer = $PAGE->get_renderer('local_userequipment');
-    $return = $renderer->list_plugin_binding_form($args);
+    $return = $renderer->list_plugin_bindings_form($plugintype, $pluginname);
 
     echo $return;
     exit(0);
 }
+
 if ($action == 'updateplugincategories') {
     /* Updates categories binding by deleting all previous mapping and replacing records. */
-    $type = required_param('plugintype', PARAM_INT);
-    $plugin = required_param('pluginname', PARAM_INT);
+    $type = required_param('type', PARAM_INT);
+    $plugin = required_param('name', PARAM_INT);
     $categoryids = required_param_array('categories', PARAM_INT);
 
     $result = new StdClass;
@@ -79,6 +82,24 @@ if ($action == 'updateplugincategories') {
     $result->catset = $renderer->list_plugin_bindings($args);
 
     echo json_encode($result);
+    exit(0);
+}
+
+if ($action == 'gethelp') {
+    $modname = required_param('modname', PARAM_TEXT);
+    $sm = get_string_manager();
+
+    $jsonobject = new StdClass;
+
+    $jsonobject->modname = $modname;
+    $help = '';
+    if ($sm->string_exists('modulename_help', $modname)) {
+        $help = get_string('modulename_help', $modname);
+    }
+    $jsonobject->help = $help;
+    $jsonobject->label = get_string('pluginname', $modname);
+    $jsonobject->image = $OUTPUT->pix_icon('icon', '', $modname); 
+    echo json_encode($jsonobject);
     exit(0);
 }
 
