@@ -43,7 +43,6 @@ class UserEquipmentForm extends moodleform {
                                      'context' => $context);
 
         $mform->addElement('html', $OUTPUT->render_from_template('local_userequipment/editcatpng', []));
-        // $mform->addElement('html', $OUTPUT->render_from_template('local_userequipment/activitieschooser', []));
         $renderer = $PAGE->get_renderer('local_userequipment');
         $mform->addElement('html', $renderer->render_modchooser());
 

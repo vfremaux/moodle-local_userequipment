@@ -21,7 +21,7 @@ define(['jquery', 'core/log', 'core/config'], function($, log, cfg) {
 
         init: function() {
 
-            $('.openmodal-activitychooser-link').bind('click', this.opendialog); 
+            $('.openmodal-activitychooser-link').bind('click', this.opendialog);
             $('.filter-section .filter').bind('click', this.filter);
             $('.openhelp').bind('click', this.openhelp);
             $('.back-selector').bind('click', this.goback);
