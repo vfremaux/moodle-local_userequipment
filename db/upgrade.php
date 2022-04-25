@@ -206,5 +206,45 @@ function xmldb_local_userequipment_upgrade($oldversion = 0) {
         upgrade_plugin_savepoint(true, 2020110200, 'local', 'userequipment');
     }
 
+    if ($oldversion < 2022042500) {
+        // Define field id to be added to local_userequipment_png.
+        $table = new xmldb_table('local_userequipment_png');
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('plugintype', XMLDB_TYPE_CHAR, '16', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('pluginname', XMLDB_TYPE_CHAR, '32', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('plugindescription', XMLDB_TYPE_TEXT, 'medium', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('plugindescriptionformat', XMLDB_TYPE_INTEGER, '4', null, XMLDB_NOTNULL, null, 0);
+
+        // Adding keys to table local_userequipment_png.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_index('ix_uniq_plugin', XMLDB_INDEX_UNIQUE, ['plugintype, pluginname']);
+
+        // Conditionally launch add field id.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        $table = new xmldb_table('local_userequipment_cat_png');
+        // delete fields.
+        $field = new xmldb_field('plugindescription');
+        $field->set_attributes(XMLDB_TYPE_TEXT, 'medium', null, null, null, null);
+
+        // Launch add field.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        $field = new xmldb_field('plugindescriptionformat');
+        $field->set_attributes(XMLDB_TYPE_INTEGER, 4, null, null, null, 0);
+
+        // Launch add field.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        // Userequipment savepoint reached.
+        upgrade_plugin_savepoint(true, 2022042500, 'local', 'userequipment');
+    }
+
     return $result;
 }
