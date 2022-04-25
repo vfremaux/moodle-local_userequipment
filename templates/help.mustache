@@ -32,26 +32,29 @@
         "favourite": 1
     }
 }}
-<div class="optionsummary" tabindex="-1" data-region="chooser-option-summary-container" aria-labelledby="optionsummary_label" aria-describedby="optionsumary_desc">
-    <div class="content text-left mb-5 p-2 px-sm-5 py-sm-4" data-region="chooser-option-summary-content-container">
-        {{#plugins}}
+<div class="optionsummary"
+     tabindex="-1"
+     data-region="chooser-option-summary-container"
+     aria-labelledby="optionsummary-label"
+     aria-describedby="optionsummary-desc">
+    <div class="content text-left mb-5 p-2 px-sm-5" data-region="chooser-option-summary-content-container">
         <div class="heading mb-4">
-            <h5 id="optionsummary_label-{{modname}}" class="description_plugin {{modname}}" data-region="summary-header" tabindex="0">
-                {{{image}}}
-                {{name}}
+            <h5 id="optionsummary-label" class="plugin-description" data-region="summary-header" tabindex="0">
+                <!-- placeholder -->
+                <div style="background-color:#f0f0f0;height:32px;width:32px;margin-bottom:10px"></div>
+                <div style="background-color:#f0f0f0;height:1.3em;width:50%"></div>
             </h5>
         </div>
-        <div id="optionsumary_desc-{{modname}}" class="description {{modname}}" tabindex="0">
-            {{{help}}}
+        <div id="optionsummary-desc" class="description" tabindex="0">
+            <div style="background-color:#f0f0f0;height:15em;width:80%"></div>
         </div>
-        {{/plugins}}
     </div>
     <div class="fixed-bottom position-absolute py-3 px-4 border-top modal-footer">
         <div class="w-100 d-flex justify-content-between" data-region="chooser-option-summary-actions-container">
-            <button class="back_selector btn btn-secondary" tabindex="0">
+            <button class="back-selector btn btn-secondary" tabindex="0">
                 {{#str}} back {{/str}}
             </button>
-            <a href="{{{addmodurl}}}" title="{{#str}} addnew, moodle, {{title}} {{/str}}" data-action="add-chooser-option" class="addoption btn btn-primary" tabindex="0">
+            <a href="{{{addmodurl}}}" title="{{#str}} addnew, local_userequipment, {{title}} {{/str}}" data-action="add-chooser-option" class="addoption btn btn-primary" tabindex="0">
                 {{#str}} add {{/str}}
             </a>
         </div>

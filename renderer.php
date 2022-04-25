@@ -177,31 +177,54 @@ class local_userequipment_renderer extends plugin_renderer_base {
      * @param $section when the modchooser needs to be attached to a return section (section enabled formats) the section num.
      * @return a full "add module" button activating the modal modchooser.
      */
-    public function render_modchooser_link($section = 0) {
+    public function render_modchooser_link($sectionid = 0, $sectionnum = 0) {
         $args = [
-            'class' => 'assignment_link',
+            'class' => 'openmodal-activitychooser-link',
             'href' => '#',
             'data-toggle' => 'modal',
-            'data-sectionid' => $section,
-            'data-target' => '#userequipment_activitychooser',
-            'id' => 'openmodal_activitychooser'
+            'data-sectionid' => $sectionid,
+            'data-sectionnum' => $sectionnum,
+            'data-target' => '#userequipment-activitychooser',
+            'id' => 'openmodal-activitychooser-'.$sectionid
         ];
         return html_writer::tag('button', get_string('addamodule', 'local_userequipment'), $args);
     }
 
+    /**
+     * Render modchooser modal. Should be rendered only once.
+     */
     public function render_modchooser() {
-        global $DB, $OUTPUT, $COURSE;
+        global $DB, $OUTPUT, $COURSE, $PAGE, $CFG;
+        static $ueinitialized = false;
+
+        if ($ueinitialized) {
+            return '';
+        }
+
+        $ueinitialized = true;
+        $PAGE->requires->js_call_amd('local_userequipment/modchooser', 'init');
  
         $pluginmanager = core_plugin_manager::instance();
         $activities = $pluginmanager->get_enabled_plugins('mod');
-        $uemanager = get_ue_manager();
         $sm = get_string_manager();
 
         $template = new StdClass;
         $template->filters = [];
 
         // Get them once and cache in variable.
-        $allcats = $DB->get_records('local_userequipment_cat', []);
+        $sql = "
+            SELECT DISTINCT
+                uc.*
+            FROM
+                {local_userequipment_cat} uc,
+                {local_userequipment_cat_png} ucp
+            WHERE
+                ucp.categoryid = uc.id
+            ORDER BY
+                uc.sortorder
+        ";
+        $allcats = $DB->get_records_sql($sql, []);
+
         foreach ($allcats as $cat) {
             $filtertpl = new StdClass;
             $filtertpl->id = $cat->id;
@@ -210,6 +233,8 @@ class local_userequipment_renderer extends plugin_renderer_base {
             $template->filters[] = $cat;
         }
 
+        $ueconfig = get_config('local_userequipment');
+        $uemanager = get_ue_manager();
         foreach (array_keys($activities) as $modname) {
 
             // User Equipement additions if installed.
@@ -226,8 +251,16 @@ class local_userequipment_renderer extends plugin_renderer_base {
             }
             $plugintpl->help = $help;
             $plugintpl->name = get_string('pluginname', $modname);
-            $plugintpl->image = $OUTPUT->pix_icon('icon', '', $modname); 
-            $plugintpl->addmodurl = new moodle_url('/course/mod.php', ['id' => $COURSE->id, 'add' => $modname]);
+            $plugintpl->image = $OUTPUT->pix_icon('icon', '', $modname);
+            if ($COURSE->format == 'page') {
+                // This sideway ensures the $SESSION->format_page_cm_insertion_page will be set.
+                include_once($CFG->dirroot.'/course/format/page/classes/page.class.php');
+                $page = format\page\course_page::get_current_page();
+                $sectionnum = $page->get_section();
+                $plugintpl->addmodurl = new moodle_url('/course/format/page/mod.php', ['id' => $COURSE->id, 'add' => $modname, 'section' => $sectionnum, 'sr' => $sectionnum, 'insertinpage' => $page->id, 'sesskey' => sesskey()]);
+            } else {
+                $plugintpl->addmodurl = new moodle_url('/course/mod.php', ['id' => $COURSE->id, 'add' => $modname, 'section' => 0, 'sr' => 0]);
+            }
             $plugintpl->categories = [];
             // get categories assigned to this module.
             $catpngs = $DB->get_records('local_userequipment_cat_png', ['plugintype' => 'mod', 'pluginname' => $modname]);

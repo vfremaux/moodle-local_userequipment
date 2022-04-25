@@ -43,7 +43,6 @@ class UserEquipmentForm extends moodleform {
                                      'context' => $context);
 
         $mform->addElement('html', $OUTPUT->render_from_template('local_userequipment/editcatpng', []));
-        // $mform->addElement('html', $OUTPUT->render_from_template('local_userequipment/activitieschooser', []));
         $renderer = $PAGE->get_renderer('local_userequipment');
         $mform->addElement('html', $renderer->render_modchooser());
 
@@ -243,7 +242,7 @@ class UserEquipmentForm extends moodleform {
      *
      */
     public function set_data($defaults) {
-        /*
+
         $context = $this->editoroptions['context'];
 
         $descdraftideditor = file_get_submitted_draft_itemid('description_editor');
@@ -256,7 +255,6 @@ class UserEquipmentForm extends moodleform {
                                        'format' => $defaults->descriptionformat,
                                        'itemid' => $descdraftideditor);
 
-        */
         parent::set_data($defaults);
     }
 }
