@@ -88,7 +88,8 @@ if ($hassiteconfig) {
 
     if (local_userequipment_supports_feature('emulate/community') == 'pro') {
         include_once($CFG->dirroot.'/local/userequipment/pro/prolib.php');
-        \local_userequipment\pro_manager::add_settings($ADMIN, $pluginsettings);
+        $promanager = local_courseindex\pro_manager::instance();
+        $promanager->add_settings($ADMIN, $pluginsettings);
     } else {
         $label = get_string('plugindist', 'local_userequipment');
         $desc = get_string('plugindist_desc', 'local_userequipment');

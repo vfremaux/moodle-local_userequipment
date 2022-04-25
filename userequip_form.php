@@ -243,7 +243,7 @@ class UserEquipmentForm extends moodleform {
      *
      */
     public function set_data($defaults) {
-        /*
+
         $context = $this->editoroptions['context'];
 
         $descdraftideditor = file_get_submitted_draft_itemid('description_editor');
@@ -256,7 +256,6 @@ class UserEquipmentForm extends moodleform {
                                        'format' => $defaults->descriptionformat,
                                        'itemid' => $descdraftideditor);
 
-        */
         parent::set_data($defaults);
     }
 }

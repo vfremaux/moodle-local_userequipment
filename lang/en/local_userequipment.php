@@ -45,6 +45,7 @@ $string['addamodule'] = 'Add plugins or resources';
 $string['addplugins'] = 'Add plugins';
 $string['addnew'] = 'Add new {$a}';
 $string['addone'] = 'Add a category';
+$string['all'] = 'All';
 $string['allusers'] = 'All users enabled';
 $string['applystrict']  = 'Apply strict template';
 $string['applytemplate'] = 'Apply template : "{$a}"';

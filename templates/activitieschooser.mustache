@@ -1,11 +1,16 @@
 <!-- local_userequipment/activitieschooser -->
 
-<div id="userequipment_activitychooser" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="z-index:1000">
+<div id="userequipment-activitychooser" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="z-index:1050">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body" id="activitychooser">
                 <div class="filter-section">
                     <h6 class="filter-main-title">{{#str}}activityfilters, local_userequipment{{/str}}</h6>
+
+                    <div type="button" class="filter filternone" data-category="0">
+                        <h6 class="filter-title"> {{#str}}all, local_userequipment{{/str}} </h6>
+                        <div class="filter-bar" style="background-color:{{colour}};"></div>
+                    </div>
 
                     {{#filters}}
                     <div type="button" class="filter" data-category="{{id}}">
@@ -26,7 +31,14 @@
                         <div class="activities-container">
                             {{#plugins}}
                             <div class="activity-element {{catclasses}}">
-                                <div role="button" class="activity-info optionaction" title="{{name}}" data-action="show-option-summary" data-value="{{modname}}" data-link="{{addmodurl}}"><i class="info fa fa-info fa-2x"></i></div>
+                                <div role="button"
+                                     class="activity-info openhelp"
+                                     title="{{name}}"
+                                     data-action="show-option-summary"
+                                     data-value="{{modname}}"
+                                     data-link="{{addmodurl}}">
+                                        <i class="info fa fa-info fa-2x"></i>
+                                </div>
                                 <div class="activity-content" data-value="{{modname}}">
                                     <a class="add-module-link" href="{{{addmodurl}}}">
                                         <div class="activity-name">
@@ -51,92 +63,4 @@
         </div>
     </div>
 </div>
-
-{{#js}}
-require([
-    'jquery',
-], function($) {
-    $(document).ready(function(){
-
-        // bind the event that injects 
-        //$('#userequipment_activitychooser').on('show.bs.modal', function(e) {
-          //  var sr = e.relatedTarget.attr('data-sectionid');
-          //$('.add-module-link').attr('href', );
-        //});
-
-        //$('#userequipment_activitychooser').click(function(){
-          //  if($(this).siblings().not('.show')){
-            //    $(this).reload();
-            //}
-        //});
-
-        $('#openmodal_activitychooser').click(function(){
-            sectionid = $(this).attr('data-sectionid');
-            console.log(sectionid);
-
-            $('.add-module-link').each(function(){
-                this.href = this.href.replace($('.add-module-link').attr('href'), $('.add-module-link').attr('href')+'&section='+sectionid);
-            });
-        });
-
-        $('.filter').click(function() {
-            if ($(this).hasClass('selected')) {
-                // if selected an isolated, release filter.
-                // process button
-                $(this).removeClass('selected'); // unmark me
-                $('.filter').css('opacity', 'unset'); // unshadow all
-
-                // process activities and resource elements
-                $('.activity-element').removeClass('decline');
-                $('.activity-element').show(500);
-            } else {
-                // if not yet selected, enable filter.
-                // process button
-                $('.filter').removeClass('selected'); // remove to all
-                $(this).addClass('selected'); // and add to me.
-                $('.filter').css('opacity', 0.2); // shadow all
-                $(this).css('opacity', 'unset'); // unshadow me.
-
-                // get category id
-                catid = $(this).attr('data-category');
-
-                // process activities and resource elements
-                $('.activity-element').not('.cat-' + catid).addClass('decline');
-                $('.activity-element').not('.cat-' + catid).hide(500);
-                $('.activity-element.cat-' + catid).removeClass('decline');
-                $('.activity-element.cat-' + catid).show(500);
-            }
-         });
-
-         $('.optionaction').click(function() {
-
-            $('.carousel-item').fadeIn();
-
-            $('.main-section').hide();
-            $('.filter-section').hide();
-            
-            // get plugin name and link
-            pluginname = $(this).attr('data-value');
-            pluginlink = $(this).attr('data-link');
-            sectionlink = '&section=' + sectionid;
-            pluginlink = pluginlink.replace(/&amp;/g, '&');
-            sectionlink = sectionlink.replace(/&amp;/g, '&');
-
-            $('.addoption').attr('href', pluginlink + sectionlink);
-            $('.description_plugin').not('.' + pluginname).addClass('decline');
-            $('.description').not('.' + pluginname).addClass('decline');
-         });
-
-         $('.back_selector').click(function() {
-            $('.carousel-item').hide();
-            $('.main-section').fadeIn();
-            $('.filter-section').fadeIn();
-
-            $('.description_plugin').removeClass('decline');
-            $('.description').removeClass('decline');
-         });
-    });
-});
-{{/js}}
-
 <!-- /local_userequipment/activitieschooser -->

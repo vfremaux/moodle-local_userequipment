@@ -6,9 +6,8 @@
 #page-local-userequipment-template #id_mheader .fitem {
     clear: none;
     float: left;
-    margin-bottom:3px;
-    margin-left:10px;
-    width: 23%;
+    margin-bottom: 3px;
+    margin-left: 10px;
 }
 
 #page-local-userequipment-index #id_bheader .fitem .felement,
@@ -17,7 +16,7 @@
 #page-local-userequipment-template #id_bheader .fitem .felement,
 #page-local-userequipment-template #id_qheader .fitem .felement,
 #page-local-userequipment-template #id_mheader .fitem .felement {
-    display:block;
+    display: block;
 }
 
 #page-local-userequipment-index #id_bheader fieldset.fgroup,
@@ -199,43 +198,44 @@ div.userequipment-plugincategory-colour {
 
 /* selector new styling */
 
-#userequipment_activitychooser #activitychooser {
+#userequipment-activitychooser #activitychooser {
     display: flex;
     text-align: left;
 }
 
-#userequipment_activitychooser #activitychooser h6 {
+#userequipment-activitychooser #activitychooser h6 {
     font-family: inherit;
 }
 
-#userequipment_activitychooser #activitychooser .filter-section {
+#userequipment-activitychooser #activitychooser .filter-section {
     width: 13%;
     background-color: #d6d6d6;
 }
 
-#userequipment_activitychooser #activitychooser .filter-title {
+#userequipment-activitychooser #activitychooser .filter-title {
     color: #000;
 }
 
-#userequipment_activitychooser #activitychooser .filter-section .filter-main-title {
+#userequipment-activitychooser #activitychooser .filter-section .filter-main-title {
     font-weight: bold;
     margin-bottom: 2em;
     padding: .2rem;
 }
-#userequipment_activitychooser #activitychooser .filter-section .filter{
+
+#userequipment-activitychooser #activitychooser .filter-section .filter{
     background-color: transparent !important;
     padding: .5rem !important;
 }
 
-#userequipment_activitychooser #activitychooser .filter-section .filter .filter-bar {
+#userequipment-activitychooser #activitychooser .filter-section .filter .filter-bar {
     padding-bottom: 1rem;
 }
 
-#userequipment_activitychooser #activitychooser .main-section {
+#userequipment-activitychooser #activitychooser .main-section {
     width: 87%;
 }
 
-#userequipment_activitychooser #activitychooser .main-section .selector-close-btn {
+#userequipment-activitychooser #activitychooser .main-section .selector-close-btn {
     position: absolute;
     right: 0;
     top: 0;
@@ -243,37 +243,37 @@ div.userequipment-plugincategory-colour {
     font-size: large;
 }
 
-#userequipment_activitychooser #activitychooser .main-section .modal-title {
+#userequipment-activitychooser #activitychooser .main-section .modal-title {
     width: 75%;
     font-size: xx-large;
     font-weight: bold;
     margin-left: 2rem;
 }
 
-#userequipment_activitychooser #activitychooser .main-section .modal-footer {
+#userequipment-activitychooser #activitychooser .main-section .modal-footer {
     border: none;
 }
 
-#userequipment_activitychooser #activitychooser .activities-section,
-#userequipment_activitychooser #activitychooser .resources-section {
+#userequipment-activitychooser #activitychooser .activities-section,
+#userequipment-activitychooser #activitychooser .resources-section {
     margin: 3%;
 }
 
-#userequipment_activitychooser #activitychooser .activities-section .activities-title,
-#userequipment_activitychooser #activitychooser .resources-section .resources-title {
+#userequipment-activitychooser #activitychooser .activities-section .activities-title,
+#userequipment-activitychooser #activitychooser .resources-section .resources-title {
     font-weight: bold;
     color: #000 !important;
     background-color: transparent;
 }
 
-#userequipment_activitychooser #activitychooser .activities-section .activities-container,
-#userequipment_activitychooser #activitychooser .resources-section .resources-container {
+#userequipment-activitychooser #activitychooser .activities-section .activities-container,
+#userequipment-activitychooser #activitychooser .resources-section .resources-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
 }
 
-#userequipment_activitychooser #activitychooser .activities-section .activities-container .activity-element,
-#userequipment_activitychooser #activitychooser .resources-section .resources-container .resources-element {
+#userequipment-activitychooser #activitychooser .activities-section .activities-container .activity-element,
+#userequipment-activitychooser #activitychooser .resources-section .resources-container .resources-element {
     display: inline-flex;
     margin: 5px;
     max-height: 66px;
@@ -281,8 +281,8 @@ div.userequipment-plugincategory-colour {
     transition: max-height .5s linear;
 }
 
-#userequipment_activitychooser #activitychooser .activities-section .activities-container .activity-element.decline,
-#userequipment_activitychooser #activitychooser .resources-section .resources-container .resources-element.decline {
+#userequipment-activitychooser #activitychooser .activities-section .activities-container .activity-element.decline,
+#userequipment-activitychooser #activitychooser .resources-section .resources-container .resources-element.decline {
     display: inline-flex;
     margin: 5px;
     max-height: 0;
@@ -290,48 +290,48 @@ div.userequipment-plugincategory-colour {
     transition: max-height .5s linear;
 }
 
-#userequipment_activitychooser #activitychooser .activities-section .activities-container .activity-content,
-#userequipment_activitychooser #activitychooser .resources-section .resources-container .resources-content {
+#userequipment-activitychooser #activitychooser .activities-section .activities-container .activity-content,
+#userequipment-activitychooser #activitychooser .resources-section .resources-container .resources-content {
     width: 87%;
     border: 1px solid #ccc;
     cursor: pointer;
 }
 
-#userequipment_activitychooser #activitychooser .activities-section .activities-container .activity-content .activity-name,
-#userequipment_activitychooser #activitychooser .resources-section .resources-container .resources-content .resources-name {
+#userequipment-activitychooser #activitychooser .activities-section .activities-container .activity-content .activity-name,
+#userequipment-activitychooser #activitychooser .resources-section .resources-container .resources-content .resources-name {
     display: grid;
     grid-template-columns: 1fr 4fr;
     margin: .5rem;
 }
 
-#userequipment_activitychooser #activitychooser .activities-section .activities-container .activity-content .activity-name .activity-icon .icon,
-#userequipment_activitychooser #activitychooser .resources-section .resources-container .resources-content .resources-name .resource-icon .icon{
+#userequipment-activitychooser #activitychooser .activities-section .activities-container .activity-content .activity-name .activity-icon .icon,
+#userequipment-activitychooser #activitychooser .resources-section .resources-container .resources-content .resources-name .resource-icon .icon{
     width: 32px;
     height: 32px;
 }
 
-#userequipment_activitychooser #activitychooser .activities-section .activities-container .activity-info,
-#userequipment_activitychooser #activitychooser .resources-section .resources-container .resources-info {
+#userequipment-activitychooser #activitychooser .activities-section .activities-container .activity-info,
+#userequipment-activitychooser #activitychooser .resources-section .resources-container .resources-info {
     background-color: #5d1569;
     width: 13%;
     text-align: center;
     color: white;
 }
 
-#userequipment_activitychooser #activitychooser .activities-section .activities-container .activity-info .info,
-#userequipment_activitychooser #activitychooser .resources-section .resources-container .resources-info .info {
+#userequipment-activitychooser #activitychooser .activities-section .activities-container .activity-info .info,
+#userequipment-activitychooser #activitychooser .resources-section .resources-container .resources-info .info {
     margin-top: 16px;
 }
 
-#userequipment_activitychooser #activitychooser .activities-section .activities-container .activity-content .activity-categories,
-#userequipment_activitychooser #activitychooser .resources-section .resources-container .resources-content .resources-categories {
+#userequipment-activitychooser #activitychooser .activities-section .activities-container .activity-content .activity-categories,
+#userequipment-activitychooser #activitychooser .resources-section .resources-container .resources-content .resources-categories {
     display: flex;
     flex-direction: row-reverse;
     min-height: 17px;
 }
 
-#userequipment_activitychooser #activitychooser .activities-section .activities-container .category-bar,
-#userequipment_activitychooser #activitychooser .resources-section .resources-container .category-bar {
+#userequipment-activitychooser #activitychooser .activities-section .activities-container .category-bar,
+#userequipment-activitychooser #activitychooser .resources-section .resources-container .category-bar {
     padding-bottom: .5rem;
     border-radius: 5px;
     width: 10%;
@@ -351,7 +351,7 @@ div.userequipment-plugincategory-colour {
     width: 4em;
 }
 
-#userequipment_activitychooser .description_plugin.decline, #userequipment_activitychooser .description.decline {
+#userequipment-activitychooser .plugin-description.decline, #userequipment_activitychooser .description.decline {
     display: none;
 }
 
@@ -388,4 +388,9 @@ div.userequipment-plugincategory-colour {
     width: 10%;
     margin: 4px;
     height: .5rem;
+}
+
+.optionsummary .content {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
 }

@@ -42,6 +42,7 @@ $string['addone'] = 'Ajouter une catégorie';
 $string['addnew'] = 'Ajouter un nouveau {$a}';
 $string['addplugins'] = 'Ajouter des plugins';
 $string['addamodule'] = 'Ajouter une activité ou une ressource';
+$string['all'] = 'Tous';
 $string['allusers'] = 'Tous les utilisateurs activés';
 $string['applystrict'] = 'Profil strict';
 $string['applytemplate'] = 'M\'appliquer l\'équipement : "{$a}"';

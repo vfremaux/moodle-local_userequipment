@@ -177,20 +177,23 @@ class local_userequipment_renderer extends plugin_renderer_base {
      * @param $section when the modchooser needs to be attached to a return section (section enabled formats) the section num.
      * @return a full "add module" button activating the modal modchooser.
      */
-    public function render_modchooser_link($section = 0) {
+    public function render_modchooser_link($sectionid = 0, $sectionnum = 0) {
         $args = [
-            'class' => 'assignment_link',
+            'class' => 'openmodal-activitychooser-link',
             'href' => '#',
             'data-toggle' => 'modal',
-            'data-sectionid' => $section,
-            'data-target' => '#userequipment_activitychooser',
-            'id' => 'openmodal_activitychooser'
+            'data-sectionid' => $sectionid,
+            'data-sectionnum' => $sectionnum,
+            'data-target' => '#userequipment-activitychooser',
+            'id' => 'openmodal-activitychooser-'.$sectionid
         ];
         return html_writer::tag('button', get_string('addamodule', 'local_userequipment'), $args);
     }
 
     public function render_modchooser() {
-        global $DB, $OUTPUT, $COURSE;
+        global $DB, $OUTPUT, $COURSE, $PAGE;
+
+        $PAGE->requires->js_call_amd('local_userequipment/modchooser', 'init');
  
         $pluginmanager = core_plugin_manager::instance();
         $activities = $pluginmanager->get_enabled_plugins('mod');
@@ -227,7 +230,7 @@ class local_userequipment_renderer extends plugin_renderer_base {
             $plugintpl->help = $help;
             $plugintpl->name = get_string('pluginname', $modname);
             $plugintpl->image = $OUTPUT->pix_icon('icon', '', $modname); 
-            $plugintpl->addmodurl = new moodle_url('/course/mod.php', ['id' => $COURSE->id, 'add' => $modname]);
+            $plugintpl->addmodurl = new moodle_url('/course/mod.php', ['id' => $COURSE->id, 'add' => $modname, 'section' => 0, 'sr' => 0]);
             $plugintpl->categories = [];
             // get categories assigned to this module.
             $catpngs = $DB->get_records('local_userequipment_cat_png', ['plugintype' => 'mod', 'pluginname' => $modname]);
