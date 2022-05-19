@@ -1,48 +1,3 @@
-#page-local-userequipment-index #id_bheader .fitem,
-#page-local-userequipment-index #id_qheader .fitem,
-#page-local-userequipment-index #id_mheader .fitem,
-#page-local-userequipment-template #id_bheader .fitem,
-#page-local-userequipment-template #id_qheader .fitem,
-#page-local-userequipment-template #id_mheader .fitem {
-    clear: none;
-    float: left;
-    margin-bottom: 3px;
-    margin-left: 10px;
-}
-
-#page-local-userequipment-index #id_bheader .fitem .felement,
-#page-local-userequipment-index #id_qheader .fitem .felement,
-#page-local-userequipment-index #id_mheader .fitem .felement,
-#page-local-userequipment-template #id_bheader .fitem .felement,
-#page-local-userequipment-template #id_qheader .fitem .felement,
-#page-local-userequipment-template #id_mheader .fitem .felement {
-    display: block;
-}
-
-#page-local-userequipment-index #id_bheader fieldset.fgroup,
-#page-local-userequipment-index #id_qheader fieldset.fgroup,
-#page-local-userequipment-index #id_mheader fieldset.fgroup,
-#page-local-userequipment-template #id_bheader fieldset.fgroup,
-#page-local-userequipment-template #id_qheader fieldset.fgroup,
-#page-local-userequipment-template #id_mheader fieldset.fgroup {
-    clear: left;
-    margin-left: 0;
-    margin: 0 0 1em;
-    text-align: left;
-    width: 100%;
-}
-
-#page-local-userequipment-index #id_bheader fieldset.fgroup > span,
-#page-local-userequipment-index #id_qheader fieldset.fgroup > span,
-#page-local-userequipment-index #id_mheader fieldset.fgroup > span,
-#page-local-userequipment-template #id_bheader fieldset.fgroup > span,
-#page-local-userequipment-template #id_qheader fieldset.fgroup > span,
-#page-local-userequipment-template #id_mheader fieldset.fgroup > span {
-    clear: left;
-    float: left;
-    line-height: 1.7;
-}
-
 [data-tooltip] {
     cursor: help;
     display: inline-block;
@@ -185,7 +140,7 @@ div.userequipment-plugincategory-colour {
 }
 
 #page-local-userequipment-index #catpng-inner-form select.selectpicker {
-    display:none;
+    display: none;
 }
 
 #page-local-userequipment-index #catpng-inner-form .dropdown-menu li{
@@ -269,14 +224,14 @@ div.userequipment-plugincategory-colour {
 #userequipment-activitychooser #activitychooser .activities-section .activities-container,
 #userequipment-activitychooser #activitychooser .resources-section .resources-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(5, 1fr);
 }
 
 #userequipment-activitychooser #activitychooser .activities-section .activities-container .activity-element,
 #userequipment-activitychooser #activitychooser .resources-section .resources-container .resources-element {
     display: inline-flex;
     margin: 5px;
-    max-height: 66px;
+    max-height: 75px;
     overflow-y: hidden;
     transition: max-height .5s linear;
 }
@@ -292,7 +247,7 @@ div.userequipment-plugincategory-colour {
 
 #userequipment-activitychooser #activitychooser .activities-section .activities-container .activity-content,
 #userequipment-activitychooser #activitychooser .resources-section .resources-container .resources-content {
-    width: 87%;
+    /* width: 87%; */
     border: 1px solid #ccc;
     cursor: pointer;
 }
@@ -312,15 +267,15 @@ div.userequipment-plugincategory-colour {
 
 #userequipment-activitychooser #activitychooser .activities-section .activities-container .activity-info,
 #userequipment-activitychooser #activitychooser .resources-section .resources-container .resources-info {
-    background-color: #5d1569;
+    background-color: #6f99aa;
+    border-radius: 50%;
     width: 13%;
     text-align: center;
     color: white;
-}
-
-#userequipment-activitychooser #activitychooser .activities-section .activities-container .activity-info .info,
-#userequipment-activitychooser #activitychooser .resources-section .resources-container .resources-info .info {
-    margin-top: 16px;
+    position: relative;
+    top: 3px;
+    left: 150px;
+    height: 20px;
 }
 
 #userequipment-activitychooser #activitychooser .activities-section .activities-container .activity-content .activity-categories,
@@ -356,7 +311,7 @@ div.userequipment-plugincategory-colour {
 }
 
 /* new style plugin selection */
-
+/*
 #page-local-userequipment-index #id_mheader .fcontainer.clearfix, #page-local-userequipment-index #id_bheader .fcontainer.clearfix {
     display: grid;
     grid-template-columns: repeat(3,1fr);
@@ -389,8 +344,14 @@ div.userequipment-plugincategory-colour {
     margin: 4px;
     height: .5rem;
 }
+*/
 
 .optionsummary .content {
     padding-top: 3rem !important;
     padding-bottom: 3rem !important;
+}
+
+#page-local-userequipment-index fitem_fcheckbox {
+  display: flex;
+  margin: 20px;
 }

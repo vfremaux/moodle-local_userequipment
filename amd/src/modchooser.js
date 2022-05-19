@@ -31,15 +31,16 @@ define(['jquery', 'core/log', 'core/config'], function($, log, cfg) {
 
         opendialog: function(e) {
 
-            sectionid = $(this).attr('data-sectionid');
-            sectionnum = $(this).attr('data-sectionnum');
+            var vregex;
+            var sectionid = $(this).attr('data-sectionid');
+            var sectionnum = $(this).attr('data-sectionnum');
             console.log(sectionid + '/' + sectionnum);
 
             $('.add-module-link').each(function() {
-                let regex = /section=[0-9]+/;
-                this.href = this.href.replace(regex, 'section=' + sectionnum);
-                regex = /sr=[0-9]+/;
-                this.href = this.href.replace(regex, 'sr=' + sectionnum);
+                vregex = /section=[0-9]+/;
+                this.href = this.href.replace(vregex, 'section=' + sectionnum);
+                vregex = /sr=[0-9]+/;
+                this.href = this.href.replace(vregex, 'sr=' + sectionnum);
             });
         },
 

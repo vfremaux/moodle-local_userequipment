@@ -51,15 +51,28 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Templates ID"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="local_userequipment_cat_png" COMMENT="stores user attached information about available modules for the user">
+    <TABLE NAME="local_userequipment_cat_png" COMMENT="stores relations of plugins to categories">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" />
         <FIELD NAME="categoryid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" />
         <FIELD NAME="plugintype" TYPE="text" LENGTH="16" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" />
         <FIELD NAME="pluginname" TYPE="text" LENGTH="32" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" />
+        <FIELD NAME="sortorder" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Templates ID"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="ix-category" UNIQUE="false" FIELDS="categoryid" />
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="local_userequipment_png" COMMENT="stores plugin attached information">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" />
+        <FIELD NAME="plugintype" TYPE="text" LENGTH="16" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" />
+        <FIELD NAME="pluginname" TYPE="text" LENGTH="32" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" />
         <FIELD NAME="plugindescription" TYPE="text" LENGTH="medium" NOTNULL="false" SEQUENCE="false" />
         <FIELD NAME="plugindescriptionformat" TYPE="int" LENGTH="4" NOTNULL="false" SEQUENCE="false" />
-        <FIELD NAME="sortorder" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Templates ID"/>

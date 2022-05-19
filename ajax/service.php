@@ -24,8 +24,6 @@
 define('AJAX_SCRIPT', 1);
 
 require('../../../config.php');
-require_once($CFG->dirroot.'/mod/tracker/locallib.php');
-require_once($CFG->dirroot.'/mod/tracker/lib.php');
 
 $context = context_system::instance();
 $PAGE->set_context($context);
@@ -96,7 +94,19 @@ if ($action == 'gethelp') {
     if ($sm->string_exists('modulename_help', $modname)) {
         $help = get_string('modulename_help', $modname);
     }
+
     $jsonobject->help = $help;
+
+    // Override if local_userequipment provides.
+    $parts = explode('_', $modname);
+    $plugintype = array_shift($parts);
+    $pluginname = implode('_', $parts);
+    $pgn = $DB->get_record('local_userequipment_png', ['plugintype' => $plugintype, 'pluginname' => $pluginname]);
+    if ($pgn) {
+        if (!empty($pgn->descriptionformat)) {
+            $jsonobject->help = format_text($png->description, $png->descriptionformat);
+        }
+    }
     $jsonobject->label = get_string('pluginname', $modname);
     $jsonobject->image = $OUTPUT->pix_icon('icon', '', $modname); 
     echo json_encode($jsonobject);

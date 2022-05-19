@@ -50,7 +50,7 @@ if ($hassiteconfig) {
         \local_userequipment\local_pro_manager::add_settings($ADMIN, $settings);
     }
 
-    $settingsurl = new moodle_url('/admin/settings.php', ['section' => 'local_userequipment']);
+    $settingsurl = new moodle_url('/admin/settings.php', ['section' => 'localsettinguserequipment']);
     $managesettingsstr = get_string('gotopluginsettings', 'local_userequipment');
     $label = get_string('pluginsettings', 'local_userequipment');
     $settings->add(new admin_setting_heading('mainsettings', $label, '<a href="'.$settingsurl.'">'.$managesettingsstr.'</a>'));
