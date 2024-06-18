@@ -1,0 +1,13 @@
+<!-- local_userequipment/categories -->
+{{^isajax}}
+<div class="plugin-categorization" id="plugin-categories-{{plugintype}}-{{pluginname}}" style="display:inline-block">
+{{/isajax}}
+    {{#iscategorized}}
+    {{#categories}}
+    <div alt="{{catname}}" title="{{catname}}" class="userequipment-plugin-category" data-id="{{catid}}" style="background-color: {{color}}"></div>
+    {{/categories}}
+    {{/iscategorized}}
+{{^isajax}}
+</div>
+{{/isajax}}
+<!-- /local_userequipment/categories -->

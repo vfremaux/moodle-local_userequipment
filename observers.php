@@ -33,8 +33,8 @@ class local_userequipment_event_observer {
      * Triggered when a user is created
      * initialize the standard user equipement list
      */
-    public static function on_user_created($e) {
-        global $DB;
+    public static function on_user_created(\core\event\user_created $event) {
+        global $DB, $CFG;
 
         $config = get_config('local_userequipment');
 
@@ -42,16 +42,22 @@ class local_userequipment_event_observer {
             return;
         }
 
+        // If there is a default defined. Apply it to any created user.
         if ($defaulttemplate = $DB->get_record('local_userequipment_tpl', array('isdefault' => 1))) {
 
-            $DB->delete_records('local_userequipment', array('userid' => $e->userid));
+            $DB->delete_records('local_userequipment', array('userid' => $event->userid));
 
             $uemanager = userequipment_manager::instance();
-            $uemanager->apply_template($defaulttemplate->id, $e->userid, true);
+            $uemanager->apply_template($defaulttemplate->id, $event->userid, true);
+        }
+
+        if (local_userequipment_supports_feature('application/profilerule')) {
+            include ($CFG->dirroot.'/local/userequipment/pro/observers.php');
+            return \local_userequipment_extra_event_observer::on_user_created($event);
         }
     }
 
-    public static function on_user_loggedin($e) {
+    public static function on_user_loggedin(\core\event\user_loggedin $event) {
         global $DB;
 
         $config = get_config('local_userequipment');
@@ -61,15 +67,43 @@ class local_userequipment_event_observer {
         }
 
         $uemanager = userequipment_manager::instance();
-        if ($uemanager->is_marked_cleaned($e->userid)) {
+        if ($uemanager->is_marked_cleaned($event->userid)) {
             return;
         }
 
-        $userpref = $DB->get_record('user_preferences', array('userid' => $e->userid, 'name' => 'moodleuserlevel'));
-        if (!$userpref) {
+        $userpref = $DB->get_record('user_preferences', ['userid' => $event->userid, 'name' => 'moodleuserlevel']);
+        $hasuserequipment = $DB->count_records('local_userequipment', ['userid' => $event->userid]);
+        if (!$userpref && !$hasuserequipment) {
             if (local_ue_has_capability_somewhere('local/userequipment:selfequip', false, false, false)) {
-                redirect(new moodle_url('/local/userequipment/profile_init.php', array('id' => $e->userid)));
+                redirect(new moodle_url('/local/userequipment/profile_init.php', array('id' => $event->userid)));
             }
         }
+    }
+
+    /** 
+     * When a course is completed and associated to some equipment profile, apply the
+     * additional equipment. Pass to pro zone.
+     */
+    public static function on_course_completed(\core\event\course_completed $event) {
+        global $CFG;
+
+        if (local_userequipment_supports_feature('application/coursecompletion')) {
+            include ($CFG->dirroot.'/local/userequipment/pro/observers.php');
+            return \local_userequipment_extra_event_observer::on_course_completed($event);
+        }
+        return false;
+    }
+
+    /** 
+     * When a user is added to some cohort. Pass to Pro.
+     */
+    public static function on_cohort_member_added(\core\event\cohort_member_added $event) {
+        global $CFG;
+
+        if (local_userequipment_supports_feature('application/coursecompletion')) {
+            include ($CFG->dirroot.'/local/userequipment/pro/observers.php');
+            return \local_userequipment_extra_event_observer::on_cohort_member_added($event);
+        }
+        return false;
     }
 }

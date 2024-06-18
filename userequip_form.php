@@ -15,6 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * OBSOLETE. Take control of form by direct templates. => Just keep the profile attributes form.
  * @package   local_userequipment
  * @category  local
  * @copyright 2016 Valery Fremaux (valery.fremaux@gmail.com)
@@ -29,7 +30,7 @@ require_once($CFG->libdir.'/formslib.php');
 class UserEquipmentForm extends moodleform {
 
     public function definition() {
-        global $CFG, $DB, $USER;
+        global $CFG, $DB, $USER, $OUTPUT, $PAGE;
 
         $mform = $this->_form;
 
@@ -42,255 +43,40 @@ class UserEquipmentForm extends moodleform {
                                      'maxbytes' => $maxbytes,
                                      'context' => $context);
 
-        if ($this->_customdata['istemplate']) {
-            $mform->addElement('header', 'theader', get_string('template', 'local_userequipment'));
+        $mform->addElement('html', $OUTPUT->render_from_template('local_userequipment/editcatpng', []));
+        $renderer = $PAGE->get_renderer('local_userequipment');
+        $mform->addElement('html', $renderer->render_modchooser());
 
-            $mform->addElement('hidden', 'istemplate');
-            $mform->setType('istemplate', PARAM_BOOL);
+        $mform->addElement('header', 'theader', get_string('template', 'local_userequipment'));
 
-            $mform->addElement('hidden', 'template');
-            $mform->setType('template', PARAM_INT);
+        $mform->addElement('hidden', 'istemplate');
+        $mform->setType('istemplate', PARAM_BOOL);
 
-            $mform->addElement('text', 'name', get_string('templatename', 'local_userequipment'));
-            $mform->setType('name', PARAM_TEXT);
-            $mform->addRule('name', null, 'required', null, 'client');
+        $mform->addElement('hidden', 'template');
+        $mform->setType('template', PARAM_INT);
 
-            $mform->addElement('editor', 'description_editor', get_string('description'), null, $this->editoroptions);
+        $mform->addElement('text', 'name', get_string('templatename', 'local_userequipment'));
+        $mform->setType('name', PARAM_TEXT);
+        $mform->addRule('name', null, 'required', null, 'client');
 
-            $mform->addElement('advcheckbox', 'usercanchoose', get_string('usercanchoose', 'local_userequipment'), '', 0);
+        $mform->addElement('editor', 'description_editor', get_string('description'), null, $this->editoroptions);
 
-            $mform->addElement('advcheckbox', 'isdefault', get_string('isdefault', 'local_userequipment'), '', 0);
+        $mform->addElement('advcheckbox', 'usercanchoose', get_string('usercanchoose', 'local_userequipment'), '', 0);
 
-            $assignableroles = get_assignable_roles(context_system::instance());
-            $roleoptions = array('' => get_string('none', 'local_userequipment'));
-            foreach ($assignableroles as $rid => $name) {
-                $roleoptions[$rid] = $name;
-            }
-            $label = get_string('associatedsystemrole', 'local_userequipment');
-            $mform->addElement('select', 'associatedsystemrole', $label, $roleoptions, '');
-            $mform->setAdvanced('associatedsystemrole');
+        $mform->addElement('advcheckbox', 'isdefault', get_string('isdefault', 'local_userequipment'), '', 0);
 
-            $options = array(0 => get_string('releasenever', 'local_userequipment'),
-                             1 => get_string('releaseonnewprofile', 'local_userequipment'),
-                             2 => get_string('releaseoncleanup', 'local_userequipment'));
-            $mform->addElement('select', 'releaseroleon', get_string('releaseroleon', 'local_userequipment'), $options, 0);
-            $mform->setAdvanced('releaseroleon');
-        } else {
-            // End user informative about user profile.
-            $mform->addElement('header', 'theader', get_string('userequipment', 'local_userequipment'));
-
-            $mform->addElement('html', get_string('ueinfo_tpl', 'local_userequipment'));
-
-            if ($selfusabletemplates = $DB->get_records('local_userequipment_tpl', array('usercanchoose' => true))) {
-                $mform->addElement('html', get_string('ueselfinfo_tpl', 'local_userequipment'));
-                foreach ($selfusabletemplates as $tpl) {
-                    $group = array();
-                    $label = get_string('applytemplate', 'local_userequipment', $tpl->name);
-                    $group[] = $mform->createElement('submit', 'applytpl'.$tpl->id, $label);
-                    $descstr = format_text($tpl->description, $tpl->descriptionformat);
-                    $desc = '<div class="pull-right userequipment-half-column">'.$descstr.'</div>';
-                    $group[] = $mform->createElement('static', 'chk'.$tpl->id);
-                    $mform->addGroup($group, 'group'.$tpl->id, '', array($desc), false, false);
-                }
-            }
-
-            $group = array();
-            $marks = $DB->count_records('local_userequipment', array('userid' => $USER->id, 'available' => 1));
-            if ($marks) {
-                $descstr = get_string('marksinfo', 'local_userequipment', $marks);
-                $desc = '<div class="pull-left userequipment-half-column">'.$descstr.'</div>';
-                $group[] = $mform->createElement('static', 'chkcleanup');
-                $group[] = $mform->createElement('submit', 'cleanup', get_string('cleanup', 'local_userequipment'));
-                $mform->addGroup($group, 'groupcleanup', '', array($desc), false, false);
-            }
-
-        }
-
-        $manager = core_plugin_manager::instance();
-        $sm = get_string_manager();
-        $blocks = $manager->get_plugins_of_type('block');
-
-        $modules = $manager->get_plugins_of_type('mod');
-
-        $qtypes = $manager->get_plugins_of_type('qtype');
-
-        $formats = $manager->get_plugins_of_type('format');
-
-        $allplugins = array();
-
-        $mform->addElement('header', 'fheader', get_string('courseformats'));
-        if (!empty($formats)) {
-            foreach ($formats as $format) {
-                $fname = $format->name;
-                $formatname = get_string("pluginname", "format_$fname");
-                if ($formatname == "[[format$fname]]") {
-                    $formatname = get_string("format$fname");
-                }
-                $mform->addElement('checkbox', 'format_'.$fname, $formatname);
-                $allplugins[] = 'format_'.$fname;
-            }
-        }
-
-        $mform->addElement('header', 'bheader', get_string('blocks'));
-        if (!empty($blocks)) {
-            if (!file_exists($CFG->dirroot.'/course/format/page')) {
-                // Standard implementation, give the block list flat and uncategorized.
-                foreach ($blocks as $block) {
-                    if ($bck = $DB->get_record('block', array('name' => $block->name))) {
-                        if (!$bck->visible) {
-                            continue;
-                        }
-                        $blockobject = block_instance($block->name);
-                        $blockname = @$blockobject->title;
-                        if (empty($blockname)) {
-                            $blockname = get_string('blockname', 'block_'.$block->name);
-                        }
-                        $blockdesc = get_string('blockdesc_block_'.$block->name, 'local_userequipment');
-
-                        $mform->addElement('checkbox', 'block_'.$block->name, $blockname, $blockdesc);
-                        $allplugins[] = 'block_'.$block->name;
-                    }
-                }
-            } else {
-                // Page enhanced implementation, get categorization.
-
-                $blockcats = $DB->get_records('format_page_pfamily', array('type' => 'block'), 'shortname', 'shortname,id,name');
-                $blockcategories = array();
-
-                foreach ($blocks as $blockid => $block) {
-
-                    if (!$DB->get_field('block', 'visible', array('name' => $block->name))) {
-                        continue;
-                    }
-
-                    // Deleted blocks.
-                    if (!is_dir($CFG->dirroot.'/blocks/'.$block->name)) {
-                        continue;
-                    }
-
-                    $blockshort = str_replace('block_', '', $block->name);
-                    $pageplugin = $DB->get_record('format_page_plugins', array('type' => 'block', 'plugin' => $blockshort));
-
-                    $blockcategories[@$blockcats[$pageplugin->familyname]->shortname][] = $block;
-                }
-
-                ksort($blockcategories);
-
-                foreach ($blockcategories as $catshort => $catblocks) {
-
-                    $group = array();
-                    if (!array_key_exists($catshort, $blockcats)) {
-                        $catname = get_string('other', 'local_userequipment');
-                    } else {
-                        $catname = format_string($blockcats[$catshort]->name);
-                    }
-
-                    foreach ($catblocks as $block) {
-                        $blockobject = block_instance($block->name);
-                        $blockname = @$blockobject->title;
-                        if (empty($blockname)) {
-                            if ($sm->string_exists('blockname', 'block_'.$block->name)) {
-                                $blockname = get_string('blockname', 'block_'.$block->name);
-                            } else {
-                                // Last try.
-                                $blockname = get_string('pluginname', 'block_'.$block->name);
-                            }
-                        }
-                        if ($sm->string_exists('plugdesc_block_'.$block->name, 'local_userequipment')) {
-                            $blockdesc = get_string('plugdesc_block_'.$block->name, 'local_userequipment');
-                        } else {
-                            $blockdesc = '';
-                        }
-                        $blocknamespan = '<span data-tooltip="'.str_replace('"', '\\"', $blockdesc).'"
-                                                data-tooltip-position="bottom">';
-                        $blocknamespan .= $blockname.' </span>';
-                        $group[] = $mform->createElement('checkbox', 'block_'.$block->name, '', $blocknamespan);
-                        $allplugins[] = 'block_'.$block->name;
-                    }
-                    $mform->addGroup($group, 'groupcat'.$catshort, $catname, array(''), false);
-                }
-            }
-        }
-
-        $mform->addElement('header', 'mheader', get_string('activities'));
-        if (!file_exists($CFG->dirroot.'/course/format/page')) {
-            if (!empty($modules)) {
-                foreach ($modules as $mod) {
-                    $mname = $mod->name;
-                    $module = $DB->get_record('modules', array('name' => $mname));
-                    if (empty($module) || !$module->visible) {
-                        continue;
-                    }
-                    $mform->addElement('checkbox', 'mod_'.$mname, get_string('pluginname', $mname));
-                    $allplugins[] = 'mod_'.$mname;
-                }
-            }
-        } else {
-            if (!empty($modules)) {
-                // Page enhanced implementation, get categorization.
-
-                $modcats = $DB->get_records('format_page_pfamily', array('type' => 'mod'), 'shortname', 'shortname,id,name');
-                $modcategories = array();
-
-                foreach ($modules as $id => $mod) {
-
-                    if (!$DB->get_field('modules', 'visible', array('name' => $mod->name))) {
-                        continue;
-                    }
-
-                    $modshort = str_replace('block_', '', $mod->name);
-                    $pageplugin = $DB->get_record('format_page_plugins', array('type' => 'mod', 'plugin' => $modshort));
-                    $modcategories[@$modcats[$pageplugin->familyname]->shortname][] = $mod;
-                }
-
-                ksort($modcategories);
-
-                foreach ($modcategories as $catshort => $catmods) {
-
-                    $group = array();
-                    if (!array_key_exists($catshort, $modcats)) {
-                        $catname = get_string('other', 'local_userequipment');
-                    } else {
-                        $catname = format_string($modcats[$catshort]->name);
-                    }
-
-                    foreach ($catmods as $mod) {
-                        if (!is_dir($CFG->dirroot.'/mod/'.$mod->name)) {
-                            // Missing modules.
-                            continue;
-                        }
-
-                        if ($sm->string_exists('modulename_help', $mod->name)) {
-                            $moddesc = strip_tags(get_string('modulename_help', $mod->name));
-                            $modnamespan = '<span class="activity"
-                                                  data-tooltip="'.str_replace('"', '\\"', $moddesc).'"
-                                                  data-tooltip-position="bottom">';
-                            $modnamespan .= get_string('pluginname', $mod->name).'</span>';
-                        } else {
-                            $modnamespan = get_string('pluginname', $mod->name);
-                        }
-                        $group[] = $mform->createElement('checkbox', 'mod_'.$mod->name, '', $modnamespan.' ');
-                        $allplugins[] = 'mod_'.$mod->name;
-                    }
-                    $mform->addGroup($group, 'groupmods'.$catshort, $catname, array(''), false);
-                }
-            }
-        }
-
-        $mform->addElement('header', 'qheader', get_string('pluginname', 'quiz'));
-        if (!empty($qtypes)) {
-            $group = array();
-            foreach ($qtypes as $qtype) {
-                $qtypevisiblename = $qtype->displayname;
-                $group[] = $mform->createElement('checkbox', 'qtype_'.$qtype->name, '', $qtypevisiblename);
-                $allplugins[] = 'qtype_'.$qtype->name;
-            }
-            $mform->addGroup($group, 'groupquiztype', get_string('questiontype', 'question'), array(''), false);
+        if (local_userequipment_supports_feature('application/coursecompletion')) {
+            include ($CFG->dirroot.'/local/userequipment/pro/lib.php');
+            local_userequipment_add_profile_extensions($mform);
         }
 
         $this->add_action_buttons(true);
     }
 
+    /**
+     * Useless.
+     *
+     */
     public function set_data($defaults) {
 
         $context = $this->editoroptions['context'];

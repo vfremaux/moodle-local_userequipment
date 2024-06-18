@@ -30,9 +30,9 @@ class template_controller {
         global $DB;
 
         if ($action == 'delete') {
-            $tid = required_param('template', PARAM_INT);
+            $tid = required_param('templateid', PARAM_INT);
             if ($tid) {
-                $DB->delete_records('local_userequipment', array('template' => $tid));
+                $DB->delete_records('local_userequipment', array('template' => $tid, 'userid' => 0]));
                 $DB->delete_records('local_userequipment_tpl', array('id' => $tid));
             }
         }

@@ -31,7 +31,7 @@ use local_userequipment\userequipment_manager;
 use local_userequipment\selectors\ue_application_users_selector;
 use local_userequipment\selectors\ue_all_users_selector;
 
-$templateid = optional_param('template', 0, PARAM_INT);
+$templateid = optional_param('templateid', optional_param('template', 0, PARAM_INT), PARAM_INT);
 
 if (!$template = $DB->get_record('local_userequipment_tpl', array('id' => $templateid))) {
     print_error('badtemplateid', 'local_userequipment');
@@ -76,11 +76,13 @@ if (optional_param('remove', false, PARAM_BOOL) && confirm_sesskey()) {
 
 $message = '';
 if (optional_param('apply', false, PARAM_BOOL) && confirm_sesskey()) {
+    // Strict application will replace all equipment by the profile selection.
+    $strictness = optional_param('strict', false, PARAM_BOOL);
     $userstoapply = @$SESSION->ue_selection;
     $manager = get_ue_manager();
     if (!empty($userstoapply)) {
         foreach ($userstoapply as $u) {
-            $manager->apply_template($templateid, $u->id);
+            $manager->apply_template($templateid, $u->id, $strictness);
         }
         $message = get_string('usersupdated', 'local_userequipment');
     }

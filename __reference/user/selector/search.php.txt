@@ -1,0 +1,1 @@
+the /user/selector/search.php customscript is "Additive" and does not change the original script.

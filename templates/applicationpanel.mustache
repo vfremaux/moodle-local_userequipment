@@ -1,0 +1,35 @@
+<!-- local_userequipment/applicationpanel -->
+{{#application}}
+<fieldset id="id-panel-userequipment" class="userequipment-panel quickform-fieldset">
+
+    <legend>{{#str}}userequipment, local_userequipment{{/str}}</legend>
+
+    {{#str}}ueinfo_tpl, local_userequipment{{/str}}
+
+    {{#isselfequipable}}
+    <div class="selfequipable">
+    {{#str}}ueselfinfo_tpl, local_userequipment{{/str}}
+    </div>
+    {{/isselfequipable}}
+
+    {{#profiles}}
+    <div class="quickform-group userequipment-profile">
+        <fieldset class="felement fgroup">
+            <input name="applytpl{{id}}" value="{{alt}}" type="submit" id="id_applytpl{{id}}">
+            <div class="pull-right userequipment-half-column">{{{description}}}</div>
+        </fieldset>
+    </div>
+    {{/profiles}}
+
+    {{#cancleanup}}
+    <div class="quickform-group userequipment-profile">
+        <fieldset class="felement fgroup">
+            <input name="cleanup" value="{{#str}}cleanup, local_userequipment{{/str}}" type="submit" id="id_cleanup">
+            <div class="pull-right userequipment-half-column">{{#str}}cleanup_desc, local_userequipment{{/str}}</div>
+        </fieldset>
+    </div>
+    {{/cancleanup}}
+
+</fieldset>
+{{/application}}
+<!-- /local_userequipment/applicationpanel -->

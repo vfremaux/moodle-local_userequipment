@@ -1,0 +1,36 @@
+<!-- local_userequipment/equipmentformpanels -->
+<div id="equipement-{{plugintype}}" class="userequipment-panels">
+    {{^istemplate}}
+    {{> local_userequipment/applicationpanel }}
+    {{/istemplate}}
+    {{#formpanels}}
+    <fieldset id="id-panel-{{plugintype}}" class="userequipment-panel quickform-fieldset {{#ishidden}}quickform-hidden-tab{{/ishidden}}">
+
+        <legend>{{paneltitle}}</legend>
+
+        {{#cantune}}
+        {{#plugins}}
+        <div class="quickform-item equipment-plugin">
+            <div class="equipment-plugin-caption">
+            <div class="pluginselect"><input type="checkbox" id="id_{{plugintype}}_{{pluginname}}" name="mark_{{plugintype}}_{{pluginname}}" value="1" {{checkedstatus}} ></div>
+            <div class="pluginname"><h4>{{pluginvisiblename}}</h4></div>
+            </div>
+            <div class="shortdescription">{{{shortdescription}}}</div>
+            <div class="categories">{{{categorization}}} {{#canedit}}
+            <span id="openmodal_{{plugintype}}_{{pluginname}}"
+                  class="assignment_button" 
+                  alt="{{#str}}categorize, local_userequipment{{/str}}"
+                  title="{{#str}}categorize, local_userequipment{{/str}}"
+                  data-plugintype="{{plugintype}}"
+                  data-pluginname="{{pluginname}}"
+                  data-toggle="modal"
+                  data-target="#catpng-inner-form">{{#pix}}t/edit, core, {{#str}}categorize, local_userequipment{{/str}} {{/pix}}</span>
+             {{/canedit}}
+            </div>
+        </div>
+        {{/plugins}}
+        {{/cantune}}
+    </fieldset>
+    {{/formpanels}}
+</ul>
+<!-- /local_userequipment/equipmentformpanels -->

@@ -25,6 +25,7 @@ namespace local_userequipment;
 defined('MOODLE_INTERNAL') || die();
 
 use \StdClass;
+use \context_system;
 
 class userequipment_manager {
 
@@ -34,7 +35,7 @@ class userequipment_manager {
      * Singleton pattern.
      */
     public static function instance() {
-        if (empty($instance)) {
+        if (is_null(self::$instance)) {
             self::$instance = new userequipment_manager();
         }
 
@@ -176,9 +177,10 @@ class userequipment_manager {
     /**
      * Applies an equipment template to a user. If strict, will replace existing equipment
      * with the template deleting eventual previous allowance.
-     * @param int $userid
-     * @param int $templateid
-     * @param bool $strict
+     * @param int $templateid the template id.
+     * @param int $userid the current user id.
+     * @param bool $strict if strict, a template subroggates to any changes the user has precedently done on his own 
+     * equipment profile.
      * @return void
      */
     public function apply_template($templateid, $userid, $strict = false) {
@@ -197,18 +199,24 @@ class userequipment_manager {
         if ($templatedefs = $DB->get_records('local_userequipment', array('template' => $templateid))) {
             foreach ($templatedefs as $td) {
                 $params = array('userid' => $userid, 'plugintype' => $td->plugintype, 'plugin' => $td->plugin);
-                if (!$DB->record_exists('local_userequipment', $params)) {
+                if (!$oldrec = $DB->get_record('local_userequipment', $params)) {
                     $def = new StdClass();
                     $def->userid = $userid;
                     $def->plugintype = $td->plugintype;
                     $def->plugin = $td->plugin;
                     $def->available = true;
                     $def->timemodified = time();
-                    $def->template = 0;
+                    $def->template = $templateid; // Mark the last applied template.
                     $DB->insert_record('local_userequipment', $def);
+                } else {
+                    $oldrec->timemodified = time();
+                    $oldrec->template = $templateid;
+                    $DB->update_record('local_userequipment', $oldrec);
                 }
             }
         }
+
+        $this->unmark_cleaned($userid);
 
         if ($template->associatedsystemrole &&
             $DB->record_exists('role', array('id' => $template->associatedsystemrole))) {
@@ -260,71 +268,57 @@ class userequipment_manager {
             $template->releaseroleon = $data->releaseroleon;
             $template->id = $data->template = $DB->insert_record('local_userequipment_tpl', $template);
         }
-
-        // Now catch all pluginset and record it for template.
-        $DB->delete_records('local_userequipment', array('template' => $data->template));
-        $pluginmanager = \core_plugin_manager::instance();
-        $allplugins = array_keys($pluginmanager->get_plugin_types());
-        foreach ($allplugins as $pl) {
-            $pluginkeys = preg_grep('/^'.$pl.'_/', array_keys($_REQUEST));
-            foreach ($pluginkeys as $eqkey) {
-                $parts = explode('_', $eqkey);
-                $eqrec = new StdClass();
-                $eqrec->plugintype = array_shift($parts);
-                $eqrec->plugin = implode('_', $parts);
-                $eqrec->userid = 0;
-                $eqrec->template = $data->template;
-                if (!empty($data->$eqkey)) {
-                    $eqrec->available = 1;
-                    $eqrec->timemodified = time();
-                    $DB->insert_record('local_userequipment', $eqrec);
-                }
-            }
-        }
     }
 
     /**
      * Adds or updates a template in DB for a user
      * @param object $data data from form.
+     * @param object $userid the concerned userid.
      */
     public function add_update_user($data, $userid) {
         global $DB;
 
         $DB->delete_records('local_userequipment', array('userid' => $userid));
-        $pluginmanager = \core_plugin_manager::instance();
-        $allplugins = array_keys($pluginmanager->get_plugin_types());
-        foreach ($allplugins as $type) {
-            $enabled = $pluginmanager->get_enabled_plugins($type);
-            if (!empty($enabled)) {
-                foreach ($enabled as $plug) {
-                    $eqrec = new StdClass();
-                    $eqrec->plugintype = $type;
-                    $eqrec->plugin = $plug;
-                    $eqrec->userid = $userid;
-                    $eqrec->template = 0;
-                    if (array_key_exists($type.'_'.$plug, $data)) {
-                        $eqrec->available = 1;
-                    } else {
-                        $eqrec->available = 0;
-                    }
-                    $eqrec->timemodified = time();
-                    $DB->insert_record('local_userequipment', $eqrec);
-                }
-            }
+        foreach ($data as $pgn => $val) {
+            $parts = explode('_', $pgn);
+            $type = array_shift($parts);
+            $plugin = implode('_', $parts);
+
+            $eqrec = new StdClass();
+            $eqrec->plugintype = $type;
+            $eqrec->plugin = $plugin;
+            $eqrec->userid = $userid;
+            $eqrec->template = $data->template ?? 0;
+            $eqrec->available = 1;
+            $eqrec->timemodified = time();
+            $DB->insert_record('local_userequipment', $eqrec);
         }
     }
 
     /**
+     * Get the current equipment of a user.
+     * @return an array of boolean marks keyed by FQPN (plugintype_pluginname)
+     * @param object $userorid the user as object or id. If given, retrieves all equipment record whatever the template being marked.
+     * @param bool $template if > 0, and user is not given we, are rather getting a template equipment definition.
      *
+     * if both $template AND $user not given, will return the current's user equipment.
      */
-    public function fetch_equipement($user = null, $template = null) {
+    public function fetch_equipement($userorid = null, $template = null) {
         global $USER, $DB;
 
-        if ($template) {
-            $params = array('template' => $template);
+        if (is_null($userorid)) {
+            $userid = 0;
+        } else if (is_object($userorid)) {
+            $userid = $userorid->id;
         } else {
-            if ($user) {
-                $params = array('userid' => $user->id);
+            $userid = $userorid;
+        }
+
+        if ($template && empty($userid)) {
+            $params = array('template' => $template, 'userid' => 0);
+        } else {
+            if (!empty($userid)) {
+                $params = array('userid' => $userid);
             } else {
                 $params = array('userid' => $USER->id);
             }
@@ -341,7 +335,42 @@ class userequipment_manager {
         return array();
     }
 
-    public function delete_equipment(&$user) {
+    /**
+     * Get the equipment data of the default profile if defined. Empty set elsewhere.
+     */
+    public function fetch_default_equipement() {
+        global $DB;
+
+        $data = [];
+
+        $default = $DB->get_record('local_userequipment_tpl', ['isdefault' => 1]);
+        if (!empty($default)) {
+            $recs = $DB->get_records('local_userequipment', ['template' => $default->id]);
+            if (!empty($recs)) {
+                foreach ($recs as $rec) {
+                    $data[$rec->plugintype.'_'.$rec->plugin] = $rec->available;
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Deletes a template with its settings and equipment marks.
+     * @param int $templateid the template's id.
+     */
+    public function delete_template_equipment($templateid) {
+        global $DB;
+
+        $DB->delete_records('local_userequipment', array('userid' => 0, 'template' => $templateid));
+        $DB->delete_records('local_userequipment_tpl', array('id' => $templateid));
+    }
+
+    /**
+     * Clears equipment of a single user.
+     */
+    public function delete_user_equipment(&$user) {
         global $DB;
 
         $DB->delete_records('local_userequipment', array('userid' => $user->id));
@@ -384,6 +413,32 @@ class userequipment_manager {
         return $checkcache[$plugintype.'_'.$plugin];
     }
 
+    /**
+     * Checks if a user is allowed to fine tune his equipement
+     */
+    public function can_tune($user = null) {
+        global $USER;
+
+        $config = get_config('local_userequipment');
+
+        if (is_null($user)) {
+            $user = $USER;
+        }
+
+        if (!empty($config->allow_self_tuning)) {
+            return true;
+        }
+
+        if (has_capability('local/userequipment:selftune', context_system::instance())) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * checks if user can use equipement interface
+     */
     public function is_enabled_for_user($user) {
         global $COURSE;
         global $DB;
@@ -447,6 +502,24 @@ class userequipment_manager {
     }
 
     /**
+     * Marks a user in preference as not wanting to be applied the default profile any more. User
+     * has cleaned his equipment profile to make his own choice.
+     * @param mixed $userorid
+     */
+    public function unmark_cleaned($userorid) {
+        global $DB;
+
+        if (is_object($userorid)) {
+            $userid = $userorid->id;
+        } else {
+            $userid = $userorid;
+        }
+
+        // Mark in preference we DO NOT want equipment restrictions any more (no defaults reloading).
+        $DB->delete_records('user_preferences', ['userid' => $userid, 'name' => 'noequipment']);
+    }
+
+    /**
      * Checks if a user has asked for cleaning his profile once, thus requiring no default
      * equipement is required.
      * @param object $userorid
@@ -464,5 +537,180 @@ class userequipment_manager {
     }
 
     public function remove_all_roles_on_cleanup($userid) {
+    }
+
+    /**
+     * returns the supported equipmenet types.
+     */
+    public function get_supported_types() : array {
+        return ['block', 'mod', 'format', 'qtype'];
+    }
+
+    /**
+     * returns the supported equipmenet types.
+     * @param string $t
+     */
+    public function get_string_for_type(string $t) : string {
+        $stringkeys = [
+            'block' => 'blocks',
+            'mod' => 'modules',
+            'format' => 'courseformats',
+            'qtype' => 'questiontypes'
+        ];
+        return get_string($stringkeys[$t], 'local_userequipment');
+    }
+
+    /**
+     * A "as clever as possible" function to get suitable description printable to the user.
+     * Description sources are (in order of preference) : 
+     * 1. Admin defined plugin description statements in local_userequipment backoffice.
+     * 2. hard strings in local_userequipment strings.
+     * 3. local overriden hard strings in plugoin scope strings.
+     * 4. available core strings for plugin.
+     */
+    public function get_suitable_description($plugintype, $pluginname) {
+        global $DB;
+
+        // Admin defined overrides in local_userequipment plugin.
+        $desc = $DB->get_record('local_userequipment_png', ['plugintype' => $plugintype, 'pluginname' => $pluginname]);
+        if ($desc) {
+            return format_text($desc->plugindescription, $desc->plugindescriptionformat);
+        }
+
+        // Desc hard strings in local_userequipment string files.
+        $sm = get_string_manager();
+        if ($sm->string_exists('plugdesc_'.$plugintype.'_'.$pluginname, 'local_userequipment')) {
+            return get_string('plugdesc_'.$plugintype.'_'.$pluginname, 'local_userequipment');
+        } 
+
+        // Desc hard strings in plugin string files.
+        $fqdn = $plugintype.'_'.$pluginname;
+        if ($sm->string_exists('plugdesc_'.$plugintype.'_'.$pluginname, $fqdn)) {
+            return get_string('plugdesc_'.$plugintype.'_'.$pluginname, $fqdn);
+        }
+
+        // This is a last chance special case for plugins who do NOT comply with full frankenstyle name.
+        if ($plugintype == 'mod') {
+            $fqdn = $pluginname;
+            if ($sm->string_exists('plugdesc_'.$plugintype.'_'.$pluginname, $fqdn)) {
+                return get_string('plugdesc_'.$plugintype.'_'.$pluginname, $fqdn);
+            }
+        }
+
+        // Now we just have to rely on core/standard description strings if exists.
+        $fqdn = $plugintype.'_'.$pluginname;
+        if ($sm->string_exists('plugdesc_'.$plugintype.'_'.$pluginname, $fqdn)) {
+            if ($plugintype == 'mod') {
+                return get_string('modulename_help', $fqdn);
+            } else {
+                return get_string('modulename_help', $fqdn);
+            }
+        }
+
+        // This is a last chance special case for plugins who do NOT comply with full frankenstyle name.
+        if ($plugintype == 'mod') {
+            $fqdn = $pluginname;
+            if ($sm->string_exists('modulename_help', $fqdn)) {
+                return get_string('modulename_help', $fqdn);
+            }
+        }
+
+        // No way ! there is really nothing nowhere :-D
+        return '';
+    }
+
+    /**
+     *
+     */
+    public function get_self_equipable_templates() {
+        global $DB;
+
+        $selfusabletemplates = $DB->get_records('local_userequipment_tpl', array('usercanchoose' => true));
+        return $selfusabletemplates;
+    }
+
+    /**
+     * Get potential users that can apply to a given template.
+     * Unprogrammed template with no rules will always return an empty set.
+     * @param object $template
+     * @return an array of tiny user records.
+     */
+    public function get_potential_users($template) {
+        global $DB;
+
+        if (!empty($template->applycoursecompletion) && !empty($template->completedcourse)) {
+            $sql = "
+                SELECT DISTINCT
+                    u.id,
+                    u.username,
+                    u.firstname,
+                    u.lastname,
+                    u.email
+                FROM
+                    course_completions cc,
+                    user u
+                WHERE
+                    u.id = cc.userid AND
+                    cc.course = ? AND 
+                    cc.timecompleted IS NOT NULL AND
+                    cc.timecompleted > 0 AND
+                    u.deleted = 0 AND
+                    u.suspended = 0
+            ";
+            $completedusers = $DB->get_records_sql($sql, [$template->completedcourse]);
+        }
+
+        if (!empty($template->applyonprofile)) {
+            // This uses a profile match expression.
+            // First approach : simple parser on user and profile_field
+            // Syntaxes : user:<field>:<value> or user:field:"<quoted value>"
+            // Syntaxes : profile_field:<field>:<value> or profile_field:field:"<quoted value>"
+            // Syntaxes : profile_field:<field>:<value> or profile_field:field:"<quoted value>"
+            $profileusers = [];
+        }
+
+        if (!empty($template->applywhencohortmember)) {
+            // Cohort id should match.
+            $sql = "
+                SELECT DISTINCT
+                    u.id,
+                    u.username,
+                    u.firstname,
+                    u.lastname,
+                    u.email
+                FROM
+                    {cohort_members} cm,
+                    {user} u
+                WHERE
+                    u.id = cm.userid AND
+                    cm.cohortid = ? AND
+                    u.deleted = 0 AND
+                    u.suspended = 0
+            ";
+            $cohortmembers = $DB->get_records_sql($sql, [$template->applywhencohortmember]);
+        }
+
+        $targetusers = [];
+        if (!empty($completedusers)) {
+            foreach ($completedusers as $u) {
+                $targetusers[$u->id] = $u;
+            }
+        }
+
+        if (!empty($profileusers)) {
+            foreach ($profileusers as $u) {
+                // Admits it rewrites someone we already have.
+                $targetusers[$u->id] = $u;
+            }
+        }
+
+        if (!empty($cohortmembers)) {
+            foreach ($cohortmembers as $u) {
+                // Admits it rewrites someone we already have.
+                $targetusers[$u->id] = $u;
+            }
+        }
+
+        return $targetusers;
     }
 }

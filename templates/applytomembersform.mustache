@@ -1,0 +1,53 @@
+<!-- local_userequipment/applytomembersform -->
+
+<div id="addmembersform">
+<form id="assignform" method="post" action="{{{formurl}}}">
+<div>
+    <input type="hidden" name="template" value="{{templateid}}" />
+    <input type="hidden" name="sesskey" value="{{sesskey}}" />
+
+    <table class="generaltable generalbox pagemanagementtable boxaligncenter">
+        <tr>
+            <td id="existingcell">
+                <p>
+                <label for="removeselect">{{#str}}target, local_userequipment{{/str}}</label>
+                </p>
+                {{{applyselector}}}
+            </td>
+
+            <td id="buttonscell">
+                <p class="arrow_button">
+                    <input name="add"
+                        id="add"
+                        type="submit"
+                        value="{{{larrow}}}&nbsp;{{#str}}add{{/str}}"
+                        title="{{#str}}add{{/str}}" /><br />
+                    <input name="remove"
+                        id="remove"
+                        type="submit"
+                        value="{{#str}}remove{{/str}}&nbsp;{{{rarrow}}}"
+                        title="{{#str}}remove{{/str}}" />
+                </p>
+            </td>
+
+            <td id="potentialcell">
+                <p>
+                <label for="addselect">{{#str}}potentialmembers, local_userequipment{{/str}}</label>
+                </p>
+                {{{potentialselector}}}
+            </td>
+        </tr>
+    </table>
+
+    </div>
+    <center>
+    <input type="checkbox" name="strict" value="1" /> {{#str}}applystrict, local_userequipment{{/str}} {{{stricthelpbutton}}}<br/>
+    <input type="submit" name="apply" value="{{#str}}applytoselection, local_userequipment{{/str}}" />
+        <a href="{{{returl}}}">
+        <input type="button" name="cancel" value="{{#str}}cancel, local_userequipment{{/str}}"  />
+        </a>
+        </center>
+</form>
+</div>
+
+<!-- /local_userequipment/applytomembersform -->

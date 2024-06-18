@@ -1,0 +1,15 @@
+<!-- local_userequipment/userlist -->
+
+{{#pluginname}}
+<div class="profile-user">
+    {{#str}}plugin{{/str}}: {{pluginname}}
+</div>
+{{/pluginname}}
+
+<ul>
+{{#equiped}}
+    <li>{{#str}}seeresultsfor, local_userequipment{{/str}} <a href="{{{userurl}}}">{{firstname}} {{lastname}} ({{username}})</a></li>
+{{/equiped}}
+</ul>
+
+<!-- /local_userequipment/userlist -->

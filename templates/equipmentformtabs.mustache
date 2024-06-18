@@ -1,0 +1,18 @@
+<!-- local_userequipment/equipmentformtabs -->
+<ul class="nav nav-tabs local-userequipment">
+
+    {{^istemplate}}
+    <li id="id-tab-userequipment" class="quickform-tab">
+        <a class="toggle-handle active nav-link" data-plugintype="userequipment">{{#str}}userequipment, local_userequipment{{/str}}</a>
+    </li>
+    {{/istemplate}}
+
+    {{#cantune}}
+    {{#formtabs}}
+    <li id="id-tab-{{plugintype}}" class="quickform-tab">
+        <a class="toggle-handle {{#isactive}}active{{/isactive}} nav-link" data-plugintype="{{plugintype}}">{{plugintypestr}}</a>
+    </li>
+    {{/formtabs}}
+    {{/cantune}}
+</ul>
+<!-- /local_userequipment/equipmentformtabs -->

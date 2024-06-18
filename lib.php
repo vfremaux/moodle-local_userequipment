@@ -27,6 +27,67 @@ require_once($CFG->dirroot.'/local/userequipment/classes/manager.php');
 use local_userequipment\userequipment_manager;
 
 /**
+ * This is part of the dual release distribution system.
+ * Tells wether a feature is supported or not. Gives back the
+ * implementation path where to fetch resources.
+ * @param string $feature a feature key to be tested.
+ */
+function local_userequipment_supports_feature($feature = null, $getsupported=null) {
+    global $CFG;
+    static $supports;
+
+    if (!during_initial_install()) {
+        $config = get_config('local_shop');
+    }
+
+    if (!isset($supports)) {
+        $supports = array(
+            'pro' => array(
+                'plugin' => array('categories'),
+                'application' => array('coursecompletion', 'bycsv', 'refresh')
+            ),
+            'community' => array(
+            ),
+        );
+    }
+
+    if ($getsupported) {
+        return $supports;
+    }
+
+    // Check existance of the 'pro' dir in plugin.
+    if (is_dir(__DIR__.'/pro')) {
+        if ($feature == 'emulate/community') {
+            return 'pro';
+        }
+        if (empty($config->emulatecommunity)) {
+            $versionkey = 'pro';
+        } else {
+            $versionkey = 'community';
+        }
+    } else {
+        $versionkey = 'community';
+    }
+
+    if (empty($feature)) {
+        // Just return version.
+        return $versionkey;
+    }
+
+    list($feat, $subfeat) = explode('/', $feature);
+
+    if (!array_key_exists($feat, $supports[$versionkey])) {
+        return false;
+    }
+
+    if (!in_array($subfeat, $supports[$versionkey][$feat])) {
+        return false;
+    }
+
+    return $versionkey;
+}
+
+/**
  *
  *
  */
@@ -122,8 +183,28 @@ function local_userequipment_extends_navigation($globalnav) {
     }
 }
 
+/**
+ * global level function to reach the manager singleton.
+ */
 function get_ue_manager() {
     return userequipment_manager::instance();
+}
+
+/**
+ * global level function to reach the appropriate renderer singleton.
+ */
+function get_ue_renderer() {
+    global $PAGE, $OUTPUT;
+
+    if (local_userequipment_supports_feature() == 'pro') {
+        include_once($CFG->dirroot.'/local/userequipment/pro/renderer.php');
+        $renderer = new local_userequipment\output\renderer_extended($PAGE, '');
+        $renderer->set_output($OUTPUT);
+    } else {
+        $renderer = $PAGE->get_renderer('local_userequipment');
+    }
+
+    return $renderer;
 }
 
 /**
@@ -182,4 +263,18 @@ function local_ue_has_capability_somewhere($capability, $excludesystem = true, $
     }
 
     return false;
+}
+
+function local_userequipment_get_renderer() {
+    global $PAGE, $OUTPUT, $CFG;
+
+    if ('pro' == local_userequipment_supports_feature()) {
+        include_once($CFG->dirroot.'/local/userequipment/pro/renderer.php');
+        $renderer = new \local_userequipment\output\renderer_extended($PAGE, '');
+        $renderer->set_output($OUTPUT);
+    } else {
+        $renderer = $PAGE->get_renderer('local_userequipment');
+    }
+
+    return $renderer;
 }

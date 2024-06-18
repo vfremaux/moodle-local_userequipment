@@ -22,58 +22,133 @@
  * @package local_userequipment
  * @category local
  */
+defined('MOODLE_INTERNAL') || die();
+
+require_once($CFG->dirroot.'/local/userequipment/lib.php');
 
 $string['userequipment:override'] = 'Surchage les limites d\'équipement';
-$string['userequipment:selfequip'] = 'Peut configurer son propre équipement';
+$string['userequipment:selfequip'] = 'Peut choisir son propre équipement';
 $string['userequipment:equip'] = 'Peut configurer l\'équipement d\'autres utilisateurs';
+$string['userequipment:selftune'] = 'Peut ajuster son équipement';
 
+$string['activities'] = 'Activités';
+$string['activitieschooser'] = 'Ajouter une activité ou une ressource';
+$string['activityfilters'] = 'Filtre sur les activités';
+$string['addamodule'] = 'Ajouter une activité ou une ressource';
+$string['addcategory'] = 'Ajouter une catégorie';
+$string['addnew'] = 'Ajouter un nouveau {$a}';
+$string['addone'] = 'Ajouter une catégorie';
+$string['addplugins'] = 'Ajouter des plugins';
+$string['addplugins'] = 'Ajouter des plugins';
 $string['addtemplate'] = 'Ajouter un nouveau profil';
+$string['all'] = 'Aucun filtre';
 $string['allusers'] = 'Tous les utilisateurs activés';
+$string['applyoncoursecompletion'] = 'Appliquer quand le cours est achevé';
+$string['applyoncoursecompletion_desc'] = 'Sélectionnez ci-dessous le cours par son ID';
 $string['applystrict'] = 'Profil strict';
 $string['applytemplate'] = 'M\'appliquer l\'équipement : "{$a}"';
 $string['applytemplatebtn'] = 'Appliquer le profil';
 $string['applytoselection'] = 'Appliquer à la sélection';
-$string['associatedsystemrole'] = 'Rôle system associé';
+$string['assignplugins'] = 'Assigner les plugins';
+$string['associatedsystemrole'] = 'Rôle associé (site)';
 $string['backtodashboard'] = 'Revenir au tableau de bord';
+$string['backtolist'] = 'Retour à la liste des profils';
 $string['cancel'] = 'Annuler';
 $string['capabilitycontrol'] = 'Désactiver par capacité';
+$string['catadd'] = 'Ajouter';
+$string['catcolour'] = 'Couleur de la catégorie';
+$string['catdesc'] = 'Description de la catégorie';
+$string['catedit'] = 'Modifier';
+$string['categories'] = 'Categories';
+$string['categories'] = 'Catégories de plugins';
+$string['categorization'] = 'Catégorisation des plugins';
+$string['categorize'] = 'Catégoriser';
+$string['categoryassignedplugins'] = 'Plugins associés à la catégorie';
+$string['categoryplugins'] = 'Plugins associés';
+$string['catname'] = 'Nom de la catégorie';
+$string['catpng'] = 'Associer un plugin';
 $string['cleanup'] = 'Revenir à l\'équipement complet';
+$string['cleanup_desc'] = 'En utilisant cette fonction, vous effacez toutes vos données d\'équipement et accédez à toutes les fonctionnalités de moodle';
+$string['colour'] = 'Couleur';
+$string['configallowselftuning'] = 'Autoriser l\'ajustement fin';
+$string['configallowselftuning_desc'] = 'Si activé, les utilisateurs pourront ajuster eux-mêmes leur équipment. Ce réglage peut être surpassé par une capacité.';
 $string['configaskuserstoprofile'] = 'Demander de choisir un équipement à la connexion';
 $string['configaskuserstoprofile_desc'] = 'Si actif, tout utilisateur se connectant pour la première fois et susceptible d\'avoir un rôle éditeur se verra proposer de choisir son équipement.';
 $string['configautosetupnewusers'] = 'Initialiser les nouveaux utilisateurs';
 $string['configautosetupnewusers_desc'] = 'Si actif, tout nouvel utilisateur créé se verra appliquer un équipement par défaut.';
 $string['configdisablecontrol'] = 'Source de désactivation';
 $string['configdisablecontrolvalue'] = 'Valeur de contrôle';
+$string['configuseenhancedmodchooser'] = 'Utiliser le sélecteur d\'activité amélioré';
+$string['configuseenhancedmodchooser_desc'] = 'Si activé, le sélecteur d\'activité standard est remplacé par sa version améliorée avec classification pédagogique';
+$string['configforcedisableforuse'] = 'Forcer l\'abandon';
+$string['configforcedisableforuse_desc'] = 'Un outil pour forcer l\'abandon d\'usage d\'un plugin, en le masquant des choix possibles, tout en laissant fonctionner ses instances, pour tous les utilisateurs, 
+indépendamment du plan d\'équipemment. Donner une liste de noms FQDN des plugins à masquer.';
+$string['coursetocomplete'] = 'Cours à compléter';
+$string['currentplugincount'] = 'Nombre de plugins activés ';
 $string['default'] = ' (défaut)';
 $string['disabledforuser'] = 'L\'équipement utilisateur a été désactivé pour votre catégorie d\'utilisateur.';
+$string['editcategory'] = 'Modifier une catégorie';
+$string['editprofile'] = 'Modifier le profil: {$a}';
+$string['emptycat'] = 'Pas de sélecteur d\'activité créé';
 $string['enableuserequipment'] = 'Activer le plan d\'équipement individuel des utilisateurs';
 $string['equipme'] = 'Gérer mes équipements';
 $string['equipmentcleaned'] = 'L\'équipement a été supprimé. Vous avez accès à toutes les fonctionnalités.';
+$string['fullname'] = 'Plugin';
+$string['gotopluginsettings'] = 'Aller aux réglages centraux du plugin';
 $string['isdefault'] = 'Est l\'équipement par défaut';
+$string['managecategories'] = 'Gestionnaire des catégories de plugins';
 $string['managetemplates'] = 'Gestionnaire de profils d\'équipement';
 $string['marksinfo'] = 'Vous avez {$a} outils dans votre équipement.';
+$string['nocategories'] = 'Aucune catégorie';
 $string['none'] = 'Aucun role';
+$string['noplugincategories'] = 'Aucune catégorie n\'a été définie pour la classification des plugins.';
+$string['noplugins'] = 'Aucun plugin';
 $string['notemplates'] = 'Aucun profil';
 $string['other'] = 'Autres';
+$string['placeholder_catcolour'] = '#00000';
+$string['placeholder_catdesc'] = 'description';
+$string['placeholder_catname'] = 'nom';
 $string['pluginname'] = 'Equipement de l\'utilisateur';
 $string['plugins'] = 'Plugins';
+$string['pluginsettings'] = 'Réglages du plugin';
+$string['pluginusers'] = 'Voir les utilisateurs équipés d\'un plugin';
 $string['potentialmembers'] = 'Utilisateurs potentiels';
+$string['profile'] = 'Modifier le profil';
 $string['profileextended'] = 'Etendu';
 $string['profilefieldcontrol'] = 'Désactiver par champ de profil';
 $string['profilesimple'] = 'Elémentaire';
 $string['profilestandard'] = 'Standard';
+$string['profileupdated'] = 'Profil mis à jour';
 $string['releasenever'] = 'Laisser assigné';
 $string['releaseoncleanup'] = 'Désassigner sur la suppression des marques d\'équipement';
 $string['releaseonnewprofile'] = 'Désassigner sur application d\'un nouveau profil';
 $string['releaseroleon'] = 'Désassigner les roles';
+$string['resources'] = 'Ressources';
+$string['shortname'] = 'Code Plugin';
+$string['strictapplication'] = 'Application stricte du profil';
 $string['target'] = 'Utilisateurs à traiter';
 $string['template'] = 'Profil';
 $string['templateapplied'] = 'Une nouvelle définition d\'équipement a été chargée.';
 $string['templatename'] = 'Nom de l\'équipement';
 $string['templates'] = 'Profils d\'équipement';
+$string['tools'] = 'Outils';
 $string['usercanchoose'] = 'Peut être auto-appliqué';
 $string['userequipment'] = 'Equipement de l\'utilisateur';
+$string['userplugins'] = 'Voir le profil d\'un utilisateur';
 $string['usersupdated'] = 'Les équipements utilisateurs sélectionnés ont été mis à jour';
+$string['queryplugin'] = 'Recherche de plugin';
+$string['queryplugin_help'] = 'Motif de recherche de plugins (utiliser * ou ? comme jokers sur le nom complet du plugin)';
+$string['queryuser_help'] = 'Motif de recherche sur les utilisateurs (utiliser * ou ? comme jokers sur le nom complet)';
+$string['queryuser'] = 'Recherche d\'utilisateurs';
+
+$string['blocks'] = 'Blocs';
+$string['modules'] = 'Activités ou ressources';
+$string['courseformats'] = 'Formats de cours';
+$string['questiontypes'] = 'Types de question';
+$string['seeresultsfor'] = 'Voir les résultats pour ';
+$string['noneequiped'] = 'Aucun utilisateur équipé ';
+
+$string['strictapplication_help'] = 'Une application stricte du profil d\'équipement supprimera tous les choix préalables des utilisateurs ciblés.';
 
 $string['isdefault_desc'] = 'Si ce profil d\'équipement est le profil par défaut, tout nouvel utilisateur créé se verra appliquer ce profil.
 Marquer ce profil supprime l\'affectation, par défaut précédente.';
@@ -90,7 +165,7 @@ $string['configdisablecontrolvalue_desc'] = 'Définit la valeur de contrôle. Ce
 d\'un champ de profil qui doit contenir une valeur non vide. Vous pouvez également utiliser une expression
 &lt;codechamp&gt;=&lt;valeur&gt; pour désactiver l\'équipement sur une valeur précise du champ de profil.';
 
-$string['ueinfo_tpl'] = '
+$string['ueinfo_tpl_deprecated'] = '
 <p>Moodle est une application de plus en plus riche et complète. Il est probable que les administrateurs et les autres usagers de Moodle
 utilisent des fonctions dont vous ne vous servez pas du tout (ou pas encore). Le principe de l\'équipement utilisateur vous permet
 de sélectionner et de nettoyer les menus de choix de fonctions de Moodle afin de vous donner une vision plus claire de vos interfaces de
@@ -118,6 +193,26 @@ et n\'arrivez pas à récupérer l\'usage de telle ou telle fonction, contactez 
 point avec eux.</p>
 ';
 
+$string['ueinfo_tpl'] = "
+<h4>Introduction</h4>
+
+<p>Moodle dispose de nombreux plugins. Il est probable qu'il y ait des outils sur ce Moodle dont vous ne vous servez
+pas du tout (ou pas encore).</p>
+<p>Si l'administrateur vous y autorise, vous pourrez constituer votre propre équipement, ou choisir un équipement
+en outils prédéfini.</p>
+
+<h4>Equipement sur mesure</h4>
+
+<p>Naviguez dans les autres onglets pour examiner les listes d'outils qui vont constituer votre équipement personnel
+en cochant ce qui vous intéresse.</p>
+<p>Si vous supprimez tous les choix d'équipement, vous aurez à nouveau tous les outils à votre disposition.</p>
+
+<h4>Equipement prédéfini</h4>
+
+<p>Il est possible que les administrateurs vous aient appliqué outillage prédéfini. Si les administrateurs l'ont autorisé, Vous pouvez à tout moment le modifier
+pour ajouter ou supprimer un outil ou changer pour un des équipements proposés ci après.</p>
+";
+
 $string['ueselfinfo_tpl'] = '
 <h4>Me choisir un profil d\'équipement</h4>
 
@@ -137,4 +232,7 @@ implantations de plates-formes et bénéficiant de fonctionnalités pédagogique
 $string['profileextended_desc'] = 'Un profil enrichi avec des fonctionnalités pédagogiques supplémentaires, afin de pouvoir diversifier les
 activités et rendre l\'expérience d\'apprentissage plus dynamique.';
 
-require_once('plugin_descriptions.php');
+$string['associatedsystemrole_help'] = 'Un rôle appliqué dans le contexte site lorsque ce profil est appliqué.';
+
+include(__DIR__.'/pro_additional_strings.php');
+include(__DIR__.'/plugin_descriptions.php');

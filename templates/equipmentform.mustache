@@ -1,0 +1,35 @@
+<!-- local_userequipment/equipmentform -->
+<div class="equipmentform">
+<form action="{{{formurl}}}" method="POST">
+
+    <!-- one-of is valid -->
+    <input type="hidden" name="templateid" value="{{templateid}}" />
+    <input type="hidden" name="userid" value="{{userid}}" />
+    <input type="hidden" name="sesskey" value="{{sesskey}}" />
+
+    <div>
+    <p>{{#str}}currentplugincount, local_userequipment{{/str}}: <span id="ue_profile_plugincount">{{pluginscount}}</span>
+    </div>
+
+    {{#canedit}}
+    {{{catmodal}}}
+    {{{modchooser}}}
+    {{/canedit}}
+
+{{> local_userequipment/equipmentformtabs}}
+
+{{> local_userequipment/equipmentformpanels}}
+
+<div class="quickform-actionbuttons">
+    <input name="submitbutton" value="{{#str}}save{{/str}}" type="submit" id="id_submitbutton">&nbsp;&nbsp;
+    {{^istemplate}}
+    <input class="btn-cancel" name="cancel" value="{{#str}}cancel{{/str}}" type="submit">
+    {{/istemplate}}
+    {{#istemplate}}
+    <input class="btn-cancel" name="cancel" value="{{#str}}backtolist, local_userequipment{{/str}}" type="submit">
+    {{/istemplate}}
+</div>
+
+</form>
+</div>
+<!-- /local_userequipment/equipmentform -->

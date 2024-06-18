@@ -1,0 +1,43 @@
+<!-- local_userequipment/activitiesresources_menu -->
+
+<div id="add_menus-section-{{{section}}}"class="section_add_menus">
+    {{#vertical}}
+    <div class="horizontal">
+    {{/vertical}}
+        {{#activitiesResource}}
+        <select>
+            {{#options}}
+                <option value="{{strresourcelabel}}">{{{strresourcelabel}}}</option>
+            {{/options}}
+        </select>
+        {{/activitiesResource}}
+        {{#activitiesActivity}}
+        <select>
+            {{#options}}
+                <option value="{{stractivitylabel}}">{{{stractivitylabel}}}</option>
+            {{/options}}
+        </select>
+        {{/activitiesActivity}}
+    {{#vertical}}
+    </div>
+    {{/vertical}}
+</div>
+{{#renderajaxcontrol}}
+<div class="mdl-right">
+    <div class="section-modchooser">
+        <span class="section-modchooser-text">
+            <button class="section-modchooser-link btn btn-link from-user-equipment" data-action="open-chooser" data-sectionid="{{{section}}}" data-sectionreturnid="{{{sectionreturn}}}">
+                {{{icon}}}
+            </button>
+        </span>
+    </div>
+</div>
+{{/renderajaxcontrol}}
+{{#behatsite}}
+<div class="hiddenifjs addresourcedropdown">
+    <div class="visibleifjs addresourcemodchooser">
+    </div>
+</div>
+{{/behatsite}}
+
+<!-- /local_userequipment/activitiesresources_menu -->
