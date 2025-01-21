@@ -14,22 +14,30 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace local_userequipment\controllers;
-defined('MOODLE_INTERNAL') || die();
-
 /**
- * @package   local_userequipment
- * @category  local
- * @copyright 2016 Valery Fremaux (valery.fremaux@gmail.com)
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * MVC Controller for editing applicable equipment templates.
+ *
+ * @package     local_userequipment
+ * @author      Valery Fremaux (valery.fremaux@gmail.com)
+ * @copyright   2017 Valery Fremaux <valery.fremaux@gmail.com> (activeprolearn.com)
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace local_userequipment\controllers;
+
+/**
+ * MVC controller
+ * @todo harmonicize to other controller structure.
+ */
 class template_controller {
 
-    public function process($action) {
+    /**
+     * Process command.
+     */
+    public function process($cmd) {
         global $DB;
 
-        if ($action == 'delete') {
+        if ($cmd == 'delete') {
             $tid = required_param('templateid', PARAM_INT);
             if ($tid) {
                 $DB->delete_records('local_userequipment', array('template' => $tid, 'userid' => 0]));

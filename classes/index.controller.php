@@ -15,12 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package   local_userequipment
- * @category  local
- * @copyright 2016 Valery Fremaux (valery.fremaux@gmail.com)
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * MVC controller for index.php.
+ *
+ * @package     local_userequipment
+ * @author      Valery Fremaux (valery.fremaux@gmail.com)
+ * @copyright   2017 Valery Fremaux <valery.fremaux@gmail.com> (activeprolearn.com)
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+s
 namespace local_userequipment;
 
 use moodle_url;
@@ -28,26 +30,42 @@ use StdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * an MVC controller
+ */
 class index_controller {
 
+    /** @var data to process */
+    protected $data;
+
+    /** @var tells we have recieved data to proces */
     protected $received;
 
+    /** @var user equipement manager instance */
     protected $uemanager;
 
+    /** @var base url */
     protected $url;
 
+    /**
+     * Constructor
+     */
     public function __construct(\local_userequipment\userequipment_manager $uemanager, $url) {
         $this->uemanager = $uemanager;
         $this->url = $url;
     }
 
+    /**
+     * Receive data.
+     * @param string $cmd
+     */
     public function receive($cmd) {
         global $USER;
 
         switch ($cmd) {
 
             case 'submit': {
-                $this->data = new StdClass;
+                $this->data = new StdClass();
                 $this->data->userid = $USER->id;
                 $this->data->templateid = 0;
                 $this->data->plugins = [];
@@ -87,6 +105,10 @@ class index_controller {
         $this->received = true;
     }
 
+    /**
+     * Process the command
+     * @param string $cmd
+     */
     public function process($cmd) {
         global $DB, $USER;
 

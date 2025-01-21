@@ -12,8 +12,11 @@
         {{#plugins}}
         <div class="quickform-item equipment-plugin">
             <div class="equipment-plugin-caption">
-            <div class="pluginselect"><input type="checkbox" id="id_{{plugintype}}_{{pluginname}}" name="mark_{{plugintype}}_{{pluginname}}" value="1" {{checkedstatus}} ></div>
-            <div class="pluginname"><h4>{{pluginvisiblename}}</h4></div>
+            <div class="pluginselect">
+            <input type="checkbox" id="id_{{plugintype}}_{{pluginname}}"
+                   name="mark_{{plugintype}}_{{pluginname}}" value="1" {{checkedstatus}} 
+                   aria-labelledby="plg-{{plugintype}}-{{pluginname}}"></div>
+            <div id="plg-{{plugintype}}-{{pluginname}}" class="pluginname"><h4>{{pluginvisiblename}}</h4></div>
             </div>
             <div class="shortdescription">{{{shortdescription}}}</div>
             <div class="categories">{{{categorization}}} {{#canedit}}

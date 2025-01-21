@@ -15,6 +15,20 @@
     <licenseversion>v3</licenseversion>
   </library>
   <library>
+    <location>__other</location>
+    <name>Other scripts from extranous technologies</name>
+    <license>GPL</license>
+    <version>3.1</version>
+    <licenseversion>v3</licenseversion>
+  </library>
+  <library>
+    <location>pro</location>
+    <name>Pro encoded code</name>
+    <license>APL</license>
+    <version></version>
+    <licenseversion></licenseversion>
+  </library>
+  <library>
     <location>classes/QuickForm_Extensions</location>
     <name>Quickform complements</name>
     <license>GPL</license>

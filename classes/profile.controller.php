@@ -15,10 +15,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package   local_userequipment
- * @category  local
- * @copyright 2016 Valery Fremaux (valery.fremaux@gmail.com)
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * MVC Controller for profile edition.
+ *
+ * @package     local_userequipment
+ * @author      Valery Fremaux (valery.fremaux@gmail.com)
+ * @copyright   2017 Valery Fremaux <valery.fremaux@gmail.com> (activeprolearn.com)
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_userequipment;
@@ -26,12 +28,21 @@ namespace local_userequipment;
 use moodle_url;
 use StdClass;
 
-defined('MOODLE_INTERNAL') || die();
-
+/**
+ * An MVC controller
+ */
 class profile_controller {
 
+    /** @var data to process */
+    protected $data;
+
+    /** @var user equipmement manager instance */
     protected $uemanager;
 
+    /** @var tells we have recieved data to proces */
+    protected $received;
+
+    /** @var base url */
     protected $url;
 
     public function __construct(\local_userequipment\userequipment_manager $uemanager, $url) {
@@ -39,9 +50,13 @@ class profile_controller {
         $this->url = $url;
     }
 
+    /**
+     * Receive some data to process.
+     * @param string $cmd
+     */
     public function receive($cmd) {
         if ($cmd == 'submit') {
-            $this->data = new StdClass;
+            $this->data = new StdClass();
             $this->data->userid = 0;
             $this->data->templateid = required_param('templateid', PARAM_INT);
             $this->data->plugins = [];
@@ -65,6 +80,10 @@ class profile_controller {
         }
     }
 
+    /**
+     * Process the command.
+     * @param string $cmd;
+     */
     public function process($cmd) {
         global $DB, $USER;
 
@@ -73,7 +92,7 @@ class profile_controller {
         }
 
         if ($cmd == 'cancel') {
-            $this->data = new StdClass;
+            $this->data = new StdClass();
             return new moodle_url('/local/userequipment/templates.php');
         }
 
@@ -104,5 +123,4 @@ class profile_controller {
         }
 
     }
-
 }

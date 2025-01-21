@@ -33,6 +33,7 @@ $string['userequipment:override'] = 'Overrides the equipment limitations';
 $string['userequipment:selfequip'] = 'Can configure his own equipment';
 $string['userequipment:equip'] = 'Can configure equipment of other users';
 $string['userequipment:selftune'] = 'Can self fine tune his own equipment';
+$string['userequipment:isdisabled'] = 'Is disabled for the user';
 
 $string['activities'] = 'Activities';
 $string['activitieschooser'] = 'Add activity or ressources';

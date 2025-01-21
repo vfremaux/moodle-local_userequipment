@@ -15,10 +15,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package   local_userequipment
- * @category  local
- * @copyright 2016 Valery Fremaux (valery.fremaux@gmail.com)
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * Equipment index page.
+ *
+ * @package     local_userequipment
+ * @author      Valery Fremaux (valery.fremaux@gmail.com)
+ * @copyright   2017 Valery Fremaux <valery.fremaux@gmail.com> (activeprolearn.com)
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 require('../../config.php');
 require_once($CFG->dirroot.'/local/userequipment/userequip_form.php');
@@ -34,10 +36,10 @@ use local_userequipment\userequipment_manager;
 
 $id = optional_param('id', 0, PARAM_INT);
 
-if ($id && !$user = $DB->get_record('user', array('id' => $id))) {
-    print_error('invaliduser');
-} else {
+if (!$id) {
     $user = $USER;
+} else {
+    $user = $DB->get_record('user', array('id' => $id), '*', MUST_EXIST);
 }
 $context = context_user::instance($user->id);
 $PAGE->set_context($context);
@@ -57,7 +59,7 @@ if (!has_capability('local/userequipment:equip', $context)) {
 
 if ($user->id == $USER->id) {
     if (!local_ue_has_capability_somewhere('local/userequipment:selfequip', false, false, true)) {
-        print_error('errornoselfequipementallowed', 'local_userequipment');
+        throw new moodle_exception('errornoselfequipementallowed', 'local_userequipment');
     }
 }
 

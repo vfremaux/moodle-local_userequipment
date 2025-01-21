@@ -14,6 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * User selector for applicaton of equipment profiles.
+ *
+ * @package     local_userequipment
+ * @author      Valery Fremaux (valery.fremaux@gmail.com)
+ * @copyright   2017 Valery Fremaux <valery.fremaux@gmail.com> (activeprolearn.com)
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace local_userequipment\selectors;
 
 defined('MOODLE_INTERNAL') || die;
@@ -35,6 +44,9 @@ abstract class ue_application_users_selector_base extends \user_selector_base {
         parent::__construct($name, $options);
     }
 
+    /**
+     * Get selector options
+     */
     protected function get_options() {
         $options = parent::get_options();
         return $options;
@@ -55,11 +67,18 @@ class ue_application_users_selector extends ue_application_users_selector_base {
         parent::__construct($name, $options);
     }
 
+    /**
+     * Get selector options.
+     */
     protected function get_options() {
         $options = parent::get_options();
         return $options;
     }
 
+    /**
+     * Find part of users to select.
+     * @param string $search
+     */
     public function find_users($search) {
         global $SESSION;
 
@@ -84,6 +103,10 @@ class ue_all_users_selector extends ue_application_users_selector_base {
         return self::$jsmodule;
     }
 
+    /**
+     * Find part of users to select.
+     * @param string $search
+     */
     public function find_users($search) {
         global $DB;
 

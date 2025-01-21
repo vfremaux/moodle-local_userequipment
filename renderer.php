@@ -242,7 +242,7 @@ class local_userequipment_renderer extends plugin_renderer_base {
             if ($COURSE->format == 'page') {
                 // This sideway ensures the $SESSION->format_page_cm_insertion_page will be set.
                 include_once($CFG->dirroot.'/course/format/page/classes/page.class.php');
-                $page = format\page\course_page::get_current_page();
+                $page = \format_page\course_page::get_current_page();
                 $sectionnum = $page->get_section();
                 $plugintpl->addmodurl = new moodle_url('/course/format/page/mod.php', ['id' => $COURSE->id, 'add' => $modname, 'section' => $sectionnum, 'sr' => $sectionnum, 'insertinpage' => $page->id, 'sesskey' => sesskey()]);
             } else {
@@ -292,6 +292,10 @@ class local_userequipment_renderer extends plugin_renderer_base {
      */
     public function render_equipmentform($manager, $equipment, $istemplate = false) : string {
         global $OUTPUT, $USER;
+
+        if (is_null($equipment)) {
+            $equipment = [];
+        }
 
         $context = context_user::instance($USER->id);
         $systemcontext = context_system::instance();

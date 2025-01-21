@@ -30,6 +30,7 @@ $string['userequipment:override'] = 'Surchage les limites d\'équipement';
 $string['userequipment:selfequip'] = 'Peut choisir son propre équipement';
 $string['userequipment:equip'] = 'Peut configurer l\'équipement d\'autres utilisateurs';
 $string['userequipment:selftune'] = 'Peut ajuster son équipement';
+$string['userequipment:isdisabled'] = 'Est désactivé pour l\'utilisateur';
 
 $string['activities'] = 'Activités';
 $string['activitieschooser'] = 'Ajouter une activité ou une ressource';
@@ -80,7 +81,7 @@ $string['configdisablecontrol'] = 'Source de désactivation';
 $string['configdisablecontrolvalue'] = 'Valeur de contrôle';
 $string['configuseenhancedmodchooser'] = 'Utiliser le sélecteur d\'activité amélioré';
 $string['configuseenhancedmodchooser_desc'] = 'Si activé, le sélecteur d\'activité standard est remplacé par sa version améliorée avec classification pédagogique';
-$string['configforcedisableforuse'] = 'Forcer l\'abandon';
+$string['configforcedisableforuse'] = 'Forcer l\'abandon de l\'usage';
 $string['configforcedisableforuse_desc'] = 'Un outil pour forcer l\'abandon d\'usage d\'un plugin, en le masquant des choix possibles, tout en laissant fonctionner ses instances, pour tous les utilisateurs, 
 indépendamment du plan d\'équipemment. Donner une liste de noms FQDN des plugins à masquer.';
 $string['coursetocomplete'] = 'Cours à compléter';

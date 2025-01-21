@@ -15,20 +15,26 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package   local_userequipment
- * @category  local
- * @copyright 2016 Valery Fremaux (valery.fremaux@gmail.com)
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * Equipment manager
+ *
+ * @package     local_userequipment
+ * @author      Valery Fremaux <valery.fremaux@gmail.com>
+ * @copyright   2016 Valery Fremaux (valery.fremaux@gmail.com)
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 namespace local_userequipment;
 
-defined('MOODLE_INTERNAL') || die();
+use StdClass;
+use context_system;
+use context_course;
 
-use \StdClass;
-use \context_system;
-
+/**
+ * Manager class.
+ */
 class userequipment_manager {
 
+    /** @var single instance **/
     protected static $instance;
 
     /**
@@ -48,10 +54,17 @@ class userequipment_manager {
     private function __construct() {
     }
 
+    /**
+     * Tells if plugin type is supported.
+     * @param string $ptype
+     */
     public function supports_plugin_type($ptype) {
         return in_array($ptype, array('mod', 'block', 'qtype', 'format'));
     }
 
+    /**
+     * Init default values.
+     */
     public static function init_defaults() {
         return array(
          'block_activity_modules' => 1,
@@ -369,15 +382,19 @@ class userequipment_manager {
 
     /**
      * Clears equipment of a single user.
+     * @param object $user
      */
-    public function delete_user_equipment(&$user) {
+    public function delete_user_equipment($user) {
         global $DB;
 
         $DB->delete_records('local_userequipment', array('userid' => $user->id));
     }
 
     /**
-     * checks if a plugin of some plugintype is in user's equipment
+     * Checks if a plugin of some plugintype is in user's equipment.
+     * @param string $plugintype the plugin type
+     * @param string $plugin the simple plugin name
+     * @param int $userid
      */
     public function check_user_equipment($plugintype, $plugin, $userid = 0) {
         global $USER;
@@ -415,6 +432,7 @@ class userequipment_manager {
 
     /**
      * Checks if a user is allowed to fine tune his equipement
+     * @param object $user
      */
     public function can_tune($user = null) {
         global $USER;
@@ -450,7 +468,7 @@ class userequipment_manager {
             return true;
         }
 
-        switch (@$config->disable_control) {
+        switch ($config->disable_control ?? 0) {
             case 0 :
                 return true;
                 break;
@@ -458,7 +476,7 @@ class userequipment_manager {
                 if (empty($config->disable_control_value)) {
                     return true;
                 }
-                $context = \context_course::instance($COURSE->id);
+                $context = context_course::instance($COURSE->id);
                 if (has_capability($config->disable_control_value, $context, $user->id)) {
                     return true;
                 }

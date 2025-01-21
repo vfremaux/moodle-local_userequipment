@@ -41,7 +41,7 @@
 
     </div>
     <center>
-    <input type="checkbox" name="strict" value="1" /> {{#str}}applystrict, local_userequipment{{/str}} {{{stricthelpbutton}}}<br/>
+    <input type="checkbox" name="strict" value="1" aria-labelledby="apply-strict" ><label id="apply-strict">{{#str}}applystrict, local_userequipment{{/str}}</label> {{{stricthelpbutton}}}<br/>
     <input type="submit" name="apply" value="{{#str}}applytoselection, local_userequipment{{/str}}" />
         <a href="{{{returl}}}">
         <input type="button" name="cancel" value="{{#str}}cancel, local_userequipment{{/str}}"  />
