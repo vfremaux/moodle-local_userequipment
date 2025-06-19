@@ -22,7 +22,7 @@
  * @copyright   2017 Valery Fremaux <valery.fremaux@gmail.com> (activeprolearn.com)
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-s
+
 namespace local_userequipment;
 
 use moodle_url;
