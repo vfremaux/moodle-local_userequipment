@@ -40,8 +40,8 @@ class template_controller {
         if ($cmd == 'delete') {
             $tid = required_param('templateid', PARAM_INT);
             if ($tid) {
-                $DB->delete_records('local_userequipment', array('template' => $tid, 'userid' => 0]));
-                $DB->delete_records('local_userequipment_tpl', array('id' => $tid));
+                $DB->delete_records('local_userequipment', ['template' => $tid, 'userid' => 0]);
+                $DB->delete_records('local_userequipment_tpl', ['id' => $tid]);
             }
         }
     }

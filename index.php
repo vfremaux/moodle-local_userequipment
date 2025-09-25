@@ -135,6 +135,7 @@ if ($uemanager->is_enabled_for_user($USER)) {
     echo $renderer->render_equipmentform($uemanager, $data, false);
 
 } else {
+    echo $OUTPUT->header();
     echo $OUTPUT->notification(get_string('disabledforuser', 'local_userequipment'));
 }
 
